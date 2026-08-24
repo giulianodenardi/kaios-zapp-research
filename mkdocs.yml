@@ -5,7 +5,10 @@ site_author: Giuliano Denardi Botteon
 theme:
   name: material
   language: pt-BR
-
+  palette:
+    scheme: slate
+    primary: teal
+    accent: cyan
   features:
     - navigation.sections
     - navigation.expand
@@ -17,11 +20,15 @@ markdown_extensions:
   - admonition
   - tables
   - attr_list
+  - meta
   - toc:
       permalink: true
 
 nav:
   - Início: index.md
+
+  - Acervo de Artigos:
+      - ART-001 (WebIDE e APIs): articles/ART-001.md
 
   - Fase 1 · Identidade do projeto:
       - Manifesto do Projeto: fases/01-identidade/01-manifesto.md
@@ -29,3 +36,24 @@ nav:
       - Escopo: fases/01-identidade/03-escopo.md
       - Contexto e motivação: fases/01-identidade/04-contexto.md
       - Estado atual da pesquisa: fases/01-identidade/05-estado-da-pesquisa.md
+
+  - Fase 2 · O Objeto de Estudo:
+      - Visão Geral: fases/02-objeto/index.md
+
+  - Fase 3 · Ambiente Técnico:
+      - Visão Geral: fases/03-ambiente-tecnico/index.md
+
+  - Fase 4 · Investigação:
+      - Visão Geral: fases/04-investigacao/index.md
+
+  - Fase 5 · Desenvolvimento:
+      - Visão Geral: fases/05-desenvolvimento/index.md
+
+  - Fase 6 · KaiOS:
+      - Visão Geral: fases/06-kaios/index.md
+
+  - Fase 7 · Documentação:
+      - Visão Geral: fases/07-documentacao/index.md
+
+  - Fase 8 · IA Aplicada:
+      - Visão Geral: fases/08-ia-aplicada/index.md
