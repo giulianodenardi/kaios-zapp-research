@@ -1,0 +1,220 @@
+# Parte 2 · Objetivos do Projeto
+
+## Transformando investigação em resultados mensuráveis
+
+O Projeto KaiOS / Zapp II não tem como objetivo apenas compreender um dispositivo específico. A investigação busca produzir conhecimento técnico verificável, ferramentas, documentação e métodos que possam ser reutilizados em estudos semelhantes.
+
+Para isso, o projeto estabelece objetivos concretos que permitem acompanhar sua evolução.
+
+---
+
+## 1. Objetivo geral
+
+**Investigar, compreender e documentar de forma sistemática a plataforma de hardware e software do Zapp II, produzindo uma base de conhecimento técnico verificável e progressivamente reproduzível.**
+
+O projeto será considerado bem-sucedido não apenas pela quantidade de informações reunidas, mas pela capacidade de transformar informações dispersas em conhecimento organizado, evidenciado e reutilizável.
+
+---
+
+## 2. Objetivos específicos
+
+### 2.1 Identificar a plataforma
+
+**Objetivo:** estabelecer uma identificação técnica confiável do dispositivo.
+
+Resultados esperados:
+
+* [ ] Identificar o modelo e variantes conhecidas do dispositivo.
+* [ ] Documentar o SoC e a arquitetura do processador.
+* [ ] Identificar componentes relevantes de hardware.
+* [ ] Registrar informações sobre memória, armazenamento e periféricos.
+* [ ] Diferenciar informações confirmadas de informações ainda desconhecidas.
+
+**Indicador de progresso:** percentual dos principais componentes identificados e documentados com evidências.
+
+---
+
+### 2.2 Mapear o ambiente de software
+
+**Objetivo:** compreender a composição do sistema utilizado pelo dispositivo.
+
+Resultados esperados:
+
+* [ ] Identificar versões relevantes de Android, KaiOS e Linux.
+* [ ] Documentar o kernel e seus principais componentes conhecidos.
+* [ ] Mapear a estrutura básica do filesystem.
+* [ ] Identificar processos e serviços relevantes.
+* [ ] Documentar permissões e mecanismos de acesso observados.
+* [ ] Registrar interfaces disponíveis em `/proc`, `/sys` e `/dev`.
+
+**Indicador de progresso:** quantidade de componentes relevantes identificados, classificados e documentados.
+
+---
+
+### 2.3 Estabelecer uma metodologia de investigação
+
+**Objetivo:** desenvolver procedimentos consistentes para investigar o dispositivo.
+
+Cada experimento relevante deverá, sempre que possível, registrar:
+
+**Pergunta → hipótese → procedimento → evidência → resultado → conclusão.**
+
+Resultados esperados:
+
+* [ ] Criar uma estrutura padronizada para experimentos.
+* [ ] Registrar comandos e ferramentas utilizados.
+* [ ] Preservar resultados relevantes.
+* [ ] Registrar hipóteses descartadas.
+* [ ] Permitir a reprodução dos experimentos quando tecnicamente possível.
+
+**Indicador de progresso:** percentual dos experimentos documentados segundo a metodologia estabelecida.
+
+---
+
+### 2.4 Desenvolver e documentar ferramentas
+
+**Objetivo:** produzir ou adaptar ferramentas que auxiliem a investigação.
+
+Podem incluir:
+
+* scripts de shell;
+* programas auxiliares;
+* ferramentas de diagnóstico;
+* scripts de coleta de informações;
+* ferramentas de análise;
+* procedimentos de compilação;
+* experimentos de cross-compilation.
+
+**Indicador de progresso:** ferramentas documentadas, testadas e disponibilizadas quando sua publicação for apropriada.
+
+---
+
+### 2.5 Construir uma base de conhecimento
+
+**Objetivo:** transformar os resultados da pesquisa em conhecimento estruturado e reutilizável.
+
+A documentação deverá permitir que uma pessoa que não acompanhou a investigação consiga compreender:
+
+* o que foi descoberto;
+* como foi descoberto;
+* quais evidências sustentam a descoberta;
+* quais limitações permanecem;
+* quais hipóteses ainda estão abertas.
+
+**Indicador de progresso:** cobertura e organização das áreas técnicas investigadas.
+
+---
+
+### 2.6 Documentar limitações e incertezas
+
+Uma investigação técnica responsável também deve registrar aquilo que **não foi possível determinar**.
+
+O projeto deverá identificar explicitamente:
+
+* informações desconhecidas;
+* resultados inconclusivos;
+* hipóteses ainda não verificadas;
+* limitações dos equipamentos ou ferramentas;
+* riscos de determinadas experiências;
+* informações provenientes de fontes secundárias.
+
+**Indicador de progresso:** hipóteses e lacunas de conhecimento registradas e classificadas.
+
+---
+
+### 2.7 Aplicar Inteligência Artificial de maneira controlada
+
+**Objetivo:** investigar como ferramentas de IA podem auxiliar uma pesquisa técnica sem substituir a validação humana.
+
+Possíveis aplicações:
+
+* pesquisa e exploração inicial;
+* organização de informações;
+* análise de documentação;
+* geração e revisão de código;
+* auxílio na interpretação de dados;
+* estruturação de documentação;
+* identificação de possíveis hipóteses.
+
+Sempre que necessário, resultados produzidos por IA deverão ser confrontados com evidências técnicas.
+
+**Indicador de progresso:** registro das aplicações de IA utilizadas e das formas de validação empregadas.
+
+---
+
+### 2.8 Publicar o conhecimento
+
+**Objetivo:** disponibilizar os resultados de forma acessível, organizada e tecnicamente útil.
+
+A publicação deverá evoluir progressivamente para:
+
+* documentação web;
+* repositório de código;
+* registros de experimentos;
+* referências técnicas;
+* ferramentas auxiliares;
+* histórico de alterações.
+
+**Indicador de progresso:** percentual da documentação considerada pronta para publicação.
+
+---
+
+## 3. Critérios de qualidade
+
+Uma descoberta não será considerada concluída apenas porque foi registrada.
+
+Sempre que possível, será avaliada segundo quatro critérios:
+
+**Evidência**
+Existe alguma observação, teste, arquivo, log ou documentação que sustente a afirmação?
+
+**Reprodutibilidade**
+Outra pessoa poderia repetir o procedimento?
+
+**Clareza**
+O resultado está documentado de maneira compreensível?
+
+**Rastreabilidade**
+É possível identificar de onde veio a informação e como a conclusão foi obtida?
+
+---
+
+## 4. Evolução do projeto
+
+O projeto será desenvolvido de forma incremental.
+
+Cada área poderá assumir um dos seguintes estados:
+
+**Não investigado**
+A questão ainda não foi explorada.
+
+**Em investigação**
+Existem experimentos ou pesquisas em andamento.
+
+**Hipótese**
+Existe uma explicação plausível, mas ainda não confirmada.
+
+**Parcialmente confirmado**
+Existem evidências, mas ainda existem lacunas.
+
+**Confirmado**
+As evidências disponíveis sustentam suficientemente a conclusão.
+
+**Documentado**
+O conhecimento foi organizado e incorporado à documentação pública.
+
+Essa classificação permitirá acompanhar não apenas **quanto foi produzido**, mas também **o grau de confiança do conhecimento produzido**.
+
+---
+
+## 5. Resultado esperado
+
+Ao final de cada etapa, o projeto deverá produzir pelo menos um resultado concreto:
+
+**uma descoberta, um experimento documentado, uma ferramenta, uma explicação técnica ou uma melhoria na própria documentação.**
+
+O projeto não estabelece como meta conhecer tudo sobre o Zapp II.
+
+A meta é construir, progressivamente, uma documentação na qual seja possível distinguir com clareza:
+
+> **o que sabemos, como sabemos, o que ainda não sabemos e como podemos descobrir.**
