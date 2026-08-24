@@ -1,0 +1,31 @@
+site_name: KaiOS Zapp Research
+site_description: Investigação técnica do Multilaser Zapp II e KaiOS 2.5
+site_author: Giuliano Denardi Botteon
+
+theme:
+  name: material
+  language: pt-BR
+
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - toc:
+      permalink: true
+
+nav:
+  - Início: index.md
+
+  - Fase 1 · Identidade do projeto:
+      - Manifesto do Projeto: fases/01-identidade/01-manifesto.md
+      - Objetivos: fases/01-identidade/02-objetivos.md
+      - Escopo: fases/01-identidade/03-escopo.md
+      - Contexto e motivação: fases/01-identidade/04-contexto.md
+      - Estado atual da pesquisa: fases/01-identidade/05-estado-da-pesquisa.md
