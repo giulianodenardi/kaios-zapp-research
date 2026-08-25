@@ -8,5 +8,5 @@ Bem-vindo à documentação da investigação técnica independente realizada so
 * Análise de viabilidade de execução de comandos de shell e permissões de runtime.
 
 ## Navegação Rápida
-* **[Acervo de Artigos](articles/ART-001/)**: Artigos, experimentos e investigações catalogadas.
-* **[Fases do Manual](fases/01-identidade/01-manifesto/)**: Estrutura consolidada da pesquisa.
+* **[Acervo de Artigos](articles/)**: Artigos, experimentos e investigações catalogadas.
+* **[Fases do Manual](fases/01-identidade/01-Manifesto.md)**: Estrutura consolidada da pesquisa.
