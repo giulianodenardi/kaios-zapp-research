@@ -65,10 +65,13 @@ def scan_markdown_files():
                 
                 # Gera o caminho relativo EXATO a partir de docs/
                 rel_path = os.path.relpath(full_path, DOCS_DIR).replace("\\", "/")
+                
+                # Remove a extensão .md do link pra bater com o build do Jekyll no GitHub Pages
+                clean_path = os.path.splitext(rel_path)[0]
 
                 item = {
                     "title": meta["title"],
-                    "path": rel_path,
+                    "path": clean_path,
                     "id": meta["id"],
                     "order": meta["order"]
                 }
@@ -104,7 +107,7 @@ def generate_index():
             return "        <li><em>Nenhum documento encontrado.</em></li>"
         return "\n".join([f'        <li><a href="{item["path"]}">{item["title"]}</a></li>' for item in items])
 
-    md_content = f"""# Acervo e Documentação KaiOS / WhatsApp Research
+    md_content = f"""# Acervo e Documentação KaiOS Research
 
 ## 📚 Acervo de Artigos
 {render_md_list(artigos)}
@@ -132,7 +135,7 @@ def generate_index():
     </style>
 </head>
 <body>
-    <h1>Acervo e Documentação KaiOS / WhatsApp Research</h1>
+    <h1>Acervo e Documentação KaiOS Research</h1>
     
     <h2>📚 Acervo de Artigos</h2>
     <ul>
