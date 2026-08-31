@@ -15,3 +15,7 @@
 - [2. Objetivos](fases/01-identidade/02-objetivos)
 - [3. Escopo](fases/01-identidade/03-escopo)
 - [4. Contexto e motivação](fases/01-identidade/04-contexto)
+- [5. Arquitetura de Hardware](fases/01-identidade/05-arquitetura-hardware)
+- [6. Arquitetura de Software](fases/01-identidade/06-arquitetura-software)
+- [7. Ambiente de Investigação](fases/01-identidade/07-ambiente-de-investigacao)
+- [8. ADB: Porta de Entrada para o Sistema](fases/01-identidade/08-adb)
