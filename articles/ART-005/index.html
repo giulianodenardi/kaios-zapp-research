@@ -1,0 +1,2370 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>ADB via USB no KaiOS: diagnóstico de desconexões cíclicas em dispositivos MediaTek - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adb-via-usb-no-kaios-diagnostico-de-desconexoes-ciclicas-em-dispositivos-mediatek" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ADB via USB no KaiOS: diagnóstico de desconexões cíclicas em dispositivos MediaTek
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-adb-nao-e-o-mesmo-que-android" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 ADB não é o mesmo que Android
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-adbd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 adbd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-musb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 MUSB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-usb-gadget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 USB Gadget
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-confirmar-qual-dispositivo-adb-esta-sendo-utilizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Confirmar qual dispositivo ADB está sendo utilizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-capturar-o-log-do-dispositivo-via-wi-fi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Capturar o log do dispositivo via Wi-Fi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-capturar-o-log-durante-a-falha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Capturar o log durante a falha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-evidencia-encontrada-no-zapp-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Evidência encontrada no Zapp II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-interpretacao-do-adb_release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Interpretação do adb_release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-evidencia-importante-sobre-o-usb-phy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Evidência importante sobre o USB PHY
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-mensagem-charger-exist-and-usb-is-not-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Mensagem "Charger exist and USB is not host"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-mensagens-sobre-o-clock-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Mensagens sobre o clock USB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-o-que-o-log-descarta-ou-enfraquece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. O que o log descarta ou enfraquece
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. O que o log descarta ou enfraquece">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-o-adb-nao-esta-funcionando" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 "O ADB não está funcionando"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-o-adbd-simplesmente-morreu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 "O adbd simplesmente morreu"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-o-problema-e-necessariamente-o-cabo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 "O problema é necessariamente o cabo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-teste-diferencial-usb-versus-wi-fi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Teste diferencial USB versus Wi-Fi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-procedimento-recomendado-para-investigacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Procedimento recomendado para investigação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Procedimento recomendado para investigação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etapa-1-manter-o-wi-fi-adb-funcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 1: manter o Wi-Fi ADB funcional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-2-verificar-o-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 2: verificar o kernel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-3-capturar-o-estado-usb-antes-da-conexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 3: capturar o estado USB antes da conexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-4-conectar-o-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 4: conectar o USB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-5-capturar-novamente-via-wi-fi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 5: capturar novamente via Wi-Fi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-6-comparar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 6: comparar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-o-que-procurar-em-um-log-futuro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. O que procurar em um log futuro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. O que procurar em um log futuro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eventos-de-desconexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos de desconexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos-de-reconexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos de reconexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eventos-potencialmente-anormais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eventos potencialmente anormais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-o-que-ainda-precisa-ser-confirmado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. O que ainda precisa ser confirmado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Segurança e riscos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Resumo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integração com o restante do manual">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conceitos-que-esta-secao-utiliza" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conceitos que esta seção utiliza
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capitulos-que-podem-depender-desta-secao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capítulos que podem depender desta seção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#informacoes-que-devem-ser-verificadas-na-compilacao-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Informações que devem ser verificadas na compilação final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="adb-via-usb-no-kaios-diagnostico-de-desconexoes-ciclicas-em-dispositivos-mediatek">ADB via USB no KaiOS: diagnóstico de desconexões cíclicas em dispositivos MediaTek<a class="headerlink" href="#adb-via-usb-no-kaios-diagnostico-de-desconexoes-ciclicas-em-dispositivos-mediatek" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>O ADB (<em>Android Debug Bridge</em>) é utilizado por dispositivos KaiOS para fornecer uma interface de depuração entre o computador e o sistema do aparelho. Embora o KaiOS não seja Android, determinadas versões utilizam o protocolo ADB e o daemon <code>adbd</code> para depuração e comunicação com ferramentas de desenvolvimento. A documentação oficial do KaiOS descreve o uso de <code>adb devices</code> e <code>adb root</code> para verificar dispositivos de desenvolvimento.</p>
+<p>Em aparelhos KaiOS baseados em MediaTek, uma falha particularmente interessante ocorre quando:</p>
+<ol>
+<li>O computador reconhece o dispositivo;</li>
+<li><code>adb devices</code> mostra o aparelho como <code>device</code>;</li>
+<li><code>adb shell</code> consegue abrir uma sessão;</li>
+<li>A sessão desaparece poucos segundos depois;</li>
+<li>O dispositivo volta a aparecer;</li>
+<li>O ciclo se repete.</li>
+</ol>
+<p>Esse comportamento deve ser distinguido de uma simples falha de autorização ADB.</p>
+<p>No caso analisado nesta seção, o Multilaser Zapp II, equipado com MediaTek MT6572 e KaiOS 2.5.1.2, apresentou exatamente esse padrão. O diagnóstico foi baseado nos logs do kernel capturados durante a desconexão.</p>
+<blockquote>
+<p><strong>Conclusão principal da investigação:</strong> os logs fornecidos indicam que a desconexão não é simplesmente causada pelo encerramento do processo <code>adbd</code>. O próprio subsistema USB/MUSB está sendo desativado e reativado repetidamente. Portanto, a investigação deve se concentrar na camada USB, no driver MUSB, no gerenciamento de energia/PHY e na forma como o firmware configura o gadget ADB.</p>
+</blockquote>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-adb-nao-e-o-mesmo-que-android">2.1 ADB não é o mesmo que Android<a class="headerlink" href="#21-adb-nao-e-o-mesmo-que-android" title="Permanent link">&para;</a></h3>
+<p>O uso de <code>adb</code> não significa que o dispositivo esteja executando Android.</p>
+<p>No KaiOS, o ADB pode ser utilizado como mecanismo de comunicação com o sistema. A própria comunidade KaiOS documenta ADB e depuração em aparelhos KaiOS 2.5, inclusive em dispositivos MediaTek.</p>
+<p>Portanto, comandos como:
+- <code>adb devices</code>
+- <code>adb shell</code>
+- <code>adb root</code>
+- <code>adb logcat</code></p>
+<p>não devem ser interpretados como evidência de que o sistema operacional do aparelho é Android.</p>
+<h3 id="22-adbd">2.2 adbd<a class="headerlink" href="#22-adbd" title="Permanent link">&para;</a></h3>
+<p><code>adbd</code> é o daemon responsável pelo lado do dispositivo da comunicação ADB.</p>
+<p>No cenário estudado, entretanto, existem vários níveis envolvidos:</p>
+<pre><code class="language-text">Computador
+    │
+    │ USB
+    ▼
+Controladora USB do PC
+    │
+    ▼
+USB Device Controller do Zapp II
+    │
+    ▼
+MUSB
+    │
+    ▼
+USB Gadget
+    │
+    ▼
+ADB Function
+    │
+    ▼
+adbd
+    │
+    ▼
+shell / sistema KaiOS
+</code></pre>
+<p>Consequentemente, uma desconexão observada pelo computador como <code>device → desconectado</code> não significa necessariamente <code>adbd → morreu</code>. O problema pode ocorrer antes disso, na camada USB.</p>
+<h3 id="23-musb">2.3 MUSB<a class="headerlink" href="#23-musb" title="Permanent link">&para;</a></h3>
+<p>O log do Zapp II identifica explicitamente o controlador USB como <code>[MUSB]</code>.</p>
+<p>MUSB é o controlador USB utilizado por diversas plataformas embarcadas, incluindo plataformas MediaTek dessa geração. No log analisado aparecem funções como:
+- <code>musb_gadget_pullup</code>
+- <code>musb_pullup</code>
+- <code>musb_start</code>
+- <code>musb_stop</code>
+- <code>mt_usb_enable</code>
+- <code>mt_usb_disable</code></p>
+<p>Isso é particularmente importante porque permite observar o comportamento do controlador USB diretamente.</p>
+<h3 id="24-usb-gadget">2.4 USB Gadget<a class="headerlink" href="#24-usb-gadget" title="Permanent link">&para;</a></h3>
+<p>No modo conectado ao computador, o Zapp II atua como dispositivo USB, ou seja, como <em>USB gadget</em>.</p>
+<p>O log apresenta:
+- <code>[USB] android_bind_enabled_functions</code>
+- <code>[USB] usb_add_function</code>
+- <code>f_adb.c adb_bind_config</code></p>
+<p>Isso demonstra que a função USB associada ao ADB está sendo configurada.</p>
+<hr />
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>Uma conexão USB ADB funcional pode ser simplificada da seguinte maneira:</p>
+<pre><code class="language-text">adbd
+  │
+  ▼
+ADB USB function
+  │
+  ▼
+USB Gadget
+  │
+  ▼
+MUSB
+  │
+  ▼
+USB PHY
+  │
+  ▼
+porta USB física
+  │
+  ▼
+computador
+</code></pre>
+<p>Durante uma reconexão, esperamos encontrar eventos semelhantes a <code>adb_open</code>, seguidos pela ativação da interface USB.</p>
+<p>No log do Zapp II aparece:
+1. <code>adb_open start</code>
+2. <code>musb_gadget_pullup ... is_on=1</code>
+3. <code>adb_open end</code></p>
+<p>Isso indica que o sistema consegue configurar novamente a interface. O problema é que, aproximadamente dois segundos depois, ocorre novamente:
+1. <code>adb_release start</code>
+2. <code>android_disconnect</code>
+3. <code>musb_stop</code></p>
+<p>Após isso, o sistema volta a executar <code>adb_open</code>.</p>
+<p>Assim, o padrão observado é:</p>
+<pre><code class="language-text">ADB/USB abre
+      ↓
+USB é ativado
+      ↓
+USB é desconectado
+      ↓
+USB é desativado
+      ↓
+adbd associado à sessão termina
+      ↓
+USB é reconfigurado
+      ↓
+ADB abre novamente
+      ↓
+...
+</code></pre>
+<p>Esse ciclo é o principal elemento diagnóstico do caso.</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente</th>
+<th style="text-align: left;">Função no diagnóstico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>adb</code></td>
+<td style="text-align: left;">Cliente ADB no computador</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>adbd</code></td>
+<td style="text-align: left;">Daemon ADB no Zapp II</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>USB Gadget</strong></td>
+<td style="text-align: left;">Expõe o ADB como função USB</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>f_adb.c</code></td>
+<td style="text-align: left;">Implementação da função ADB no gadget USB</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MUSB</strong></td>
+<td style="text-align: left;">Controlador USB do SoC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>USB PHY</strong></td>
+<td style="text-align: left;">Camada física USB</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>musb_gadget_pullup()</code></td>
+<td style="text-align: left;">Controle da conexão lógica do gadget</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>mt_usb_enable()</code></td>
+<td style="text-align: left;">Ativação do subsistema USB MediaTek</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>mt_usb_disable()</code></td>
+<td style="text-align: left;">Desativação do subsistema USB MediaTek</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>upmu_is_chr_det</code></td>
+<td style="text-align: left;">Detecção relacionada ao carregamento/USB</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kernel Linux 3.4</strong></td>
+<td style="text-align: left;">Kernel identificado no firmware analisado</td>
+</tr>
+</tbody>
+</table>
+<p>O próprio log fornece uma evidência particularmente útil sobre a árvore de código utilizada na compilação:</p>
+<pre><code class="language-text">/home/ap-3-x9/workspace/zhouc/kaios_72_R1_512S/kernel-3.4/drivers/usb/gadget/f_adb.c
+</code></pre>
+<p>Esse caminho não deve ser interpretado como um caminho existente no aparelho. Ele é, aparentemente, o caminho do ambiente de compilação utilizado pelo fabricante. Ele é, entretanto, uma evidência valiosa sobre a origem do código do kernel.</p>
+<hr />
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-confirmar-qual-dispositivo-adb-esta-sendo-utilizado">5.1 Confirmar qual dispositivo ADB está sendo utilizado<a class="headerlink" href="#51-confirmar-qual-dispositivo-adb-esta-sendo-utilizado" title="Permanent link">&para;</a></h3>
+<p>Quando o Zapp II está simultaneamente conectado por USB e Wi-Fi, o ADB pode apresentar:</p>
+<pre><code class="language-text">error: more than one device/emulator
+</code></pre>
+<p>Nesse caso, utilize o identificador explicitamente.</p>
+<p>Para o Zapp II conectado via Wi-Fi:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell
+</code></pre>
+<p>Para verificar os dispositivos:</p>
+<pre><code class="language-bash">adb devices
+</code></pre>
+<p>Exemplo de saída:</p>
+<pre><code class="language-text">List of devices attached
+192.168.0.16:5555       device
+AIQ4Q85PWK4L6PEU        device
+</code></pre>
+<p>O primeiro é a conexão Wi-Fi. O segundo é a conexão USB.</p>
+<h3 id="52-capturar-o-log-do-dispositivo-via-wi-fi">5.2 Capturar o log do dispositivo via Wi-Fi<a class="headerlink" href="#52-capturar-o-log-do-dispositivo-via-wi-fi" title="Permanent link">&para;</a></h3>
+<p>A conexão Wi-Fi é particularmente útil neste diagnóstico porque permite investigar o subsistema USB sem depender da estabilidade do ADB USB.</p>
+<p>Exemplo para capturar o dmesg:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg
+</code></pre>
+<p>Para procurar mensagens relacionadas a USB:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg | grep -i usb
+</code></pre>
+<p>Para procurar MUSB:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg | grep -i musb
+</code></pre>
+<p>Para procurar ADB:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg | grep -i adb
+</code></pre>
+<p>Uma estratégia mais ampla:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg | grep -Ei 'adb|usb|musb|phy|gadget'
+</code></pre>
+<p>Essa abordagem é preferível a procurar exclusivamente por <code>adbd</code>.</p>
+<h3 id="53-capturar-o-log-durante-a-falha">5.3 Capturar o log durante a falha<a class="headerlink" href="#53-capturar-o-log-durante-a-falha" title="Permanent link">&para;</a></h3>
+<p>Como o problema ocorre rapidamente, a melhor metodologia é:</p>
+<ol>
+<li>Estabelecer ADB via Wi-Fi;</li>
+<li>Iniciar a captura;</li>
+<li>Conectar o USB;</li>
+<li>Aguardar a falha;</li>
+<li>Preservar o log;</li>
+<li>Somente depois realizar alterações no sistema.</li>
+</ol>
+<p>Exemplo de comando:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg &gt; zapp2_usb_dmesg.txt
+</code></pre>
+<p>Para acompanhamento em tempo real:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg -w
+</code></pre>
+<p><em>Nota: A disponibilidade de <code>dmesg -w</code> depende da implementação presente no firmware. Portanto, se essa opção não funcionar, deve-se utilizar uma captura convencional de <code>dmesg</code>.</em></p>
+<hr />
+<h2 id="6-evidencia-encontrada-no-zapp-ii">6. Evidência encontrada no Zapp II<a class="headerlink" href="#6-evidencia-encontrada-no-zapp-ii" title="Permanent link">&para;</a></h2>
+<p>O trecho mais importante do log fornecido é:</p>
+<ol>
+<li><code>adb_release start</code> seguido imediatamente por <code>musb_gadget_pullup ... is_on=0</code></li>
+<li><code>android_disconnect</code></li>
+<li><code>dev-&gt;connected = 0</code></li>
+<li><code>mt_usb_disable</code></li>
+<li><code>musb_stop</code></li>
+</ol>
+<p>Isso constitui uma sequência coerente de desconexão do gadget USB.</p>
+<p>Logo depois, o kernel começa novamente a montar a função ADB:
+1. <code>adb_open start</code>
+2. <code>android_bind_enabled_functions</code>
+3. <code>usb_add_function</code>
+4. <code>f_adb.c adb_bind_config</code>
+5. <code>musb_gadget_pullup ... is_on=1</code>
+6. <code>adb_open end</code></p>
+<p>Ou seja:</p>
+<pre><code class="language-text">                    ┌──────────────────────┐
+                    │      adb_open        │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                     USB gadget ativo
+                               │
+                               ▼
+                        ADB disponível
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │     adb_release      │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                      android_disconnect
+                               │
+                               ▼
+                        mt_usb_disable
+                               │
+                               ▼
+                          musb_stop
+                               │
+                               ▼
+                     USB gadget desligado
+                               │
+                               ▼
+                         adb_open novamente
+</code></pre>
+<p>O ciclo aparece diversas vezes no intervalo de poucos segundos.</p>
+<hr />
+<h2 id="7-interpretacao-do-adb_release">7. Interpretação do <code>adb_release</code><a class="headerlink" href="#7-interpretacao-do-adb_release" title="Permanent link">&para;</a></h2>
+<p>É importante não interpretar <code>adb_release</code> automaticamente como <em>"O adbd decidiu encerrar porque encontrou um erro."</em></p>
+<p>O log fornecido não demonstra isso. A sequência mostra que <code>adb_release</code> está associada à liberação da interface USB:</p>
+<pre><code class="language-text">adb_release start → android_disconnect → mt_usb_disable → musb_stop
+</code></pre>
+<p>Portanto, uma hipótese mais consistente com as evidências é:</p>
+<blockquote>
+<p>A sessão ADB está sendo encerrada como consequência da desconexão da função USB, e não necessariamente porque o <code>adbd</code> apresentou uma falha primária.</p>
+</blockquote>
+<p>Essa distinção é fundamental para o <em>debugging</em>.</p>
+<hr />
+<h2 id="8-evidencia-importante-sobre-o-usb-phy">8. Evidência importante sobre o USB PHY<a class="headerlink" href="#8-evidencia-importante-sobre-o-usb-phy" title="Permanent link">&para;</a></h2>
+<p>O log contém:
+- <code>usb_phy_savecurrent_internal</code>
+- <code>usb save current success</code></p>
+<p>E posteriormente, durante a reconexão:
+- <code>[USBPHY]slew calibration</code>
+- <code>usb recovery success</code></p>
+<p>Isso demonstra que o firmware está realizando operações explícitas de gerenciamento e recuperação do USB PHY.</p>
+<p>A presença de <code>usb recovery success</code> é especialmente interessante. Ela indica que o código do controlador considera que houve uma condição na qual uma recuperação da interface USB foi necessária.</p>
+<p>Entretanto, não é possível concluir apenas por essa mensagem que a causa raiz seja um defeito físico do PHY. O log demonstra a recuperação, mas não demonstra por que a recuperação foi necessária.</p>
+<hr />
+<h2 id="9-mensagem-charger-exist-and-usb-is-not-host">9. Mensagem "Charger exist and USB is not host"<a class="headerlink" href="#9-mensagem-charger-exist-and-usb-is-not-host" title="Permanent link">&para;</a></h2>
+<p>Uma mensagem recorrente é:</p>
+<pre><code class="language-text">[Power/Battery] [upmu_is_chr_det] Charger exist and USB is not host
+</code></pre>
+<p>Ela merece atenção, mas não deve ser interpretada isoladamente como <em>"O aparelho está reconhecendo o computador apenas como carregador."</em> Essa conclusão seria excessiva.</p>
+<p>A mensagem está sendo emitida durante a ativação/desativação do subsistema USB e provavelmente está relacionada à lógica de detecção de carregador/host do hardware MediaTek.</p>
+<p>Mais importante é observar o conjunto:</p>
+<pre><code class="language-text">Charger exist and USB is not host
+    + musb_gadget_pullup
+    + android_disconnect
+    + mt_usb_disable
+    + musb_stop
+</code></pre>
+<p><strong>Diagnóstico correto:</strong> Existe uma interação anormal entre a lógica de detecção USB/power e o modo gadget do controlador MUSB. Ainda não é possível determinar, apenas com esse log, se a causa é cabo, porta, hardware, configuração de firmware, gerenciamento de energia ou bug do driver.</p>
+<hr />
+<h2 id="10-mensagens-sobre-o-clock-usb">10. Mensagens sobre o clock USB<a class="headerlink" href="#10-mensagens-sobre-o-clock-usb" title="Permanent link">&para;</a></h2>
+<p>O log também apresenta:
+- <code>musb_readl: access musb_readl function when usb clock is off</code>
+- <code>musb_writel: access musb_writel function when usb clock is off</code></p>
+<p>Essas mensagens são relevantes. Elas indicam que determinadas operações de leitura/escrita nos registradores MUSB estão ocorrendo quando o clock USB está desligado.</p>
+<p>Entretanto, novamente, isso não deve ser automaticamente classificado como "o erro". É possível que essas mensagens façam parte de uma sequência normal de transição de energia do driver, especialmente durante a ativação ou desativação do controlador.</p>
+<p>A hipótese mais interessante é investigar se a sequência:</p>
+<pre><code class="language-text">clock USB ──&gt; MUSB ──&gt; USB PHY ──&gt; gadget
+</code></pre>
+<p>está entrando em uma condição de desligamento/reinicialização inesperada.</p>
+<hr />
+<h2 id="11-o-que-o-log-descarta-ou-enfraquece">11. O que o log descarta ou enfraquece<a class="headerlink" href="#11-o-que-o-log-descarta-ou-enfraquece" title="Permanent link">&para;</a></h2>
+<p>O log fornece evidências contra algumas hipóteses.</p>
+<h3 id="111-o-adb-nao-esta-funcionando">11.1 "O ADB não está funcionando"<a class="headerlink" href="#111-o-adb-nao-esta-funcionando" title="Permanent link">&para;</a></h3>
+<p><strong>Não.</strong> O ADB funciona. O dispositivo chegou a <code>device</code> e a sessão shell chegou a <code>root@ZAPP_II:/ #</code>. Além disso, o log mostra repetidamente a criação da função ADB.</p>
+<h3 id="112-o-adbd-simplesmente-morreu">11.2 "O adbd simplesmente morreu"<a class="headerlink" href="#112-o-adbd-simplesmente-morreu" title="Permanent link">&para;</a></h3>
+<p>Não há evidência suficiente para afirmar isso. O log mostra processos filhos <code>adbd</code> terminando (<code>[2364:adbd] exit</code>), mas isso acontece dentro de uma sequência de <code>adb_release</code> e desconexão USB. É mais consistente interpretar esses processos como associados às sessões/conexões que estão sendo encerradas.</p>
+<h3 id="113-o-problema-e-necessariamente-o-cabo">11.3 "O problema é necessariamente o cabo"<a class="headerlink" href="#113-o-problema-e-necessariamente-o-cabo" title="Permanent link">&para;</a></h3>
+<p>Também não está comprovado. Um cabo defeituoso continua sendo uma hipótese válida, especialmente se o problema ocorrer somente em determinada conexão física. Mas o log demonstra atividade interna no controlador USB do aparelho, portanto não devemos encerrar o diagnóstico simplesmente substituindo o cabo.</p>
+<hr />
+<h2 id="12-teste-diferencial-usb-versus-wi-fi">12. Teste diferencial USB versus Wi-Fi<a class="headerlink" href="#12-teste-diferencial-usb-versus-wi-fi" title="Permanent link">&para;</a></h2>
+<p>Esse é um dos testes mais importantes. O Zapp II apresentou uma conexão <code>192.168.0.16:5555 device</code> e <code>adb -s 192.168.0.16:5555 shell</code> funcionando como root.</p>
+<p>Isso permite separar duas camadas:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Teste</th>
+<th style="text-align: left;">Resultado</th>
+<th style="text-align: left;">Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>ADB via Wi-Fi</strong></td>
+<td style="text-align: left;">Funciona</td>
+<td style="text-align: left;"><code>adbd</code> e shell estão operacionais</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ADB via USB</strong></td>
+<td style="text-align: left;">Desconecta</td>
+<td style="text-align: left;">Problema associado à camada USB ou à sua configuração</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>adb root via Wi-Fi</strong></td>
+<td style="text-align: left;"><code>adbd is already running as root</code></td>
+<td style="text-align: left;">Daemon está funcional e privilegiado</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>USB gadget</strong></td>
+<td style="text-align: left;">Reinicia repetidamente</td>
+<td style="text-align: left;">Forte evidência de problema no caminho USB</td>
+</tr>
+</tbody>
+</table>
+<p>Essa comparação é muito mais informativa do que simplesmente executar <code>adb shell</code> várias vezes.</p>
+<hr />
+<h2 id="13-procedimento-recomendado-para-investigacao">13. Procedimento recomendado para investigação<a class="headerlink" href="#13-procedimento-recomendado-para-investigacao" title="Permanent link">&para;</a></h2>
+<h3 id="etapa-1-manter-o-wi-fi-adb-funcional">Etapa 1: manter o Wi-Fi ADB funcional<a class="headerlink" href="#etapa-1-manter-o-wi-fi-adb-funcional" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">adb devices
+# Esperado: 192.168.0.16:5555       device
+
+adb -s 192.168.0.16:5555 shell
+</code></pre>
+<h3 id="etapa-2-verificar-o-kernel">Etapa 2: verificar o kernel<a class="headerlink" href="#etapa-2-verificar-o-kernel" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell uname -a
+adb -s 192.168.0.16:5555 shell cat /proc/version
+</code></pre>
+<h3 id="etapa-3-capturar-o-estado-usb-antes-da-conexao">Etapa 3: capturar o estado USB antes da conexão<a class="headerlink" href="#etapa-3-capturar-o-estado-usb-antes-da-conexao" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg &gt; zapp2_before_usb.txt
+</code></pre>
+<h3 id="etapa-4-conectar-o-usb">Etapa 4: conectar o USB<a class="headerlink" href="#etapa-4-conectar-o-usb" title="Permanent link">&para;</a></h3>
+<p>Conectar o cabo sem executar imediatamente vários comandos ADB. Observar no computador:</p>
+<pre><code class="language-bash">adb devices
+</code></pre>
+<h3 id="etapa-5-capturar-novamente-via-wi-fi">Etapa 5: capturar novamente via Wi-Fi<a class="headerlink" href="#etapa-5-capturar-novamente-via-wi-fi" title="Permanent link">&para;</a></h3>
+<p>Enquanto o ADB Wi-Fi permanecer disponível:</p>
+<pre><code class="language-bash">adb -s 192.168.0.16:5555 shell dmesg &gt; zapp2_after_usb.txt
+</code></pre>
+<h3 id="etapa-6-comparar">Etapa 6: comparar<a class="headerlink" href="#etapa-6-comparar" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">grep -Ei 'adb|usb|musb|phy|gadget|charger' zapp2_after_usb.txt
+</code></pre>
+<p>Uma investigação mais precisa pode utilizar:</p>
+<pre><code class="language-bash">grep -Ei 'disconnect|connect|release|open|disable|enable|recovery|clock|phy' zapp2_after_usb.txt
+</code></pre>
+<hr />
+<h2 id="14-o-que-procurar-em-um-log-futuro">14. O que procurar em um log futuro<a class="headerlink" href="#14-o-que-procurar-em-um-log-futuro" title="Permanent link">&para;</a></h2>
+<p>Durante uma nova captura, os eventos mais importantes são:</p>
+<h3 id="eventos-de-desconexao">Eventos de desconexão<a class="headerlink" href="#eventos-de-desconexao" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>android_disconnect</code></li>
+<li><code>dev-&gt;connected = 0</code></li>
+<li><code>musb_stop</code></li>
+<li><code>mt_usb_disable</code></li>
+<li><code>adb_release</code></li>
+</ul>
+<h3 id="eventos-de-reconexao">Eventos de reconexão<a class="headerlink" href="#eventos-de-reconexao" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>adb_open</code></li>
+<li><code>usb_add_function</code></li>
+<li><code>adb_bind_config</code></li>
+<li><code>musb_start</code></li>
+<li><code>mt_usb_enable</code></li>
+<li><code>adb_open end</code></li>
+</ul>
+<h3 id="eventos-potencialmente-anormais">Eventos potencialmente anormais<a class="headerlink" href="#eventos-potencialmente-anormais" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>USBPHY</code></li>
+<li><code>usb recovery</code></li>
+<li><code>clock is off</code></li>
+<li><code>reset</code></li>
+<li><code>error</code></li>
+<li><code>timeout</code></li>
+<li><code>over-current</code></li>
+<li><code>overcurrent</code></li>
+<li><code>enumeration failed</code></li>
+</ul>
+<p>Também devem ser procuradas mensagens que apareçam imediatamente antes da primeira ocorrência de <code>adb_release</code>. Essa é uma das partes mais importantes do diagnóstico: <strong>o evento que inicia o ciclo é mais relevante que os eventos posteriores de recuperação</strong>.</p>
+<hr />
+<h2 id="15-o-que-ainda-precisa-ser-confirmado">15. O que ainda precisa ser confirmado<a class="headerlink" href="#15-o-que-ainda-precisa-ser-confirmado" title="Permanent link">&para;</a></h2>
+<p>Com os dados atuais, algumas hipóteses permanecem abertas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Hipótese</th>
+<th style="text-align: left;">Evidência atual</th>
+<th style="text-align: left;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Problema no cabo</td>
+<td style="text-align: left;">Possível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Problema na porta USB do PC</td>
+<td style="text-align: left;">Possível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Problema no conector do Zapp II</td>
+<td style="text-align: left;">Possível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Configuração USB do firmware</td>
+<td style="text-align: left;">Plausível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Bug no driver MUSB</td>
+<td style="text-align: left;">Plausível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Problema de USB PHY/power management</td>
+<td style="text-align: left;">Plausível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Falha primária do adbd</td>
+<td style="text-align: left;">Pouco sustentada pelo log</td>
+<td style="text-align: left;">Improvável como hipótese principal</td>
+</tr>
+<tr>
+<td style="text-align: left;">Problema exclusivo do ADB</td>
+<td style="text-align: left;">Enfraquecido pelo funcionamento via Wi-Fi</td>
+<td style="text-align: left;">Improvável</td>
+</tr>
+<tr>
+<td style="text-align: left;">Problema físico no USB</td>
+<td style="text-align: left;">Possível</td>
+<td style="text-align: left;">Não confirmado</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="16-seguranca-e-riscos">16. Segurança e riscos<a class="headerlink" href="#16-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>A investigação inicial deve ser somente observacional.</p>
+<p>Comandos como <code>dmesg</code>, <code>adb devices</code>, <code>adb shell</code>, <code>uname -a</code> e <code>cat /proc/version</code> são preferíveis inicialmente porque não modificam o sistema.</p>
+<p>Não é recomendável começar o diagnóstico alterando:
+- <code>/system</code>
+- <code>/init</code>
+- <code>build.prop</code>
+- propriedades USB
+- scripts de boot
+- kernel
+- <code>boot.img</code></p>
+<p>sem antes preservar os logs.</p>
+<p>Especialmente em um dispositivo no qual já existe acesso root, comandos como <code>setprop</code>, <code>stop adbd</code> e <code>start adbd</code> podem alterar o estado de depuração e destruir justamente a condição que está sendo investigada.</p>
+<p>A documentação oficial do KaiOS confirma que o ADB faz parte do fluxo de desenvolvimento em dispositivos de debug, mas o comportamento concreto de cada aparelho depende da implementação do fabricante.</p>
+<hr />
+<h2 id="17-compatibilidade">17. Compatibilidade<a class="headerlink" href="#17-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>O comportamento descrito nesta seção não deve ser generalizado para todos os dispositivos KaiOS.</p>
+<p>O caso analisado possui características específicas:
+- <strong>Modelo:</strong> Multilaser Zapp II
+- <strong>SoC:</strong> MediaTek MT6572
+- <strong>KaiOS:</strong> 2.5.1.2
+- <strong>Kernel:</strong> Linux 3.4
+- <strong>Controlador USB observado:</strong> MUSB</p>
+<p>A comunidade KaiOS registra que dispositivos MediaTek possuem particularidades próprias em relação à depuração e modificação, e existem diferenças importantes entre aparelhos mesmo dentro da mesma versão do KaiOS. Além disso, versões posteriores do KaiOS podem alterar significativamente o acesso ao ADB e às ferramentas de desenvolvimento.</p>
+<blockquote>
+<p><strong>Portanto:</strong> Os comandos básicos ADB são relativamente portáveis, mas o diagnóstico interno de USB, <code>adbd</code>, MUSB, PHY e firmware é específico da plataforma.</p>
+</blockquote>
+<hr />
+<h2 id="18-referencias-cruzadas">18. Referências cruzadas<a class="headerlink" href="#18-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Esta seção depende principalmente dos seguintes capítulos do manual:
+- Arquitetura do KaiOS
+- Linux e kernel no KaiOS
+- Hardware e SoCs MediaTek
+- ADB e ferramentas de desenvolvimento
+- Root e privilégios
+- Estrutura do firmware
+- Debugging e análise de logs
+- USB Gadget e controladores USB</p>
+<p>Ela poderá servir de base posteriormente para:
+- Modificação do kernel
+- Análise do <code>boot.img</code>
+- Modificação do firmware
+- Engenharia reversa do <code>adbd</code>
+- Desenvolvimento de ferramentas de diagnóstico
+- Recuperação de dispositivos</p>
+<hr />
+<h2 id="19-resumo">19. Resumo<a class="headerlink" href="#19-resumo" title="Permanent link">&para;</a></h2>
+<p>O caso do Zapp II demonstra uma distinção importante no diagnóstico de ADB:</p>
+<p><code>ADB desconectando</code> ≠ <code>adbd necessariamente com defeito</code></p>
+<p>Os logs fornecidos mostram repetidamente a seguinte sequência:</p>
+<pre><code class="language-text">adb_release
+    ↓
+musb_gadget_pullup(is_on=0)
+    ↓
+android_disconnect
+    ↓
+dev-&gt;connected = 0
+    ↓
+mt_usb_disable
+    ↓
+musb_stop
+    ↓
+adb_open
+    ↓
+usb_add_function
+    ↓
+adb_bind_config
+    ↓
+musb_gadget_pullup(is_on=1)
+    ↓
+usb recovery
+    ↓
+adb_open end
+</code></pre>
+<p>A repetição desse ciclo demonstra que o subsistema USB do Zapp II está sendo desativado e reativado repetidamente.</p>
+<p>A evidência atual favorece uma investigação concentrada em:
+1. Controlador MUSB;
+2. USB gadget;
+3. USB PHY;
+4. Gerenciamento de energia USB;
+5. Detecção host/carregador;
+6. Configuração do firmware;
+7. Eventualmente, cabo, porta ou hardware físico.</p>
+<p>O funcionamento do ADB via Wi-Fi é uma evidência importante porque demonstra que o <code>adbd</code> e o shell do aparelho permanecem operacionais fora do caminho USB.</p>
+<p>A próxima informação mais valiosa para determinar a causa raiz não é simplesmente mais uma captura do mesmo ciclo, mas o trecho imediatamente anterior à primeira ocorrência de <code>adb_release</code>, preferencialmente incluindo todas as mensagens do kernel relacionadas a USB, PHY, energia e MUSB.</p>
+<hr />
+<h2 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h2>
+<h3 id="conceitos-que-esta-secao-utiliza">Conceitos que esta seção utiliza<a class="headerlink" href="#conceitos-que-esta-secao-utiliza" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Arquitetura Linux do KaiOS</li>
+<li>ADB e <code>adbd</code></li>
+<li>Estrutura do kernel</li>
+<li>Hardware MediaTek</li>
+<li>USB Gadget</li>
+<li>Sistema de logs do kernel</li>
+</ul>
+<h3 id="capitulos-que-podem-depender-desta-secao">Capítulos que podem depender desta seção<a class="headerlink" href="#capitulos-que-podem-depender-desta-secao" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Diagnóstico avançado de hardware</li>
+<li>Engenharia reversa do kernel</li>
+<li>Modificação do firmware</li>
+<li>Análise de <code>boot.img</code></li>
+<li>Desenvolvimento de ferramentas ADB</li>
+<li>Recuperação e debugging de dispositivos MediaTek</li>
+</ul>
+<h3 id="informacoes-que-devem-ser-verificadas-na-compilacao-final">Informações que devem ser verificadas na compilação final<a class="headerlink" href="#informacoes-que-devem-ser-verificadas-na-compilacao-final" title="Permanent link">&para;</a></h3>
+<p>Durante a consolidação do manual, devem ser confirmados especificamente:
+- Versão exata do firmware do Zapp II;
+- Versão exata do kernel;
+- Configuração USB compilada no kernel;
+- Implementação de <code>adbd</code> utilizada pelo firmware;
+- Propriedades USB disponíveis no aparelho;
+- Origem do código <code>kernel-3.4</code> indicado no log;
+- Comportamento do mesmo aparelho com diferentes cabos e portas USB;
+- Diferenças entre ADB USB e ADB TCP/IP;
+- Existência de alterações específicas da Multilaser no driver MUSB.</p>
+<p>Essas verificações são importantes para separar definitivamente comportamento específico do firmware do Zapp II de comportamento geral do KaiOS 2.5.1.x.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2244 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Terminal de Sistema em KaiOS Modificado: Otimização de Uso por Teclas Físicas, Aliases e Menus de Inicialização - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#terminal-de-sistema-em-kaios-modificado-otimizacao-de-uso-por-teclas-fisicas-aliases-e-menus-de-inicializacao" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Terminal de Sistema em KaiOS Modificado: Otimização de Uso por Teclas Físicas, Aliases e Menus de Inicialização
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-terminal-existente-versus-terminal-personalizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Terminal existente versus terminal personalizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-alias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Alias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-funcoes-de-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Funções de shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-menu-de-inicializacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Menu de inicialização
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Como funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-por-que-nao-substituir-systembinsh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Por que não substituir /system/bin/sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-verificar-qual-shell-esta-sendo-utilizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar qual shell está sendo utilizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-criar-um-primeiro-script-de-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Criar um primeiro script de diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-criar-aliases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Criar aliases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-identificar-arquivos-de-inicializacao-do-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Identificar arquivos de inicialização do shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-criar-um-menu-interativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Criar um menu interativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-menu-especializado-em-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Menu especializado em diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-atalho-para-propriedades-kaios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Atalho para propriedades KaiOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-atalhos-para-investigacao-de-dispositivos-de-entrada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Atalhos para investigação de dispositivos de entrada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Diagnóstico e debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-verificar-o-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Verificar o ambiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-verificar-comandos-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Verificar comandos disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-registrar-a-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Registrar a saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-preservar-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Preservar evidências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baixo-risco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baixo risco
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-maior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco maior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Resumo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Resumo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="terminal-de-sistema-em-kaios-modificado-otimizacao-de-uso-por-teclas-fisicas-aliases-e-menus-de-inicializacao">Terminal de Sistema em KaiOS Modificado: Otimização de Uso por Teclas Físicas, Aliases e Menus de Inicialização<a class="headerlink" href="#terminal-de-sistema-em-kaios-modificado-otimizacao-de-uso-por-teclas-fisicas-aliases-e-menus-de-inicializacao" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>Em aparelhos KaiOS com acesso a <code>adb shell</code> e privilégios de root, um terminal de sistema pode ser utilizado para investigação, diagnóstico e execução de comandos diretamente no dispositivo.</p>
+<p>Entretanto, aparelhos de baixo custo com teclado físico apresentam uma limitação prática importante: a entrada de comandos longos é lenta quando realizada exclusivamente pelas teclas alfanuméricas do aparelho.</p>
+<p>Uma solução não é substituir o terminal existente, mas criar uma camada de conveniência sobre ele. Essa camada pode utilizar:</p>
+<ul>
+<li>Aliases; </li>
+<li>Funções de shell; </li>
+<li>Scripts de automação; </li>
+<li>Menus interativos; </li>
+<li>Comandos pré-programados; </li>
+<li>Scripts de inicialização; </li>
+<li>Atalhos para operações recorrentes. </li>
+</ul>
+<p>O objetivo é transformar operações que exigiriam vários caracteres em ações selecionáveis por poucas teclas.</p>
+<p>No contexto investigado neste manual, essa abordagem é particularmente relevante para o Multilaser Zapp II, cujo firmware apresenta:</p>
+<pre><code class="language-properties">ro.build.version.release=4.4.2
+ro.build.version.sdk=19
+ro.product.version_tag=kaios_2_5_modric_20200721_20
+ro.product.model=ZAPP_II
+ro.board.platform=mt6572
+</code></pre>
+<p>O kernel identificado é:</p>
+<pre><code class="language-text">Linux version 3.4.67
+</code></pre>
+<p>Esses dados demonstram que o ambiente possui uma base Android antiga profundamente modificada para executar KaiOS. Portanto, comandos e comportamentos documentados para Android moderno não devem ser automaticamente considerados aplicáveis.</p>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-terminal-existente-versus-terminal-personalizado">2.1 Terminal existente versus terminal personalizado<a class="headerlink" href="#21-terminal-existente-versus-terminal-personalizado" title="Permanent link">&para;</a></h3>
+<p>É importante distinguir duas abordagens:</p>
+<ul>
+<li><strong>Terminal personalizado:</strong> significa desenvolver uma nova interface ou aplicação de terminal.</li>
+<li><strong>Camada de conveniência:</strong> significa utilizar o terminal que já existe e adicionar mecanismos para facilitar sua utilização.</li>
+</ul>
+<p>Neste capítulo é adotada a segunda abordagem. A estrutura conceitual é:</p>
+<pre><code class="language-text">Teclas físicas
+      │
+      ▼
+Terminal existente
+      │
+      ▼
+Shell
+      │
+      ▼
+Aliases / funções / scripts
+      │
+      ▼
+Comandos do sistema
+</code></pre>
+<p>O terminal continua responsável pela interface, o shell continua executando os comandos, e os scripts apenas reduzem a quantidade de entrada necessária.</p>
+<h3 id="22-alias">2.2 Alias<a class="headerlink" href="#22-alias" title="Permanent link">&para;</a></h3>
+<p>Um alias associa uma palavra curta a um comando maior. Por exemplo:</p>
+<pre><code class="language-bash">alias si='getprop ro.build.display.id'
+</code></pre>
+<p>Depois disso, <code>si</code> pode executar o comando correspondente. Aliases são especialmente úteis para comandos:</p>
+<ul>
+<li>Longos; </li>
+<li>Executados frequentemente; </li>
+<li>Difíceis de digitar; </li>
+<li>Compostos por vários parâmetros. </li>
+</ul>
+<p>Porém, aliases normalmente são uma característica do shell e da sessão atual. Sua persistência depende de onde forem definidos.</p>
+<h3 id="23-funcoes-de-shell">2.3 Funções de shell<a class="headerlink" href="#23-funcoes-de-shell" title="Permanent link">&para;</a></h3>
+<p>Funções são mais poderosas que aliases porque podem receber argumentos e executar várias operações. Exemplo:</p>
+<pre><code class="language-bash">sysinfo() {
+    getprop ro.product.model
+    getprop ro.build.version.release
+    getprop ro.build.display.id
+}
+</code></pre>
+<p>A função pode então ser executada simplesmente com:</p>
+<pre><code class="language-bash">sysinfo
+</code></pre>
+<p>Uma função é mais apropriada quando uma operação precisa combinar vários comandos.</p>
+<h3 id="24-scripts">2.4 Scripts<a class="headerlink" href="#24-scripts" title="Permanent link">&para;</a></h3>
+<p>Um script é um arquivo contendo comandos executáveis pelo shell. Exemplo:</p>
+<pre><code class="language-bash">#!/system/bin/sh
+
+echo &quot;Modelo:&quot;
+getprop ro.product.model
+
+echo &quot;Build:&quot;
+getprop ro.build.display.id
+
+echo &quot;KaiOS:&quot;
+getprop ro.product.version_tag
+</code></pre>
+<p>Scripts são particularmente interessantes no Zapp II porque permitem criar ferramentas reutilizáveis sem modificar diretamente os componentes principais do sistema.</p>
+<h3 id="25-menu-de-inicializacao">2.5 Menu de inicialização<a class="headerlink" href="#25-menu-de-inicializacao" title="Permanent link">&para;</a></h3>
+<p>Um menu pode funcionar como uma camada intermediária entre o usuário e o shell:</p>
+<pre><code class="language-text">========================
+     ZAPP II TOOLKIT
+========================
+
+1. Informações do sistema
+2. Rede
+3. Processos
+4. Diagnóstico
+5. Shell
+
+Selecione:
+</code></pre>
+<p>O usuário precisa digitar somente uma opção, em vez de conhecer e digitar o comando correspondente. Essa abordagem é especialmente adequada para aparelhos com teclado físico limitado.</p>
+<hr />
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>Uma implementação simples pode seguir o seguinte fluxo:</p>
+<pre><code class="language-text">Terminal
+   │
+   ▼
+Script inicial
+   │
+   ├── 1 → diagnóstico
+   ├── 2 → rede
+   ├── 3 → informações
+   ├── 4 → ferramentas
+   └── 5 → shell interativo
+</code></pre>
+<p>O script pode utilizar <code>case</code> para selecionar uma operação:</p>
+<pre><code class="language-bash">case &quot;$opcao&quot; in
+    1)
+        comando1
+        ;;
+    2)
+        comando2
+        ;;
+    3)
+        comando3
+        ;;
+esac
+</code></pre>
+<p>Essa técnica utiliza recursos básicos do shell e, portanto, tende a ser mais compatível com ambientes embarcados do que depender de frameworks ou bibliotecas adicionais.</p>
+<h3 id="31-por-que-nao-substituir-systembinsh">3.1 Por que não substituir <code>/system/bin/sh</code><a class="headerlink" href="#31-por-que-nao-substituir-systembinsh" title="Permanent link">&para;</a></h3>
+<p>Modificar diretamente o shell do sistema é uma estratégia desnecessariamente invasiva. Por exemplo, substituir ou encapsular <code>/system/bin/sh</code> pode afetar:</p>
+<ul>
+<li>Scripts de inicialização ; </li>
+<li>Serviços ; </li>
+<li>Comandos executados por outros processos ; </li>
+<li>Scripts do firmware ; </li>
+<li>Mecanismos de recuperação ; </li>
+<li>Processos do próprio KaiOS. </li>
+</ul>
+<p>Portanto, não é recomendável modificar <code>/system/bin/sh</code> apenas para criar um menu. É preferível criar um executável ou script separado e configurar o terminal, quando isso for possível, para iniciar esse script.</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente</th>
+<th style="text-align: left;">Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Terminal webapp</strong></td>
+<td style="text-align: left;">Interface utilizada pelo usuário</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Shell</strong></td>
+<td style="text-align: left;">Interpretador dos comandos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/system/bin/sh</code></td>
+<td style="text-align: left;">Shell disponibilizado pelo firmware</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scripts <code>.sh</code></strong></td>
+<td style="text-align: left;">Automação de operações</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Aliases</strong></td>
+<td style="text-align: left;">Atalhos para comandos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Funções shell</strong></td>
+<td style="text-align: left;">Atalhos parametrizáveis</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>getprop</code></td>
+<td style="text-align: left;">Consulta de propriedades do Android/KaiOS</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>setprop</code></td>
+<td style="text-align: left;">Alteração de propriedades, quando permitido</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>adb shell</code></td>
+<td style="text-align: left;">Acesso remoto ao shell</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>su</code></td>
+<td style="text-align: left;">Obtenção de privilégios elevados, quando disponível</td>
+</tr>
+</tbody>
+</table>
+<p>A disponibilidade exata desses componentes deve ser verificada no firmware.</p>
+<hr />
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-verificar-qual-shell-esta-sendo-utilizado">5.1 Verificar qual shell está sendo utilizado<a class="headerlink" href="#51-verificar-qual-shell-esta-sendo-utilizado" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Determinar qual interpretador está sendo executado antes de criar scripts dependentes de características específicas.</li>
+</ul>
+<p><strong>Comando:</strong></p>
+<pre><code class="language-bash">adb shell 'echo $SHELL'
+</code></pre>
+<p>Também pode ser útil:</p>
+<pre><code class="language-bash">adb shell 'ls -l /system/bin/sh'
+</code></pre>
+<p><strong>Resultado esperado:</strong>
+O segundo comando deve mostrar o arquivo ou link utilizado como shell. No ambiente investigado, o shell é fornecido pelo próprio firmware. Não se deve assumir que seja equivalente a Bash.</p>
+<p><strong>Diagnóstico:</strong>
+Verifique:</p>
+<pre><code class="language-bash">adb shell 'sh --help'
+</code></pre>
+<p>Caso <code>--help</code> não seja suportado, isso não significa necessariamente que o shell esteja com defeito. Shells embarcados frequentemente possuem conjuntos de opções reduzidos.</p>
+<h3 id="52-criar-um-primeiro-script-de-diagnostico">5.2 Criar um primeiro script de diagnóstico<a class="headerlink" href="#52-criar-um-primeiro-script-de-diagnostico" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Criar uma ferramenta simples que concentre informações frequentemente utilizadas durante a investigação.</li>
+<li><strong>Pré-requisitos:</strong> Acesso ao terminal, permissão de execução e um diretório onde scripts possam ser armazenados.</li>
+</ul>
+<p>Um local temporário comum para testes é <code>/data/local/tmp/</code>.</p>
+<p><strong>Criar o script:</strong></p>
+<pre><code class="language-bash">cat &gt; /data/local/tmp/sysinfo.sh &lt;&lt;'EOF'
+#!/system/bin/sh
+
+echo &quot;=== SISTEMA ===&quot;
+getprop ro.product.model
+getprop ro.product.manufacturer
+getprop ro.build.version.release
+getprop ro.build.version.sdk
+
+echo
+echo &quot;=== BUILD ===&quot;
+getprop ro.build.display.id
+getprop ro.build.id
+getprop ro.build.fingerprint
+
+echo
+echo &quot;=== KAIOS ===&quot;
+getprop ro.product.version_tag
+
+echo
+echo &quot;=== KERNEL ===&quot;
+uname -a
+EOF
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">chmod 755 /data/local/tmp/sysinfo.sh
+</code></pre>
+<p>Executar:</p>
+<pre><code class="language-bash">/data/local/tmp/sysinfo.sh
+</code></pre>
+<p><strong>Resultado esperado:</strong>
+O script deve produzir um resumo das propriedades principais do sistema.</p>
+<p><strong>Como desfazer:</strong></p>
+<pre><code class="language-bash">rm /data/local/tmp/sysinfo.sh
+</code></pre>
+<p>Esse procedimento não modifica a ROM. O arquivo criado pode ser removido posteriormente.</p>
+<h3 id="53-criar-aliases">5.3 Criar aliases<a class="headerlink" href="#53-criar-aliases" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Reduzir comandos frequentemente utilizados durante a investigação.</li>
+</ul>
+<p>Exemplo:</p>
+<pre><code class="language-bash">alias build='getprop ro.build.display.id'
+alias kaios='getprop ro.product.version_tag'
+alias kernel='uname -a'
+alias model='getprop ro.product.model'
+</code></pre>
+<p>Agora <code>build</code>, <code>kaios</code>, <code>kernel</code> e <code>model</code> podem substituir comandos mais longos.</p>
+<p><strong>Limitação importante:</strong>
+O alias pode desaparecer quando a sessão do shell terminar. Para torná-lo persistente, é necessário identificar qual arquivo de inicialização o shell utilizado pelo firmware realmente lê. Não se deve presumir que <code>/system/etc/profile</code> ou <code>/system/etc/mkshrc</code> sejam utilizados sem verificar o comportamento do firmware.</p>
+<h3 id="54-identificar-arquivos-de-inicializacao-do-shell">5.4 Identificar arquivos de inicialização do shell<a class="headerlink" href="#54-identificar-arquivos-de-inicializacao-do-shell" title="Permanent link">&para;</a></h3>
+<p>Antes de modificar qualquer arquivo, é preferível procurar referências ao shell. Exemplos:</p>
+<pre><code class="language-bash">ls -la /system/etc/
+</code></pre>
+<p>e:</p>
+<pre><code class="language-bash">find /system/etc -maxdepth 2 -type f 2&gt;/dev/null
+</code></pre>
+<p>Dependendo das ferramentas disponíveis, pode-se procurar por arquivos conhecidos:</p>
+<pre><code class="language-bash">find /system -name 'profile' 2&gt;/dev/null
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-bash">find /system -name '*shrc*' 2&gt;/dev/null
+</code></pre>
+<p>O resultado precisa ser analisado antes de qualquer alteração. A existência de um arquivo não prova que ele seja carregado pelo shell.</p>
+<h3 id="55-criar-um-menu-interativo">5.5 Criar um menu interativo<a class="headerlink" href="#55-criar-um-menu-interativo" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Reduzir ainda mais a necessidade de digitação.</li>
+</ul>
+<p>Um exemplo minimalista:</p>
+<pre><code class="language-bash">#!/system/bin/sh
+
+while true
+do
+    clear
+
+    echo &quot;====================&quot;
+    echo &quot;    ZAPP II TOOL&quot;
+    echo &quot;====================&quot;
+    echo
+    echo &quot;1 - Sistema&quot;
+    echo &quot;2 - Kernel&quot;
+    echo &quot;3 - Rede&quot;
+    echo &quot;4 - Shell&quot;
+    echo &quot;5 - Sair&quot;
+    echo
+    echo -n &quot;Opcao: &quot;
+
+    read opcao
+
+    case &quot;$opcao&quot; in
+        1)
+            getprop ro.product.model
+            getprop ro.build.display.id
+            getprop ro.product.version_tag
+            echo
+            echo &quot;Pressione Enter...&quot;
+            read pausa
+            ;;
+
+        2)
+            uname -a
+            echo
+            echo &quot;Pressione Enter...&quot;
+            read pausa
+            ;;
+
+        3)
+            ifconfig
+            echo
+            echo &quot;Pressione Enter...&quot;
+            read pausa
+            ;;
+
+        4)
+            exec /system/bin/sh
+            ;;
+
+        5)
+            exit 0
+            ;;
+
+        *)
+            echo &quot;Opcao invalida.&quot;
+            sleep 1
+            ;;
+    esac
+done
+</code></pre>
+<p>O uso de <code>exec /system/bin/sh</code> é conceitualmente importante. Em vez de iniciar outra camada desnecessária, o processo atual pode ser substituído por um shell.
+A disponibilidade de <code>clear</code>, <code>sleep</code>, <code>ifconfig</code> e outros comandos deve ser verificada no firmware específico.</p>
+<hr />
+<h2 id="6-exemplos">6. Exemplos<a class="headerlink" href="#6-exemplos" title="Permanent link">&para;</a></h2>
+<h3 id="61-menu-especializado-em-diagnostico">6.1 Menu especializado em diagnóstico<a class="headerlink" href="#61-menu-especializado-em-diagnostico" title="Permanent link">&para;</a></h3>
+<p>Em vez de criar um menu genérico, pode-se criar um menu voltado especificamente para o trabalho de engenharia do aparelho:</p>
+<pre><code class="language-text">ZAPP II DEBUG
+
+1  Build
+2  Kernel
+3  Input
+4  Bluetooth
+5  USB
+6  Processos
+7  Shell
+0  Sair
+</code></pre>
+<p>Por exemplo, a opção 3 poderia executar <code>cat /proc/bus/input/devices</code>. Isso é particularmente útil porque esse arquivo permitiu verificar anteriormente os dispositivos de entrada presentes no Zapp II.</p>
+<h3 id="62-atalho-para-propriedades-kaios">6.2 Atalho para propriedades KaiOS<a class="headerlink" href="#62-atalho-para-propriedades-kaios" title="Permanent link">&para;</a></h3>
+<p>Uma função:</p>
+<pre><code class="language-bash">kaiosinfo() {
+    echo &quot;KaiOS:&quot;
+    getprop ro.product.version_tag
+
+    echo &quot;Build:&quot;
+    getprop ro.build.display.id
+
+    echo &quot;Android base:&quot;
+    getprop ro.build.version.release
+
+    echo &quot;SDK:&quot;
+    getprop ro.build.version.sdk
+}
+</code></pre>
+<p>Pode ser chamada com <code>kaiosinfo</code>. No firmware analisado, isso permite obter rapidamente:</p>
+<pre><code class="language-text">kaios_2_5_modric_20200721_20
+4.4.2
+19
+</code></pre>
+<h3 id="63-atalhos-para-investigacao-de-dispositivos-de-entrada">6.3 Atalhos para investigação de dispositivos de entrada<a class="headerlink" href="#63-atalhos-para-investigacao-de-dispositivos-de-entrada" title="Permanent link">&para;</a></h3>
+<p>Uma função útil durante investigação:</p>
+<pre><code class="language-bash">inputs() {
+    cat /proc/bus/input/devices
+}
+</code></pre>
+<p>Depois, basta executar <code>inputs</code>. Esse tipo de função é preferível a criar uma implementação própria de entrada, pois apenas encapsula uma ferramenta de diagnóstico já existente.</p>
+<hr />
+<h2 id="7-problemas-comuns">7. Problemas comuns<a class="headerlink" href="#7-problemas-comuns" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><strong>Alias desaparece</strong><br />
+<em>Causa provável:</em> o alias foi criado somente na sessão atual.<br />
+<em>Solução:</em> identificar o arquivo de inicialização efetivamente utilizado pelo shell.</p>
+</li>
+<li>
+<p><strong><code>read</code> não funciona como esperado</strong><br />
+  Algumas implementações de shell embarcado podem apresentar diferenças em relação ao Bash.<br />
+<em>Testar:</em>
+  <code>bash
+  read teste
+  echo "$teste"</code>
+  Se houver comportamento inesperado, o script deve ser adaptado ao shell disponível.</p>
+</li>
+<li>
+<p><strong><code>clear</code> não existe</strong><br />
+<em>Verifique:</em> <code>which clear</code> ou <code>ls -l /system/bin/clear</code>.<br />
+  Se não existir, o menu pode simplesmente não limpar a tela. Isso não impede o funcionamento do restante do script.</p>
+</li>
+<li>
+<p><strong>Script não executa</strong><br />
+<em>Verifique:</em> <code>ls -l /data/local/tmp/script.sh</code> e <code>chmod 755 /data/local/tmp/script.sh</code>.<br />
+  Também é possível executá-lo explicitamente:
+  <code>bash
+  /system/bin/sh /data/local/tmp/script.sh</code>
+  Essa forma elimina a necessidade de o sistema reconhecer o shebang.</p>
+</li>
+<li>
+<p><strong>Comando existe no ADB, mas não no terminal</strong><br />
+  Isso pode ocorrer por diferenças de PATH, usuário, permissões, ambiente, diretório atual ou shell utilizado pelo terminal.<br />
+  Compare <code>echo "$PATH"</code> no terminal e no ADB. Também é possível executar comandos usando caminhos absolutos quando conhecidos.</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-diagnostico-e-debugging">8. Diagnóstico e debugging<a class="headerlink" href="#8-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<p>A primeira regra ao desenvolver ferramentas para esse ambiente é não modificar o sistema antes de entender seu comportamento.</p>
+<h3 id="81-verificar-o-ambiente">8.1 Verificar o ambiente<a class="headerlink" href="#81-verificar-o-ambiente" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">id
+whoami
+echo &quot;$PATH&quot;
+uname -a
+getprop ro.build.display.id
+</code></pre>
+<p>Esses comandos permitem registrar as condições sob as quais o script está sendo executado.</p>
+<h3 id="82-verificar-comandos-disponiveis">8.2 Verificar comandos disponíveis<a class="headerlink" href="#82-verificar-comandos-disponiveis" title="Permanent link">&para;</a></h3>
+<p>Em vez de assumir que uma ferramenta existe:</p>
+<pre><code class="language-bash">which comando
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-bash">ls -l /system/bin/comando
+</code></pre>
+<p>O firmware do Zapp II demonstrou anteriormente que alguns utilitários esperados em sistemas Linux completos não estão disponíveis (por exemplo, o comando <code>file</code> não estava instalado). Portanto, scripts destinados a esse aparelho devem evitar dependências desnecessárias.</p>
+<h3 id="83-registrar-a-saida">8.3 Registrar a saída<a class="headerlink" href="#83-registrar-a-saida" title="Permanent link">&para;</a></h3>
+<p>Durante desenvolvimento, pode ser útil:</p>
+<pre><code class="language-bash">/data/local/tmp/teste.sh &gt; /data/local/tmp/teste.log 2&gt;&amp;1
+</code></pre>
+<p>Isso permite preservar tanto a saída normal quanto os erros. Depois:</p>
+<pre><code class="language-bash">cat /data/local/tmp/teste.log
+</code></pre>
+<p>Esse método é especialmente útil quando o terminal apresenta limitações de visualização.</p>
+<h3 id="84-preservar-evidencias">8.4 Preservar evidências<a class="headerlink" href="#84-preservar-evidencias" title="Permanent link">&para;</a></h3>
+<p>Durante engenharia reversa, não é recomendável editar diretamente arquivos importantes do sistema apenas para testar uma hipótese. É preferível:</p>
+<ol>
+<li>Copiar o arquivo ; </li>
+<li>Modificar a cópia ; </li>
+<li>Testar ; </li>
+<li>Registrar o resultado ; </li>
+<li>Somente então considerar uma alteração permanente. </li>
+</ol>
+<p>Por exemplo:</p>
+<pre><code class="language-bash">cp arquivo_original arquivo_backup
+</code></pre>
+<p>A localização e as permissões precisam ser verificadas antes de qualquer operação de cópia.</p>
+<hr />
+<h2 id="9-seguranca-e-riscos">9. Segurança e riscos<a class="headerlink" href="#9-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>Scripts de conveniência são relativamente seguros quando permanecem em áreas temporárias, mas o risco aumenta significativamente quando passam a modificar componentes do sistema.</p>
+<h3 id="baixo-risco">Baixo risco<a class="headerlink" href="#baixo-risco" title="Permanent link">&para;</a></h3>
+<p>Exemplos em <code>/data/local/tmp/</code>. Scripts que apenas executam <code>getprop</code>, <code>uname</code>, <code>cat</code> e <code>ls</code> tendem a ser operações de leitura.</p>
+<h3 id="risco-maior">Risco maior<a class="headerlink" href="#risco-maior" title="Permanent link">&para;</a></h3>
+<p>Alterações em <code>/system/bin/</code>, <code>/system/etc/</code>, <code>/system/app/</code> e <code>/system/framework/</code> podem causar consequências inesperadas. Particularmente perigoso é substituir <code>/system/bin/sh</code> ou modificar scripts de inicialização. Uma alteração incorreta pode impedir a inicialização de processos essenciais ou produzir um sistema parcialmente inutilizável.</p>
+<p><strong>Regra prática:</strong>
+Para uma interface de conveniência, a arquitetura preferencial deve ser:</p>
+<pre><code class="language-text">ROM original
+    │
+    ├── Terminal existente
+    │
+    └── Script externo
+           │
+           ├── aliases
+           ├── funções
+           └── menu
+</code></pre>
+<p>e não:</p>
+<pre><code class="language-text">ROM original
+    ↓
+substituição do shell
+    ↓
+modificação de componentes essenciais
+</code></pre>
+<hr />
+<h2 id="10-compatibilidade">10. Compatibilidade<a class="headerlink" href="#10-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>A compatibilidade depende de diversos fatores:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Fator</th>
+<th style="text-align: left;">Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Versão do KaiOS</strong></td>
+<td style="text-align: left;">APIs e componentes podem mudar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Base Android</strong></td>
+<td style="text-align: left;">Define ferramentas e estrutura disponíveis</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Shell</strong></td>
+<td style="text-align: left;">Determina sintaxe suportada</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Fabricante</strong></td>
+<td style="text-align: left;">Pode remover comandos e modificar caminhos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Chipset</strong></td>
+<td style="text-align: left;">Afeta drivers e interfaces de hardware</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Terminal utilizado</strong></td>
+<td style="text-align: left;">Determina como o shell é iniciado</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Root</strong></td>
+<td style="text-align: left;">Determina quais operações podem ser executadas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PATH</strong></td>
+<td style="text-align: left;">Determina quais comandos podem ser chamados diretamente</td>
+</tr>
+</tbody>
+</table>
+<p>No Zapp II analisado, há evidências concretas de um ambiente bastante específico:</p>
+<ul>
+<li><strong>Android:</strong> 4.4.2 </li>
+<li><strong>SDK:</strong> 19 </li>
+<li><strong>Kernel:</strong> 3.4.67 </li>
+<li><strong>SoC:</strong> MT6572 </li>
+<li><strong>KaiOS tag:</strong> <code>kaios_2_5_modric_20200721_20</code> </li>
+<li><strong>Build:</strong> <code>ML-SI04_ZAPP_II.V14_240730_1535</code> </li>
+</ul>
+<p>Esses dados não devem ser generalizados para todos os aparelhos KaiOS. Além disso, a ausência de determinados comandos ou interfaces não significa necessariamente que o recurso correspondente não exista no sistema (por exemplo, <code>/proc/config.gz</code> não estava disponível no Zapp II, mas isso por si só não permite concluir quais opções foram utilizadas na compilação do kernel).</p>
+<hr />
+<h2 id="11-referencias-cruzadas">11. Referências cruzadas<a class="headerlink" href="#11-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Este capítulo está relacionado principalmente aos seguintes temas:</p>
+<ul>
+<li><strong>Arquitetura do KaiOS:</strong> necessário para compreender a relação entre Gecko, sistema embarcado e componentes derivados do Android.</li>
+<li><strong>ADB e acesso ao shell:</strong> necessário para acessar e testar scripts no dispositivo.</li>
+<li><strong>Root e permissões:</strong> necessário para operações que ultrapassam as permissões normais do usuário.</li>
+<li><strong>Debugging e diagnóstico:</strong> utiliza os mecanismos de coleta de informações apresentados neste capítulo.</li>
+<li><strong>Kernel e hardware:</strong> relevante quando scripts de diagnóstico consultam <code>/proc</code>, <code>/sys</code> e dispositivos de entrada.</li>
+<li><strong>Desenvolvimento de WebApps KaiOS:</strong> o terminal utilizado pelo usuário é uma aplicação, mas este capítulo trata apenas da camada de utilização do shell, não da implementação do WebApp.</li>
+</ul>
+<p>Um capítulo futuro sobre automação do ambiente de shell pode aprofundar persistência, inicialização automática, gerenciamento de scripts e criação de uma pequena suíte de ferramentas para o dispositivo.</p>
+<hr />
+<h2 id="12-resumo">12. Resumo<a class="headerlink" href="#12-resumo" title="Permanent link">&para;</a></h2>
+<p>O uso de um terminal em um aparelho KaiOS com teclado físico limitado pode ser significativamente melhorado sem modificar o terminal ou desenvolver uma nova aplicação.</p>
+<p>As principais técnicas são:</p>
+<ol>
+<li>Aliases para comandos curtos e recorrentes.</li>
+<li>Funções de shell para operações compostas.</li>
+<li>Scripts para automatizar procedimentos.</li>
+<li>Menus numéricos para reduzir a necessidade de digitação.</li>
+<li>Scripts de diagnóstico para concentrar comandos utilizados frequentemente.</li>
+<li>Execução através de caminhos absolutos quando o PATH for inconsistente.</li>
+<li>Uso de <code>/data/local/tmp/</code> durante desenvolvimento, reduzindo alterações permanentes no sistema.</li>
+<li>Preservação de evidências e backups antes de modificar componentes importantes.</li>
+<li>Evitar alterações em <code>/system/bin/sh</code> quando uma solução externa for suficiente.</li>
+</ol>
+<p>Para o Zapp II, a abordagem mais segura e prática é construir progressivamente uma pequena suíte de ferramentas de shell, começando por scripts de diagnóstico e menus simples e somente posteriormente avaliando mecanismos de inicialização automática.</p>
+<hr />
+<h3 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h3>
+<p><strong>Depende de:</strong>
+Arquitetura do KaiOS, ADB e modos de depuração, Shell e permissões do sistema, Root, Estrutura do sistema de arquivos, Kernel Linux e interfaces <code>/proc</code> e <code>/sys</code>.</p>
+<p><strong>Pode servir de base para:</strong>
+Automação do Zapp II, Ferramentas de diagnóstico, Engenharia reversa do firmware, Desenvolvimento de utilitários para KaiOS, Criação de uma suíte de manutenção do dispositivo, Investigação de hardware por linha de comando.</p>
+<p><strong>Informações que devem ser verificadas na compilação final:</strong>
+Qual shell é efetivamente utilizado pelo terminal do Zapp II, quais arquivos de inicialização esse shell carrega, quais comandos estão realmente presentes no firmware, se o terminal permite configurar um comando ou script inicial, quais mecanismos de persistência são apropriados para o firmware específico, diferenças entre o firmware <code>ML-SI04_ZAPP_II.V14</code> e outras versões do Zapp II.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

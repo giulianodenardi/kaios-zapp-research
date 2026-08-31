@@ -1,0 +1,2774 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Binários nativos estáticos no KaiOS - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#binarios-nativos-estaticos-no-kaios" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Binários nativos estáticos no KaiOS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-binario-nativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Binário nativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-binario-dinamicamente-vinculado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Binário dinamicamente vinculado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-binario-estaticamente-vinculado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Binário estaticamente vinculado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-arquitetura-do-processador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Arquitetura do processador
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-a-arquitetura-nao-e-suficiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 A arquitetura não é suficiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Componentes envolvidos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-adb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 ADB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-shell-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Shell remoto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-diretorios-gravaveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Diretórios graváveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-systembin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 /system/bin
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-procedimento-a-identificar-a-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Procedimento A: identificar a arquitetura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 Procedimento A: identificar a arquitetura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pré-requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comandos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado-esperado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado esperado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#possiveis-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Possíveis erros
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-procedimento-b-verificar-o-ambiente-nativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Procedimento B: verificar o ambiente nativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-procedimento-c-transferir-um-binario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Procedimento C: transferir um binário
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 Procedimento C: transferir um binário">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resultado-esperado_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado esperado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-procedimento-d-verificar-se-o-executavel-e-realmente-estatico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Procedimento D: verificar se o executável é realmente estático
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-procedimento-e-testar-primeiro-em-datalocaltmp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Procedimento E: testar primeiro em /data/local/tmp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-compilacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Compilação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Compilação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-compilacao-nativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Compilação nativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-cross-compilacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Cross-compilação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-o-caso-do-bash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 O caso do Bash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-o-caso-do-nano" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 O caso do Nano
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-instalacao-permanente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Instalação permanente
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Instalação permanente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-armazenamento-persistente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Armazenamento persistente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-modificar-systembin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Modificar /system/bin
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-programa-minimo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Programa mínimo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-programa-para-inspecao-do-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Programa para inspeção do ambiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-ferramentas-maiores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Ferramentas maiores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Diagnóstico e debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-identificar-o-arquivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Identificar o arquivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-verificar-permissoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Verificar permissões
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-verificar-arquitetura-do-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Verificar arquitetura do dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-verificar-identidade-do-processo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Verificar identidade do processo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105-verificar-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 Verificar SELinux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#106-preservacao-de-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 Preservação de evidências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-executar-como-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Executar como root
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-modificar-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Modificar /system
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-binarios-desconhecidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Binários desconhecidos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 SELinux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-brick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Brick
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Resumo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integração com o restante do manual">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencias-desta-secao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependências desta seção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capitulos-que-dependem-desta-secao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capítulos que dependem desta seção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#informacoes-que-devem-ser-verificadas-durante-a-compilacao-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Informações que devem ser verificadas durante a compilação final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="binarios-nativos-estaticos-no-kaios">Binários nativos estáticos no KaiOS<a class="headerlink" href="#binarios-nativos-estaticos-no-kaios" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>O KaiOS utiliza uma base Linux embarcada, mas não deve ser tratado como uma distribuição Linux convencional. O sistema combina componentes do Linux/Gonk, serviços específicos do KaiOS, componentes do Android em determinadas gerações e o ambiente B2G/Gecko. A organização do sistema de arquivos, as permissões, o SELinux, a disponibilidade de bibliotecas e o acesso ao ADB variam conforme a versão, fabricante, chipset e firmware.</p>
+<p>Uma possibilidade importante para análise, desenvolvimento e modificação de dispositivos KaiOS é executar <strong>binários nativos compilados especificamente para a arquitetura do aparelho</strong>.</p>
+<p>Exemplos de ferramentas que podem ser utilizadas dessa forma incluem:</p>
+<ul>
+<li><code>bash</code></li>
+<li><code>nano</code></li>
+<li><code>vim</code></li>
+<li><code>grep</code></li>
+<li><code>sed</code></li>
+<li><code>awk</code></li>
+<li><code>find</code></li>
+<li><code>tar</code></li>
+<li><code>gzip</code></li>
+<li>pequenos utilitários próprios desenvolvidos em C</li>
+</ul>
+<p>A principal vantagem de um binário estaticamente vinculado é reduzir a dependência de bibliotecas compartilhadas presentes no firmware. Entretanto, <strong>"compilado estaticamente" não significa automaticamente "compatível com qualquer KaiOS"</strong>. O executável ainda precisa ser compatível com a arquitetura do processador, com o formato ELF esperado, com o kernel e com as interfaces disponíveis.</p>
+<p>Além disso, possuir um binário não significa possuir permissão para executá-lo em qualquer diretório. As permissões Unix e as políticas SELinux continuam sendo aplicadas.</p>
+<p>O desenvolvimento oficial do KaiOS confirma a existência de acesso ADB em dispositivos de desenvolvimento/debug, mas a disponibilidade de <code>adb root</code> e o nível de privilégio obtido dependem do dispositivo.</p>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-binario-nativo">2.1 Binário nativo<a class="headerlink" href="#21-binario-nativo" title="Permanent link">&para;</a></h3>
+<p>Um binário nativo é um programa compilado para ser executado diretamente pelo processador do dispositivo.</p>
+<p>Por exemplo, um programa C:</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+ printf(&quot;Hello KaiOS\n&quot;);
+ return 0;
+}
+</code></pre>
+<p>pode ser compilado para produzir um executável ELF.</p>
+<p>O arquivo resultante não é um aplicativo KaiOS no sentido tradicional. Ele é um programa nativo destinado ao ambiente Linux subjacente.</p>
+<p>Isso é diferente de uma aplicação Web/HTML instalada pelo mecanismo normal do KaiOS.</p>
+<hr />
+<h3 id="22-binario-dinamicamente-vinculado">2.2 Binário dinamicamente vinculado<a class="headerlink" href="#22-binario-dinamicamente-vinculado" title="Permanent link">&para;</a></h3>
+<p>Um executável dinamicamente vinculado depende de bibliotecas compartilhadas existentes no sistema.</p>
+<p>Um exemplo conceitual seria:</p>
+<pre><code>meu-programa
+ |
+ +-- libc.so
+ +-- libm.so
+ +-- outras bibliotecas
+</code></pre>
+<p>Se uma biblioteca necessária não existir, estiver em uma versão incompatível ou não estiver disponível no caminho esperado pelo carregador ELF, o programa pode não iniciar.</p>
+<p>Um erro típico pode ser semelhante a:</p>
+<pre><code>CANNOT LINK EXECUTABLE
+</code></pre>
+<p>ou:</p>
+<pre><code>not found
+</code></pre>
+<p>dependendo do carregador e da versão do sistema.</p>
+<hr />
+<h3 id="23-binario-estaticamente-vinculado">2.3 Binário estaticamente vinculado<a class="headerlink" href="#23-binario-estaticamente-vinculado" title="Permanent link">&para;</a></h3>
+<p>No vínculo estático, parte significativa das bibliotecas necessárias é incorporada ao próprio executável.</p>
+<p>Conceitualmente:</p>
+<pre><code>programa estático
+ |
+ +-- código do programa
+ +-- código necessário da libc
+ +-- outras dependências vinculadas
+</code></pre>
+<p>Isso torna o binário muito mais independente do userland instalado no aparelho.</p>
+<p>Porém, existem limitações. O programa ainda utiliza interfaces fornecidas pelo kernel e pode depender de mecanismos externos, como <code>/proc</code>, <code>/sys</code>, dispositivos, arquivos de configuração ou determinados recursos do sistema.</p>
+<p>Portanto:</p>
+<blockquote>
+<p>Binário estático reduz dependências de bibliotecas. Não elimina dependências do sistema operacional.</p>
+</blockquote>
+<hr />
+<h3 id="24-arquitetura-do-processador">2.4 Arquitetura do processador<a class="headerlink" href="#24-arquitetura-do-processador" title="Permanent link">&para;</a></h3>
+<p>Antes de compilar qualquer programa, é necessário descobrir a arquitetura do aparelho.</p>
+<p>Uma maneira prática, quando o ADB está disponível, é consultar propriedades do sistema:</p>
+<pre><code>adb shell getprop ro.product.cpu.abi
+</code></pre>
+<p>Também pode ser útil:</p>
+<pre><code>adb shell getprop ro.product.cpu.abilist
+</code></pre>
+<p>e:</p>
+<pre><code>adb shell uname -m
+</code></pre>
+<p>Os resultados devem ser registrados antes da compilação.</p>
+<p>Um aparelho ARM de 32 bits, por exemplo, não deve receber simplesmente um executável x86-64 compilado para um computador Linux convencional.</p>
+<hr />
+<h3 id="25-a-arquitetura-nao-e-suficiente">2.5 A arquitetura não é suficiente<a class="headerlink" href="#25-a-arquitetura-nao-e-suficiente" title="Permanent link">&para;</a></h3>
+<p>Mesmo quando dois dispositivos utilizam ARM, isso não garante compatibilidade.</p>
+<p>É necessário considerar:</p>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Exemplo de problema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arquitetura</td>
+<td>ARM vs ARM64</td>
+</tr>
+<tr>
+<td>ABI</td>
+<td>ABI incompatível</td>
+</tr>
+<tr>
+<td>Endianness</td>
+<td>Normalmente little-endian, mas deve ser confirmado</td>
+</tr>
+<tr>
+<td>libc</td>
+<td>Bionic, musl, glibc ou outra implementação</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>Recursos e interfaces diferentes</td>
+</tr>
+<tr>
+<td>SELinux</td>
+<td>Execução pode ser bloqueada</td>
+</tr>
+<tr>
+<td>Diretório</td>
+<td>Filesystem pode possuir restrições</td>
+</tr>
+<tr>
+<td>Permissões</td>
+<td>Arquivo pode não ter bit de execução</td>
+</tr>
+<tr>
+<td>Firmware</td>
+<td>Fabricante pode modificar componentes</td>
+</tr>
+</tbody>
+</table>
+<p>No ecossistema KaiOS, componentes Android/Bionic são particularmente relevantes em determinadas gerações. Portanto, utilizar um binário estático produzido em uma distribuição Linux convencional não garante compatibilidade simplesmente porque a arquitetura coincide.</p>
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>O processo completo pode ser dividido em seis etapas:</p>
+<pre><code>┌──────────────────────┐
+│ Identificar aparelho│
+└──────────┬───────────┘
+ ↓
+┌──────────────────────┐
+│ Identificar ABI/CPU │
+└──────────┬───────────┘
+ ↓
+┌──────────────────────┐
+│ Compilar o programa │
+└──────────┬───────────┘
+ ↓
+┌──────────────────────┐
+│ Transferir via ADB │
+└──────────┬───────────┘
+ ↓
+┌──────────────────────┐
+│ Ajustar permissões │
+└──────────┬───────────┘
+ ↓
+┌──────────────────────┐
+│ Executar/testar │
+└──────────────────────┘
+</code></pre>
+<p>A primeira etapa deve sempre ser a identificação do dispositivo.</p>
+<p>Não é recomendável começar copiando um binário para <code>/system/bin</code> simplesmente porque esse diretório contém outros executáveis.</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<h3 id="41-adb">4.1 ADB<a class="headerlink" href="#41-adb" title="Permanent link">&para;</a></h3>
+<p>O Android Debug Bridge é frequentemente utilizado para comunicação com dispositivos KaiOS que possuem o modo de depuração apropriado.</p>
+<p>A documentação oficial do KaiOS apresenta o uso de:</p>
+<pre><code class="language-bash">adb devices
+</code></pre>
+<p>para verificar a conexão com o dispositivo.</p>
+<p>Quando suportado pelo firmware, também pode existir:</p>
+<pre><code class="language-bash">adb root
+</code></pre>
+<p>Entretanto, <code>adb root</code> <strong>não deve ser considerado universalmente disponível</strong>. Dispositivos de produção podem impedir a execução do <code>adbd</code> como root.</p>
+<h3 id="42-shell-remoto">4.2 Shell remoto<a class="headerlink" href="#42-shell-remoto" title="Permanent link">&para;</a></h3>
+<p>Com ADB funcionando:</p>
+<pre><code class="language-bash">adb shell
+</code></pre>
+<p>abre um shell no dispositivo.</p>
+<p>Também é possível executar comandos diretamente:</p>
+<pre><code class="language-bash">adb shell uname -m
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-bash">adb shell getprop ro.product.cpu.abi
+</code></pre>
+<h3 id="43-diretorios-gravaveis">4.3 Diretórios graváveis<a class="headerlink" href="#43-diretorios-gravaveis" title="Permanent link">&para;</a></h3>
+<p>Para testes, deve-se preferir inicialmente um diretório destinado a arquivos temporários ou dados graváveis.</p>
+<p>Um exemplo comum é:</p>
+<pre><code class="language-text">/data/local/tmp/
+</code></pre>
+<p>Sua disponibilidade e permissões devem ser verificadas no próprio aparelho:</p>
+<pre><code class="language-bash">adb shell ls -ld /data/local/tmp
+</code></pre>
+<p>Não se deve presumir que um determinado diretório será gravável em todos os modelos.</p>
+<h3 id="44-systembin">4.4 <code>/system/bin</code><a class="headerlink" href="#44-systembin" title="Permanent link">&para;</a></h3>
+<p>Em dispositivos KaiOS baseados em componentes Android/Gonk, <code>/system/bin</code> pode conter executáveis nativos do sistema.</p>
+<p>Entretanto, isso <strong>não significa que o usuário possa modificar esse diretório</strong>.</p>
+<p>Em muitos aparelhos:</p>
+<pre><code class="language-text">/system
+</code></pre>
+<p>é montado como somente leitura.</p>
+<p>Além disso, mesmo que seja possível obter privilégios suficientes para modificar a partição, o SELinux, o sistema de montagem, a proteção do firmware ou mecanismos de integridade podem impedir a operação.</p>
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-procedimento-a-identificar-a-arquitetura">5.1 Procedimento A: identificar a arquitetura<a class="headerlink" href="#51-procedimento-a-identificar-a-arquitetura" title="Permanent link">&para;</a></h3>
+<h4 id="objetivo">Objetivo<a class="headerlink" href="#objetivo" title="Permanent link">&para;</a></h4>
+<p>Descobrir para qual arquitetura e ABI o binário deverá ser compilado.</p>
+<h4 id="pre-requisitos">Pré-requisitos<a class="headerlink" href="#pre-requisitos" title="Permanent link">&para;</a></h4>
+<ul>
+<li>ADB funcionando;</li>
+<li>aparelho em modo de depuração;</li>
+<li>computador com <code>adb</code>.</li>
+</ul>
+<h4 id="comandos">Comandos<a class="headerlink" href="#comandos" title="Permanent link">&para;</a></h4>
+<pre><code>adb devices
+</code></pre>
+<p>Depois:</p>
+<pre><code>adb shell getprop ro.product.cpu.abi
+adb shell getprop ro.product.cpu.abilist
+adb shell uname -m
+</code></pre>
+<p>Também é possível consultar:</p>
+<pre><code>adb shell getprop ro.build.version.release
+</code></pre>
+<p>e:</p>
+<pre><code>adb shell getprop ro.build.version.sdk
+</code></pre>
+<h4 id="resultado-esperado">Resultado esperado<a class="headerlink" href="#resultado-esperado" title="Permanent link">&para;</a></h4>
+<p>O objetivo é obter informações semelhantes a:</p>
+<pre><code>armeabi-v7a
+</code></pre>
+<p>ou:</p>
+<pre><code>arm64-v8a
+</code></pre>
+<p>e uma identificação correspondente do kernel.</p>
+<p>Os valores exatos dependem do aparelho.</p>
+<h4 id="possiveis-erros">Possíveis erros<a class="headerlink" href="#possiveis-erros" title="Permanent link">&para;</a></h4>
+<p>Se aparecer:</p>
+<pre><code>adb: no devices/emulators found
+</code></pre>
+<p>o problema ainda não está relacionado ao binário. Primeiro é necessário resolver a conexão ADB.</p>
+<p>Se o dispositivo aparecer como:</p>
+<pre><code>unauthorized
+</code></pre>
+<p>é necessário investigar a autorização/debug do aparelho. A própria comunidade KaiOS documenta que determinados dispositivos comerciais não possuem chaves ADB apropriadas e podem apresentar esse estado.</p>
+<hr />
+<h3 id="52-procedimento-b-verificar-o-ambiente-nativo">5.2 Procedimento B: verificar o ambiente nativo<a class="headerlink" href="#52-procedimento-b-verificar-o-ambiente-nativo" title="Permanent link">&para;</a></h3>
+<p>Antes de instalar um programa grande, deve-se descobrir quais ferramentas já existem.</p>
+<p>Por exemplo:</p>
+<pre><code>adb shell ls -l /system/bin
+</code></pre>
+<p>Para procurar BusyBox:</p>
+<pre><code>adb shell ls -l /system/bin/busybox
+</code></pre>
+<p>Se o arquivo existir:</p>
+<pre><code>adb shell /system/bin/busybox
+</code></pre>
+<p>poderá mostrar os applets disponíveis.</p>
+<p>A presença de BusyBox não deve ser presumida. Há aparelhos KaiOS que possuem o programa e outros que não o possuem. Registros da comunidade mostram o uso de <code>/system/bin/busybox</code> em determinados dispositivos KaiOS, mas isso não constitui uma característica universal da plataforma.</p>
+<hr />
+<h3 id="53-procedimento-c-transferir-um-binario">5.3 Procedimento C: transferir um binário<a class="headerlink" href="#53-procedimento-c-transferir-um-binario" title="Permanent link">&para;</a></h3>
+<p>Supondo que exista um executável chamado:</p>
+<pre><code>hello
+</code></pre>
+<p>no computador:</p>
+<pre><code>adb push hello /data/local/tmp/hello
+</code></pre>
+<p>Depois:</p>
+<pre><code>adb shell chmod 755 /data/local/tmp/hello
+</code></pre>
+<p>E então:</p>
+<pre><code>adb shell /data/local/tmp/hello
+</code></pre>
+<h4 id="resultado-esperado_1">Resultado esperado<a class="headerlink" href="#resultado-esperado_1" title="Permanent link">&para;</a></h4>
+<p>O programa deve iniciar e produzir sua saída normal.</p>
+<p>Por exemplo:</p>
+<pre><code>Hello KaiOS
+</code></pre>
+<h4 id="diagnostico">Diagnóstico<a class="headerlink" href="#diagnostico" title="Permanent link">&para;</a></h4>
+<p>Se ocorrer:</p>
+<pre><code>Permission denied
+</code></pre>
+<p>verifique:</p>
+<pre><code>adb shell ls -l /data/local/tmp/hello
+</code></pre>
+<p>O resultado deverá indicar o bit de execução, por exemplo:</p>
+<pre><code>-rwxr-xr-x
+</code></pre>
+<p>Se o arquivo possuir permissão de execução e ainda assim falhar, o problema pode estar relacionado ao SELinux ou a outras restrições do ambiente.</p>
+<hr />
+<h3 id="54-procedimento-d-verificar-se-o-executavel-e-realmente-estatico">5.4 Procedimento D: verificar se o executável é realmente estático<a class="headerlink" href="#54-procedimento-d-verificar-se-o-executavel-e-realmente-estatico" title="Permanent link">&para;</a></h3>
+<p>No computador Linux, pode-se utilizar:</p>
+<pre><code>file hello
+</code></pre>
+<p>Para um executável estático, espera-se uma descrição indicando vínculo estático, quando suportado pela ferramenta <code>file</code>.</p>
+<p>Também pode ser utilizado:</p>
+<pre><code>readelf -l hello
+</code></pre>
+<p>e:</p>
+<pre><code>readelf -d hello
+</code></pre>
+<p>Um executável ELF dinamicamente vinculado normalmente apresenta informações relacionadas ao carregador dinâmico e à seção de dependências.</p>
+<p>A ausência de dependências dinâmicas é um indício importante, mas deve ser interpretada de acordo com a ferramenta e o formato do binário.</p>
+<hr />
+<h3 id="55-procedimento-e-testar-primeiro-em-datalocaltmp">5.5 Procedimento E: testar primeiro em <code>/data/local/tmp</code><a class="headerlink" href="#55-procedimento-e-testar-primeiro-em-datalocaltmp" title="Permanent link">&para;</a></h3>
+<p>A estratégia recomendada é:</p>
+<pre><code>compilar
+ ↓
+transferir
+ ↓
+executar em diretório temporário
+ ↓
+validar
+ ↓
+investigar dependências
+ ↓
+somente depois considerar instalação permanente
+</code></pre>
+<p>Exemplo:</p>
+<pre><code>adb push nano /data/local/tmp/nano
+adb shell chmod 755 /data/local/tmp/nano
+adb shell /data/local/tmp/nano
+</code></pre>
+<p>Essa abordagem evita modificar imediatamente a imagem do sistema.</p>
+<hr />
+<h2 id="6-compilacao">6. Compilação<a class="headerlink" href="#6-compilacao" title="Permanent link">&para;</a></h2>
+<h3 id="61-compilacao-nativa">6.1 Compilação nativa<a class="headerlink" href="#61-compilacao-nativa" title="Permanent link">&para;</a></h3>
+<p>Se o ambiente de compilação possuir uma toolchain adequada à arquitetura do dispositivo, um programa simples pode ser compilado com:</p>
+<pre><code>gcc -static -o hello hello.c
+</code></pre>
+<p>Entretanto, esse comando <strong>não deve ser interpretado como uma receita universal para KaiOS</strong>.</p>
+<p>Um <code>gcc</code> configurado para glibc em um PC Linux pode produzir um executável incompatível com o ambiente nativo do telefone, mesmo utilizando a arquitetura ARM correta.</p>
+<hr />
+<h3 id="62-cross-compilacao">6.2 Cross-compilação<a class="headerlink" href="#62-cross-compilacao" title="Permanent link">&para;</a></h3>
+<p>Em muitos casos será necessário utilizar uma toolchain de cross-compilação.</p>
+<p>Conceitualmente:</p>
+<pre><code>PC x86-64
+ |
+ | cross compiler
+ ↓
+ARM/ARM64 ELF
+ |
+ ↓
+KaiOS
+</code></pre>
+<p>A toolchain precisa ser compatível com a ABI desejada.</p>
+<p>Para projetos maiores, a forma mais confiável é utilizar uma toolchain ou SDK correspondente ao ambiente alvo, quando disponível.</p>
+<hr />
+<h3 id="63-o-caso-do-bash">6.3 O caso do Bash<a class="headerlink" href="#63-o-caso-do-bash" title="Permanent link">&para;</a></h3>
+<p>O <code>bash</code> é um exemplo particularmente interessante.</p>
+<p>Ele é muito maior e mais complexo que utilitários simples como:</p>
+<pre><code>cat
+echo
+true
+false
+pwd
+</code></pre>
+<p>Além disso, o Bash espera determinados comportamentos do ambiente Unix.</p>
+<p>Mesmo que seja possível gerar um executável estático, algumas funcionalidades podem depender de:</p>
+<ul>
+<li><code>/dev</code>;</li>
+<li><code>/proc</code>;</li>
+<li>sinais;</li>
+<li>terminais;</li>
+<li>variáveis de ambiente;</li>
+<li>arquivos de configuração;</li>
+<li>permissões;</li>
+<li>comportamento específico do kernel.</li>
+</ul>
+<p>Portanto, o primeiro objetivo deve ser obter:</p>
+<pre><code>bash --version
+</code></pre>
+<p>e posteriormente testar funcionalidades individualmente.</p>
+<hr />
+<h3 id="64-o-caso-do-nano">6.4 O caso do Nano<a class="headerlink" href="#64-o-caso-do-nano" title="Permanent link">&para;</a></h3>
+<p>O <code>nano</code> também é um programa nativo, mas depende de uma interface de terminal funcional.</p>
+<p>Em um ambiente ADB:</p>
+<pre><code>adb shell /data/local/tmp/nano arquivo.txt
+</code></pre>
+<p>pode não proporcionar a mesma experiência de um terminal Linux convencional.</p>
+<p>Isso ocorre porque o problema pode não estar no <code>nano</code>, mas na forma como o shell ADB fornece o terminal, no suporte a <code>PTY</code>, no teclado e na configuração do terminal.</p>
+<p>Portanto, instalar <code>nano</code> não equivale automaticamente a possuir um ambiente de terminal completo.</p>
+<hr />
+<h2 id="7-instalacao-permanente">7. Instalação permanente<a class="headerlink" href="#7-instalacao-permanente" title="Permanent link">&para;</a></h2>
+<p>Existem três conceitos diferentes que não devem ser confundidos:</p>
+<ol>
+<li><strong>executar temporariamente
+um binário;</strong></li>
+<li><strong>armazenar
+permanentemente um binário em uma área gravável;</strong></li>
+<li><strong>integrar o binário à
+imagem do sistema.</strong></li>
+</ol>
+<p>A primeira opção é a mais simples.</p>
+<p>A segunda depende das permissões e do layout do dispositivo.</p>
+<p>A terceira é uma modificação de firmware e deve ser tratada em um capítulo próprio.</p>
+<hr />
+<h3 id="71-armazenamento-persistente">7.1 Armazenamento persistente<a class="headerlink" href="#71-armazenamento-persistente" title="Permanent link">&para;</a></h3>
+<p>Se existir um diretório apropriado e gravável:</p>
+<pre><code>adb shell mkdir -p /data/local/bin
+</code></pre>
+<p>pode ser possível armazenar ferramentas ali.</p>
+<p>Depois:</p>
+<pre><code>adb push bash /data/local/bin/bash
+</code></pre>
+<p>e:</p>
+<pre><code>adb shell chmod 755 /data/local/bin/bash
+</code></pre>
+<p>Porém, a existência e persistência de <code>/data/local/bin</code> não devem ser consideradas garantidas em todos os aparelhos.</p>
+<p>O ponto importante é que o diretório deve ser validado no dispositivo antes de ser utilizado.</p>
+<hr />
+<h3 id="72-modificar-systembin">7.2 Modificar <code>/system/bin</code><a class="headerlink" href="#72-modificar-systembin" title="Permanent link">&para;</a></h3>
+<p>A abordagem:</p>
+<pre><code>cp programa /system/bin/
+</code></pre>
+<p>não deve ser utilizada como primeiro procedimento.</p>
+<p>Ela depende de:</p>
+<ul>
+<li>acesso privilegiado;</li>
+<li><code>/system</code> montável como leitura/escrita;</li>
+<li>permissões adequadas;</li>
+<li>política SELinux;</li>
+<li>estrutura de partições;</li>
+<li>mecanismos de proteção do firmware.</li>
+</ul>
+<p>Além disso, modificar arquivos existentes em <code>/system/bin</code> pode impedir o funcionamento normal do sistema.</p>
+<p>A existência de acesso ADB não significa automaticamente capacidade de modificar <code>/system</code>.</p>
+<hr />
+<h2 id="8-exemplos">8. Exemplos<a class="headerlink" href="#8-exemplos" title="Permanent link">&para;</a></h2>
+<h3 id="81-programa-minimo">8.1 Programa mínimo<a class="headerlink" href="#81-programa-minimo" title="Permanent link">&para;</a></h3>
+<p>Um teste inicial muito melhor que <code>bash</code> ou <code>nano</code> é um programa extremamente simples.</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+ puts(&quot;KaiOS native test&quot;);
+ return 0;
+}
+</code></pre>
+<p>Compile-o para a arquitetura correta e transfira:</p>
+<pre><code>adb push hello /data/local/tmp/hello
+adb shell chmod 755 /data/local/tmp/hello
+adb shell /data/local/tmp/hello
+</code></pre>
+<p>Se funcionar, significa que o caminho básico:</p>
+<pre><code>ELF → arquitetura → kernel → permissões → execução
+</code></pre>
+<p>está operacional.</p>
+<hr />
+<h3 id="82-programa-para-inspecao-do-ambiente">8.2 Programa para inspeção do ambiente<a class="headerlink" href="#82-programa-para-inspecao-do-ambiente" title="Permanent link">&para;</a></h3>
+<p>Um pequeno programa nativo pode também ser usado para identificar características do ambiente.</p>
+<p>Por exemplo:</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+{
+ printf(&quot;UID: %d\n&quot;, getuid());
+ printf(&quot;PID: %d\n&quot;, getpid());
+
+ return 0;
+}
+</code></pre>
+<p>Esse tipo de ferramenta é útil durante a investigação porque permite determinar com qual identidade o processo está sendo executado.</p>
+<hr />
+<h3 id="83-ferramentas-maiores">8.3 Ferramentas maiores<a class="headerlink" href="#83-ferramentas-maiores" title="Permanent link">&para;</a></h3>
+<p>Depois de validar um programa mínimo, pode-se avançar gradualmente:</p>
+<pre><code>hello
+ ↓
+cat
+ ↓
+grep
+ ↓
+sed
+ ↓
+tar
+ ↓
+vim/nano
+ ↓
+bash
+</code></pre>
+<p>Essa progressão reduz a quantidade de variáveis durante o diagnóstico.</p>
+<hr />
+<h2 id="9-problemas-comuns">9. Problemas comuns<a class="headerlink" href="#9-problemas-comuns" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Possível causa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Permission denied</code></td>
+<td>Permissões Unix ou SELinux</td>
+</tr>
+<tr>
+<td><code>No such file or directory</code></td>
+<td>Caminho incorreto ou carregador ELF ausente</td>
+</tr>
+<tr>
+<td><code>CANNOT LINK EXECUTABLE</code></td>
+<td>Dependência dinâmica incompatível</td>
+</tr>
+<tr>
+<td>Executável não inicia</td>
+<td>Arquitetura/ABI incompatível</td>
+</tr>
+<tr>
+<td><code>adb push</code> falha</td>
+<td>Diretório sem permissão ou ADB limitado</td>
+</tr>
+<tr>
+<td><code>adb root</code> falha</td>
+<td>Firmware de produção ou <code>adbd</code> sem suporte a root</td>
+</tr>
+<tr>
+<td>Programa funciona no PC e não no telefone</td>
+<td>Toolchain/ABI incompatível</td>
+</tr>
+<tr>
+<td><code>nano</code> inicia mas terminal funciona mal</td>
+<td>Limitações de PTY/terminal</td>
+</tr>
+<tr>
+<td>Programa desaparece após reinicialização</td>
+<td>Armazenamento temporário ou área não persistente</td>
+</tr>
+<tr>
+<td><code>/system</code> não pode ser modificado</td>
+<td>Partição somente leitura, SELinux ou proteção do firmware</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-diagnostico-e-debugging">10. Diagnóstico e debugging<a class="headerlink" href="#10-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<p>O diagnóstico deve começar pelo nível mais baixo possível.</p>
+<h3 id="101-identificar-o-arquivo">10.1 Identificar o arquivo<a class="headerlink" href="#101-identificar-o-arquivo" title="Permanent link">&para;</a></h3>
+<p>No computador:</p>
+<pre><code>file programa
+</code></pre>
+<p>Depois:</p>
+<pre><code>readelf -h programa
+</code></pre>
+<p>Esses comandos ajudam a identificar o formato ELF e a arquitetura indicada no executável.</p>
+<hr />
+<h3 id="102-verificar-permissoes">10.2 Verificar permissões<a class="headerlink" href="#102-verificar-permissoes" title="Permanent link">&para;</a></h3>
+<p>No dispositivo:</p>
+<pre><code>adb shell ls -l /data/local/tmp/programa
+</code></pre>
+<hr />
+<h3 id="103-verificar-arquitetura-do-dispositivo">10.3 Verificar arquitetura do dispositivo<a class="headerlink" href="#103-verificar-arquitetura-do-dispositivo" title="Permanent link">&para;</a></h3>
+<pre><code>adb shell uname -m
+</code></pre>
+<p>e:</p>
+<pre><code>adb shell getprop ro.product.cpu.abi
+</code></pre>
+<hr />
+<h3 id="104-verificar-identidade-do-processo">10.4 Verificar identidade do processo<a class="headerlink" href="#104-verificar-identidade-do-processo" title="Permanent link">&para;</a></h3>
+<pre><code>adb shell id
+</code></pre>
+<p>Resultado semelhante a:</p>
+<pre><code>uid=0(root)
+</code></pre>
+<p>ou:</p>
+<pre><code>uid=2000(shell)
+</code></pre>
+<p>deve ser interpretado como evidência do nível de privilégio disponível naquele momento.</p>
+<p>Não se deve presumir que todo acesso ADB seja root.</p>
+<hr />
+<h3 id="105-verificar-selinux">10.5 Verificar SELinux<a class="headerlink" href="#105-verificar-selinux" title="Permanent link">&para;</a></h3>
+<p>Quando disponível:</p>
+<pre><code>adb shell getenforce
+</code></pre>
+<p>Um resultado como:</p>
+<pre><code>Enforcing
+</code></pre>
+<p>indica que a política SELinux está sendo aplicada.</p>
+<p>O SELinux pode impedir uma operação mesmo quando as permissões Unix aparentam estar corretas.</p>
+<p>Em versões recentes do KaiOS, o controle de acesso é especialmente relevante. Pesquisas recentes sobre KaiOS 3.1 documentam diferentes domínios SELinux, incluindo <code>B2G</code>, <code>Api-daemon</code> e <code>Shell</code>, mostrando que possuir execução de comandos não significa possuir acesso irrestrito ao sistema.</p>
+<hr />
+<h3 id="106-preservacao-de-evidencias">10.6 Preservação de evidências<a class="headerlink" href="#106-preservacao-de-evidencias" title="Permanent link">&para;</a></h3>
+<p>Durante investigação, não se deve substituir imediatamente arquivos existentes.</p>
+<p>Em vez de:</p>
+<pre><code>cp programa /system/bin/programa
+</code></pre>
+<p>prefira:</p>
+<pre><code>adb push programa /data/local/tmp/programa
+</code></pre>
+<p>e teste isoladamente.</p>
+<p>Quando possível, registre:</p>
+<pre><code>adb shell uname -a
+adb shell id
+adb shell getenforce
+adb shell getprop ro.product.cpu.abi
+adb shell getprop ro.build.version.release
+adb shell getprop ro.build.version.sdk
+</code></pre>
+<p>Essas informações ajudam a reproduzir posteriormente o ambiente.</p>
+<hr />
+<h2 id="11-seguranca-e-riscos">11. Segurança e riscos<a class="headerlink" href="#11-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>A instalação de binários nativos possui riscos significativamente maiores que a instalação de uma aplicação Web convencional.</p>
+<h3 id="111-executar-como-root">11.1 Executar como root<a class="headerlink" href="#111-executar-como-root" title="Permanent link">&para;</a></h3>
+<p>Um programa executado como root pode modificar partes críticas do sistema.</p>
+<p>Um erro simples em comandos como:</p>
+<pre><code>rm
+chmod
+chown
+mount
+cp
+</code></pre>
+<p>pode causar perda de dados ou tornar o sistema inutilizável.</p>
+<hr />
+<h3 id="112-modificar-system">11.2 Modificar <code>/system</code><a class="headerlink" href="#112-modificar-system" title="Permanent link">&para;</a></h3>
+<p>Modificar a partição do sistema pode:</p>
+<ul>
+<li>quebrar componentes do KaiOS;</li>
+<li>impedir a inicialização;</li>
+<li>interferir em atualizações;</li>
+<li>modificar permissões;</li>
+<li>gerar inconsistências no firmware.</li>
+</ul>
+<p>Portanto, <code>/system</code> deve ser tratado como área de alto risco.</p>
+<hr />
+<h3 id="113-binarios-desconhecidos">11.3 Binários desconhecidos<a class="headerlink" href="#113-binarios-desconhecidos" title="Permanent link">&para;</a></h3>
+<p>Um executável nativo possui acesso às mesmas interfaces do sistema disponíveis para o processo que o executa.</p>
+<p>Não se deve copiar para um aparelho um binário de origem desconhecida e executá-lo com privilégios elevados.</p>
+<hr />
+<h3 id="114-selinux">11.4 SELinux<a class="headerlink" href="#114-selinux" title="Permanent link">&para;</a></h3>
+<p>Tentar contornar o SELinux apenas para fazer um programa funcionar pode produzir resultados difíceis de diagnosticar.</p>
+<p>O ideal é primeiro descobrir <strong>qual regra está impedindo a operação</strong>.</p>
+<hr />
+<h3 id="115-brick">11.5 Brick<a class="headerlink" href="#115-brick" title="Permanent link">&para;</a></h3>
+<p>A instalação de um executável em <code>/data/local/tmp</code> normalmente é muito menos arriscada que modificar partições de sistema.</p>
+<p>A alteração de:</p>
+<pre><code>/system
+/vendor
+/boot
+</code></pre>
+<p>ou outras partições do firmware pertence ao nível de modificação de firmware e deve ser realizada somente depois que houver:</p>
+<ul>
+<li>backup;</li>
+<li>método de recuperação;</li>
+<li>identificação exata do firmware;</li>
+<li>documentação do particionamento;</li>
+<li>confirmação da compatibilidade.</li>
+</ul>
+<hr />
+<h2 id="12-compatibilidade">12. Compatibilidade<a class="headerlink" href="#12-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>A compatibilidade deve ser avaliada em várias dimensões.</p>
+<table>
+<thead>
+<tr>
+<th>Fator</th>
+<th>O que verificar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KaiOS</td>
+<td>2.5.x, 3.x etc.</td>
+</tr>
+<tr>
+<td>Modelo</td>
+<td>Aparelho específico</td>
+</tr>
+<tr>
+<td>Fabricante</td>
+<td>Implementação do OEM</td>
+</tr>
+<tr>
+<td>Chipset</td>
+<td>MediaTek, Qualcomm, Spreadtrum/Unisoc etc.</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>ARM32, ARM64 etc.</td>
+</tr>
+<tr>
+<td>ABI</td>
+<td><code>armeabi-v7a</code>, <code>arm64-v8a</code> etc.</td>
+</tr>
+<tr>
+<td>libc</td>
+<td>Implementação utilizada pelo ambiente</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>Versão e recursos disponíveis</td>
+</tr>
+<tr>
+<td>SELinux</td>
+<td>Modo e política</td>
+</tr>
+<tr>
+<td>ADB</td>
+<td>Disponível ou bloqueado</td>
+</tr>
+<tr>
+<td>Privilégios</td>
+<td>Shell, B2G, root etc.</td>
+</tr>
+<tr>
+<td>Partições</td>
+<td>Somente leitura ou leitura/escrita</td>
+</tr>
+<tr>
+<td>Persistência</td>
+<td><code>/data</code>, <code>/system</code> e demais áreas</td>
+</tr>
+</tbody>
+</table>
+<p>As diferenças entre versões são especialmente importantes.</p>
+<p>A documentação oficial ainda apresenta procedimentos diferentes para ambientes KaiOS tradicionais e KaiOS 3.x, inclusive diferenças na infraestrutura de desenvolvimento e ferramentas.</p>
+<p>Consequentemente, um procedimento confirmado em um KaiOS 2.5 não deve ser automaticamente aplicado a um KaiOS 3.x.</p>
+<h2 id="13-referencias-cruzadas">13. Referências cruzadas<a class="headerlink" href="#13-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Este assunto está relacionado principalmente aos seguintes capítulos do manual:</p>
+<ul>
+<li><strong>Arquitetura do KaiOS</strong></li>
+<li><strong>Arquitetura Linux/Gonk</strong></li>
+<li><strong>Sistema de arquivos do KaiOS</strong></li>
+<li><strong>ADB e ferramentas de desenvolvimento</strong></li>
+<li><strong>Root, privilégios e permissões</strong></li>
+<li><strong>SELinux no KaiOS</strong></li>
+<li><strong>Cross-compilação para ARM</strong></li>
+<li><strong>Engenharia reversa de firmware</strong></li>
+<li><strong>Particionamento e firmware</strong></li>
+<li><strong>Debugging e análise de processos</strong></li>
+</ul>
+<p>A compilação de binários depende diretamente da seção sobre arquitetura e toolchains.</p>
+<p>A instalação permanente em <code>/system</code> deve ser tratada na seção de firmware e particionamento, não neste capítulo.</p>
+<hr />
+<h2 id="14-resumo">14. Resumo<a class="headerlink" href="#14-resumo" title="Permanent link">&para;</a></h2>
+<p>Binários nativos estáticos podem ser uma maneira eficiente de adicionar ferramentas Unix a um ambiente KaiOS limitado, principalmente durante desenvolvimento, debugging e pesquisa do sistema.</p>
+<p>O procedimento recomendado é:</p>
+<pre><code>1. Identificar CPU e ABI
+2. Identificar versão do KaiOS
+3. Identificar ambiente e privilégios
+4. Compilar para a arquitetura correta
+5. Preferir vínculo estático quando apropriado
+6. Transferir para uma área temporária
+7. Aplicar chmod
+8. Executar e testar
+9. Diagnosticar permissões/SELinux
+10. Somente depois considerar persistência
+</code></pre>
+<p>Um exemplo mínimo é:</p>
+<pre><code>adb push programa /data/local/tmp/programa
+adb shell chmod 755 /data/local/tmp/programa
+adb shell /data/local/tmp/programa
+</code></pre>
+<p>A estratégia mais segura é <strong>não modificar</strong> <code>/system</code><strong> durante os primeiros testes</strong>.</p>
+<p>Também é importante distinguir três objetivos diferentes:</p>
+<pre><code>Executar um binário
+ ≠
+Armazenar um binário permanentemente
+ ≠
+Integrar um binário ao firmware
+</code></pre>
+<p>Cada um desses níveis exige privilégios e procedimentos diferentes.</p>
+<hr />
+<h2 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h2>
+<h3 id="dependencias-desta-secao">Dependências desta seção<a class="headerlink" href="#dependencias-desta-secao" title="Permanent link">&para;</a></h3>
+<p>Esta seção depende principalmente dos capítulos:</p>
+<ul>
+<li>Arquitetura do KaiOS;</li>
+<li>Linux/Gonk;</li>
+<li>Arquitetura e ABI do hardware;</li>
+<li>ADB;</li>
+<li>permissões Unix;</li>
+<li>SELinux;</li>
+<li>cross-compilação.</li>
+</ul>
+<h3 id="capitulos-que-dependem-desta-secao">Capítulos que dependem desta seção<a class="headerlink" href="#capitulos-que-dependem-desta-secao" title="Permanent link">&para;</a></h3>
+<p>O conteúdo apresentado aqui poderá ser utilizado posteriormente em:</p>
+<ul>
+<li>criação de um ambiente Unix mínimo no KaiOS;</li>
+<li>desenvolvimento de ferramentas nativas;</li>
+<li>debugging avançado;</li>
+<li>engenharia reversa;</li>
+<li>automação via shell;</li>
+<li>criação de ambientes de recuperação;</li>
+<li>modificação de firmware.</li>
+</ul>
+<h3 id="informacoes-que-devem-ser-verificadas-durante-a-compilacao-final">Informações que devem ser verificadas durante a compilação final<a class="headerlink" href="#informacoes-que-devem-ser-verificadas-durante-a-compilacao-final" title="Permanent link">&para;</a></h3>
+<p>Durante a compilação do manual, devem ser confirmados para cada aparelho estudado:</p>
+<ol>
+<li>arquitetura e ABI exatas;</li>
+<li>versão do KaiOS;</li>
+<li>versão do kernel;</li>
+<li>implementação da libc;</li>
+<li>disponibilidade de ADB;</li>
+<li>possibilidade de <code>adb
+root</code>;</li>
+<li>política SELinux;</li>
+<li>diretórios graváveis;</li>
+<li>método de persistência;</li>
+<li>possibilidade real de modificar
+<code>/system</code>;</li>
+<li>existência ou ausência de
+BusyBox;</li>
+<li>toolchain utilizada para gerar
+cada binário.</li>
+</ol>
+<p>Esses dados devem ser registrados por <strong>modelo e firmware</strong>, e não tratados como propriedades universais do KaiOS.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

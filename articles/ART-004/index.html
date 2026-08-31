@@ -1,0 +1,2608 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Ambiente Linux em chroot no Zapp II - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ambiente-linux-em-chroot-no-zapp-ii" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ambiente Linux em chroot no Zapp II
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-linux-android-kaios-e-userland" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Linux, Android, KaiOS e userland
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-o-que-e-chroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 O que é chroot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-root-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Root filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-busybox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 BusyBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Como funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-execucao-do-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Execução do shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Componentes envolvidos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-sistema-hospedeiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Sistema hospedeiro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-rootfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Rootfs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-busybox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 BusyBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-verificar-o-busybox-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar o BusyBox do sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-criar-ou-verificar-o-rootfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Criar ou verificar o rootfs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-entrar-no-mini-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Entrar no mini-Linux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-configurar-o-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Configurar o PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-instalar-applets-do-busybox-no-rootfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Instalar applets do BusyBox no rootfs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-problema-dos-links-absolutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Problema dos links absolutos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-testar-a-rede" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 Testar a rede
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-testar-conectividade-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 Testar conectividade IP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#59-disponibilizar-proc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.9 Disponibilizar /proc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#510-disponibilizar-sys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.10 Disponibilizar /sys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#511-disponibilizar-dev" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.11 Disponibilizar /dev
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-disponibilizar-tmp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.12 Disponibilizar /tmp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-ambiente-minimo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Ambiente mínimo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-teste-basico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Teste básico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-teste-de-rede" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Teste de rede
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Problemas comuns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Problemas comuns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-ls-not-found-dentro-do-chroot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 ls: not found dentro do chroot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-mount-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 mount: not found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-chroot-encontra-binsh-mas-nao-consegue-executa-lo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 chroot encontra /bin/sh, mas não consegue executá-lo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-ifconfig-reclama-de-procnetdev" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 ifconfig reclama de /proc/net/dev
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-busybox-install-cria-arquivos-nos-lugares-errados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 busybox --install cria arquivos nos lugares errados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-chmod-retorna-read-only-file-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 chmod retorna Read-only file system
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Diagnóstico e debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-verificar-mounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Verificar mounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-verificar-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Verificar SELinux
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-verificar-identidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Verificar identidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-verificar-localizacao-do-busybox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Verificar localização do BusyBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-verificar-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Verificar links
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-alteracao-de-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Alteração de /system
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-alteracao-de-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Alteração de /data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-su-e-setuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 su e setuid
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-selinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 SELinux
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Compatibilidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Compatibilidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-kaios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 KaiOS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Kernel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-busybox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 BusyBox
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Resumo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Resumo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#informacoes-que-devem-ser-verificadas-na-compilacao-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Informações que devem ser verificadas na compilação final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ambiente-linux-em-chroot-no-zapp-ii">Ambiente Linux em chroot no Zapp II<a class="headerlink" href="#ambiente-linux-em-chroot-no-zapp-ii" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>O Zapp II utilizado neste projeto apresenta uma combinação particular de componentes de software baseados em Linux, Android e KaiOS. Para fins de engenharia e experimentação, é possível aproveitar o ambiente Linux já existente no aparelho para criar um <em>root filesystem</em> (<em>rootfs</em>) independente, executado por meio de <code>chroot</code>.</p>
+<p>O objetivo deste ambiente não é substituir o sistema operacional principal, mas fornecer um espaço Linux adicional dentro do sistema existente.</p>
+<p>Nesse modelo:</p>
+<pre><code class="language-text">┌──────────────────────────────────────────────┐
+│ Zapp II                                      │
+│                                              │
+│ ┌──────────────────────────────────────────┐ │
+│ │ Sistema principal                        │ │
+│ │ Linux / Android / KaiOS                  │ │
+│ │                                          │ │
+│ │ /system                                  │ │
+│ │ /data                                    │ │
+│ │ /vendor                                  │ │
+│ │ /dev                                     │ │
+│ │ /proc                                    │ │
+│ │ /sys                                     │ │
+│ └──────────────────────┬───────────────────┘ │
+│                        │                     │
+│                        │ chroot              │
+│                        ▼                     │
+│ ┌──────────────────────────────────────────┐ │
+│ │ /data/local/linux                        │ │
+│ │                                          │ │
+│ │ /bin                                     │ │
+│ │ /sbin                                    │ │
+│ │ /usr                                     │ │
+│ │ /etc                                     │ │
+│ │ /root                                    │ │
+│ │ /proc                                    │ │
+│ │ /sys                                     │ │
+│ │ /dev                                     │ │
+│ └──────────────────────────────────────────┘ │
+└──────────────────────────────────────────────┘
+</code></pre>
+<p>O ambiente criado neste projeto utiliza principalmente o BusyBox 1.21.1, compilado para ARMv7, como conjunto de ferramentas Unix.</p>
+<p>O ambiente foi testado no Zapp II com:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente</th>
+<th style="text-align: left;">Evidência observada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>SoC</strong></td>
+<td style="text-align: left;">MediaTek MT6572</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arquitetura</strong></td>
+<td style="text-align: left;">ARMv7</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>KaiOS</strong></td>
+<td style="text-align: left;">2.5.1.2</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kernel</strong></td>
+<td style="text-align: left;">Linux 3.4.67</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BusyBox</strong></td>
+<td style="text-align: left;">1.21.1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BusyBox principal</strong></td>
+<td style="text-align: left;"><code>/system/xbin/busybox</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Root durante os testes</strong></td>
+<td style="text-align: left;"><code>uid=0(root) gid=0(root)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rootfs experimental</strong></td>
+<td style="text-align: left;"><code>/data/local/linux</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sistema <code>/data</code></strong></td>
+<td style="text-align: left;"><code>ext4</code>, montado <code>rw</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SELinux</strong></td>
+<td style="text-align: left;"><code>Enforcing</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota:</strong> Essas informações são específicas do aparelho e firmware investigados e não devem ser generalizadas para todos os dispositivos KaiOS.</p>
+</blockquote>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-linux-android-kaios-e-userland">2.1 Linux, Android, KaiOS e userland<a class="headerlink" href="#21-linux-android-kaios-e-userland" title="Permanent link">&para;</a></h3>
+<p>É importante separar três conceitos diferentes:</p>
+<ol>
+<li><strong>Kernel</strong></li>
+<li><strong>Sistema operacional/runtime</strong></li>
+<li><strong>Userland</strong></li>
+</ol>
+<p>O kernel fornece funções fundamentais como:</p>
+<ul>
+<li>processos;</li>
+<li>memória;</li>
+<li>dispositivos;</li>
+<li>sistemas de arquivos;</li>
+<li>rede;</li>
+<li>drivers;</li>
+<li>permissões;</li>
+<li>chamadas de sistema.</li>
+</ul>
+<p>O Android utiliza um kernel Linux, mas possui seu próprio conjunto de componentes e serviços. O KaiOS também utiliza tecnologias baseadas em Linux e possui uma camada de runtime própria. Portanto, dizer que <em>"Android e Linux userland são a mesma coisa"</em> não é tecnicamente correto.</p>
+<p>Um sistema Android possui um userland Android, que pode incluir componentes como:</p>
+<ul>
+<li><code>/system</code></li>
+<li><code>/vendor</code></li>
+<li><code>/data</code></li>
+<li><code>/bin</code></li>
+<li><code>/xbin</code></li>
+<li>serviços Android</li>
+<li>bibliotecas</li>
+<li>framework</li>
+<li>runtime</li>
+</ul>
+<p>O KaiOS acrescenta sua própria camada de software sobre a infraestrutura fornecida pelo dispositivo.</p>
+<p>O <code>chroot</code> explorado neste projeto não cria um novo kernel. Ele reutiliza o kernel já executado pelo aparelho.</p>
+<h3 id="22-o-que-e-chroot">2.2 O que é chroot<a class="headerlink" href="#22-o-que-e-chroot" title="Permanent link">&para;</a></h3>
+<p><code>chroot</code> significa aproximadamente <em>"change root"</em>. O comando altera o diretório que será tratado como <code>/</code> para um processo e seus descendentes.</p>
+<p>Por exemplo:</p>
+<pre><code class="language-bash">chroot /data/local/linux /bin/sh
+</code></pre>
+<p>Antes:</p>
+<pre><code class="language-text">/
+├── system
+├── data
+├── vendor
+└── ...
+</code></pre>
+<p>Depois, para o processo dentro do chroot:</p>
+<pre><code class="language-text">/
+├── bin
+├── etc
+├── usr
+├── root
+└── ...
+</code></pre>
+<p>Nesse caso:</p>
+<pre><code class="language-text">/data/local/linux/bin/sh
+</code></pre>
+<p>passa a ser percebido pelo processo como:</p>
+<pre><code class="language-text">/bin/sh
+</code></pre>
+<p>Entretanto, <code>chroot</code> não é uma máquina virtual e não é um container completo. O processo continua utilizando:</p>
+<ul>
+<li>o mesmo kernel;</li>
+<li>os mesmos dispositivos subjacentes;</li>
+<li>a mesma arquitetura;</li>
+<li>os mesmos mecanismos de segurança do kernel;</li>
+<li>o mesmo namespace de processos, salvo outras técnicas adicionais;</li>
+<li>as mesmas limitações impostas pelo sistema hospedeiro.</li>
+</ul>
+<h3 id="23-root-filesystem">2.3 Root filesystem<a class="headerlink" href="#23-root-filesystem" title="Permanent link">&para;</a></h3>
+<p>O diretório utilizado neste projeto foi:</p>
+<pre><code class="language-text">/data/local/linux
+</code></pre>
+<p>Esse diretório funciona como rootfs experimental. Uma estrutura mínima pode ser:</p>
+<pre><code class="language-text">/data/local/linux/
+├── bin/
+├── sbin/
+├── usr/
+│   ├── bin/
+│   └── sbin/
+├── etc/
+├── dev/
+├── proc/
+├── sys/
+├── tmp/
+└── root/
+</code></pre>
+<p>O rootfs precisa conter os executáveis e bibliotecas necessários para executar o ambiente.</p>
+<h3 id="24-busybox">2.4 BusyBox<a class="headerlink" href="#24-busybox" title="Permanent link">&para;</a></h3>
+<p>BusyBox é um executável que reúne diversas ferramentas Unix em um único binário.</p>
+<p>No aparelho investigado:</p>
+<pre><code class="language-bash">which busybox
+</code></pre>
+<p>retornou:</p>
+<pre><code class="language-text">/system/xbin/busybox
+</code></pre>
+<p>A versão observada foi:</p>
+<pre><code class="language-text">BusyBox v1.21.1
+</code></pre>
+<p>O binário disponibiliza dezenas de applets, incluindo: <code>sh</code>, <code>ls</code>, <code>cat</code>, <code>mount</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>chmod</code>, <code>chown</code>, <code>ps</code>, <code>ping</code>, <code>ifconfig</code>, <code>tar</code>, <code>wget</code>, <code>vi</code>, <code>su</code>, entre muitos outros.</p>
+<p>Isso é particularmente útil em sistemas embarcados porque um único executável pode fornecer uma grande quantidade de ferramentas.</p>
+<hr />
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>O funcionamento do ambiente pode ser dividido em quatro camadas:</p>
+<pre><code class="language-text">┌─────────────────────────────┐
+│ Aplicações / shell          │
+├─────────────────────────────┤
+│ BusyBox / userland          │
+├─────────────────────────────┤
+│ Rootfs /data/local/linux    │
+├─────────────────────────────┤
+│ Kernel Linux do aparelho    │
+└─────────────────────────────┘
+</code></pre>
+<p>O <code>chroot</code> altera a visão do sistema de arquivos para o processo. O BusyBox fornece as ferramentas. O kernel continua sendo o kernel do Zapp II.</p>
+<p>Isso explica por que um programa executado no mini-Linux consegue utilizar a interface <code>wlan0</code> existente no aparelho.</p>
+<h3 id="31-execucao-do-shell">3.1 Execução do shell<a class="headerlink" href="#31-execucao-do-shell" title="Permanent link">&para;</a></h3>
+<p>O ponto de entrada utilizado foi:</p>
+<pre><code class="language-bash">chroot /data/local/linux /bin/sh
+</code></pre>
+<p>Quando esse comando funciona, o prompt muda para algo semelhante a:</p>
+<pre><code class="language-text">/ #
+</code></pre>
+<p>Nesse momento, <code>/</code> representa <code>/data/local/linux</code> no sistema hospedeiro.</p>
+<h3 id="32-path">3.2 PATH<a class="headerlink" href="#32-path" title="Permanent link">&para;</a></h3>
+<p>Dentro do chroot, o PATH inicialmente observado foi:</p>
+<pre><code class="language-text">/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+</code></pre>
+<p>Foi então configurado:</p>
+<pre><code class="language-bash">export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+</code></pre>
+<p>Isso é conceitualmente correto, mas não é suficiente por si só. O shell procura:</p>
+<ul>
+<li><code>/bin/ls</code></li>
+<li><code>/sbin/mount</code></li>
+<li><code>/usr/bin/cat</code></li>
+<li><code>/usr/sbin/...</code></li>
+</ul>
+<p>Portanto, esses arquivos precisam realmente existir no rootfs e ser executáveis.</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<h3 id="41-sistema-hospedeiro">4.1 Sistema hospedeiro<a class="headerlink" href="#41-sistema-hospedeiro" title="Permanent link">&para;</a></h3>
+<p>Os principais componentes observados foram:</p>
+<ul>
+<li><code>/system</code></li>
+<li><code>/data</code></li>
+<li><code>/vendor</code></li>
+<li><code>/dev</code></li>
+<li><code>/proc</code></li>
+<li><code>/sys</code></li>
+</ul>
+<p>O sistema <code>/system</code> foi observado inicialmente como:</p>
+<pre><code class="language-text">/emmc@android /system ext4 ro,seclabel,relatime,data=ordered 0 0
+</code></pre>
+<p>Durante os testes, foi possível remontá-lo como <code>rw</code>:</p>
+<pre><code class="language-bash">/system/xbin/busybox mount -o remount,rw /system
+</code></pre>
+<p>Posteriormente:</p>
+<pre><code class="language-text">/emmc@android /system ext4 rw,seclabel,relatime,data=ordered 0 0
+</code></pre>
+<blockquote>
+<p><strong>Aviso:</strong> Essa alteração deve ser tratada como operação potencialmente perigosa e não deve ser considerada necessária para um chroot convencional.</p>
+</blockquote>
+<h3 id="42-rootfs">4.2 Rootfs<a class="headerlink" href="#42-rootfs" title="Permanent link">&para;</a></h3>
+<p>O rootfs experimental está localizado em:</p>
+<pre><code class="language-text">/data/local/linux
+</code></pre>
+<p>Os arquivos do BusyBox foram distribuídos nesse ambiente. Durante a montagem do ambiente, foi criado um conjunto de links para os applets.</p>
+<p>Por exemplo:</p>
+<ul>
+<li><code>/data/local/linux/bin/ls</code></li>
+<li><code>/data/local/linux/bin/mount</code></li>
+<li><code>/data/local/linux/bin/cat</code></li>
+</ul>
+<h3 id="43-busybox">4.3 BusyBox<a class="headerlink" href="#43-busybox" title="Permanent link">&para;</a></h3>
+<p>O executável principal é:</p>
+<pre><code class="language-text">/system/xbin/busybox
+</code></pre>
+<p>Foi confirmado:</p>
+<pre><code class="language-bash">/system/xbin/busybox --help
+</code></pre>
+<p>com resultado indicando <code>BusyBox v1.21.1</code>.</p>
+<p>O BusyBox também contém o applet <code>su</code>. Entretanto, a simples presença do applet <code>su</code> não significa que ele esteja configurado como um mecanismo funcional de escalada de privilégios.</p>
+<hr />
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-verificar-o-busybox-do-sistema">5.1 Verificar o BusyBox do sistema<a class="headerlink" href="#51-verificar-o-busybox-do-sistema" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Confirmar a localização e a versão do BusyBox.</li>
+<li><strong>Comandos:</strong></li>
+</ul>
+<pre><code class="language-bash">which busybox
+/system/xbin/busybox --help
+</code></pre>
+<ul>
+<li><strong>Resultado observado:</strong> <code>/system/xbin/busybox</code> e <code>BusyBox v1.21.1</code>.</li>
+<li><strong>Diagnóstico:</strong> Caso <code>which</code> não encontre o executável, utilizar diretamente <code>/system/xbin/busybox</code>.</li>
+</ul>
+<h3 id="52-criar-ou-verificar-o-rootfs">5.2 Criar ou verificar o rootfs<a class="headerlink" href="#52-criar-ou-verificar-o-rootfs" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Confirmar a existência do ambiente Linux.</li>
+</ul>
+<pre><code class="language-bash">ls -l /data/local/linux
+</code></pre>
+<p>Uma estrutura mínima esperada inclui: <code>bin</code>, <code>etc</code>, <code>root</code>, <code>usr</code>, <code>tmp</code>, <code>dev</code>, <code>proc</code>, <code>sys</code>.</p>
+<h3 id="53-entrar-no-mini-linux">5.3 Entrar no mini-Linux<a class="headerlink" href="#53-entrar-no-mini-linux" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Comando:</strong></li>
+</ul>
+<pre><code class="language-bash">chroot /data/local/linux /bin/sh
+</code></pre>
+<ul>
+<li><strong>Resultado esperado:</strong> <code>/ #</code></li>
+<li><strong>Diagnóstico:</strong> Se ocorrer <code>chroot: can't execute '/bin/sh': No such file or directory</code>, não significa necessariamente que <code>/bin/sh</code> não exista. Possíveis causas incluem:</li>
+<li>arquivo ausente;</li>
+<li>link simbólico quebrado;</li>
+<li>arquitetura incompatível;</li>
+<li>biblioteca dinâmica ausente;</li>
+<li>interpretador ELF ausente.</li>
+</ul>
+<p>Nesse caso, deve-se investigar o executável antes de substituí-lo.</p>
+<h3 id="54-configurar-o-path">5.4 Configurar o PATH<a class="headerlink" href="#54-configurar-o-path" title="Permanent link">&para;</a></h3>
+<p>Dentro do ambiente:</p>
+<pre><code class="language-bash">export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+</code></pre>
+<p>Verificar:</p>
+<pre><code class="language-bash">echo $PATH
+</code></pre>
+<ul>
+<li><strong>Resultado esperado:</strong> <code>/bin:/sbin:/usr/bin:/usr/sbin</code></li>
+</ul>
+<blockquote>
+<p>Isso apenas informa ao shell onde procurar executáveis. Não cria os executáveis.</p>
+</blockquote>
+<h3 id="55-instalar-applets-do-busybox-no-rootfs">5.5 Instalar applets do BusyBox no rootfs<a class="headerlink" href="#55-instalar-applets-do-busybox-no-rootfs" title="Permanent link">&para;</a></h3>
+<p>O BusyBox possui <code>busybox --install</code> e <code>busybox --install -s</code>. A opção <code>-s</code> solicita links simbólicos em vez de cópias.</p>
+<p>No rootfs, a operação deve ser direcionada explicitamente ao diretório desejado:</p>
+<pre><code class="language-bash">/system/xbin/busybox --install -s /data/local/linux/bin
+</code></pre>
+<p>ou, se o BusyBox estiver disponível dentro do rootfs:</p>
+<pre><code class="language-bash">/bin/busybox --install -s /bin
+</code></pre>
+<blockquote>
+<p><strong>Observação importante:</strong> Não é recomendável executar simplesmente <code>busybox --install -s</code> sem especificar o destino durante a preparação de um rootfs. No teste realizado anteriormente, isso fez o BusyBox tentar criar applets em caminhos do sistema hospedeiro, como <code>/bin</code>, <code>/sbin</code>, <code>/usr/bin</code>, <code>/usr/sbin</code>, produzindo mensagens como <code>Read-only file system</code> e <code>No such file or directory</code>. Portanto, o problema não era ausência dos applets no BusyBox, mas sim o destino utilizado pelo <code>--install</code>.</p>
+</blockquote>
+<h3 id="56-problema-dos-links-absolutos">5.6 Problema dos links absolutos<a class="headerlink" href="#56-problema-dos-links-absolutos" title="Permanent link">&para;</a></h3>
+<p>Durante os testes foi observado:</p>
+<pre><code class="language-bash">ls -l /data/local/linux/bin/ls
+</code></pre>
+<p>resultando em:</p>
+<pre><code class="language-text">ls -&gt; /system/xbin/busybox
+</code></pre>
+<p>Esse detalhe é fundamental. Dentro do chroot, o processo interpreta <code>/system/xbin/busybox</code> como um caminho pertencente ao rootfs (<code>/data/local/linux/system/xbin/busybox</code>) e não necessariamente como o <code>/system/xbin/busybox</code> do sistema hospedeiro.</p>
+<p>Por isso, um link como <code>/bin/ls -&gt; /system/xbin/busybox</code> pode parecer correto fora do chroot, mas falhar dentro dele.</p>
+<p>A solução correta é disponibilizar o BusyBox dentro do rootfs e criar links que apontem para uma localização válida dentro desse mesmo rootfs. Por exemplo:</p>
+<ul>
+<li><code>/bin/busybox</code></li>
+<li><code>/bin/ls -&gt; busybox</code></li>
+<li><code>/bin/cat -&gt; busybox</code></li>
+<li><code>/bin/mount -&gt; busybox</code></li>
+</ul>
+<p>ou utilizar links absolutos que apontem para uma localização existente dentro do rootfs.</p>
+<h3 id="57-testar-a-rede">5.7 Testar a rede<a class="headerlink" href="#57-testar-a-rede" title="Permanent link">&para;</a></h3>
+<p>A rede foi efetivamente demonstrada dentro do chroot.</p>
+<ul>
+<li><strong>Comando utilizado:</strong></li>
+</ul>
+<pre><code class="language-bash">/bin/busybox ifconfig
+</code></pre>
+<p>Foi possível observar <code>lo</code> e <code>wlan0</code>, com <code>wlan0</code> apresentando <code>inet addr:192.168.0.16</code>.</p>
+<p>Também foi observado:</p>
+<pre><code class="language-text">ifconfig: /proc/net/dev: No such file or directory
+</code></pre>
+<p>Esse aviso indica que <code>/proc</code> não estava corretamente disponível no ambiente naquele momento. Apesar disso, as interfaces de rede puderam ser identificadas.</p>
+<h3 id="58-testar-conectividade-ip">5.8 Testar conectividade IP<a class="headerlink" href="#58-testar-conectividade-ip" title="Permanent link">&para;</a></h3>
+<p>Foi executado:</p>
+<pre><code class="language-bash">/bin/busybox ping -c 3 8.8.8.8
+</code></pre>
+<ul>
+<li><strong>Resultado:</strong></li>
+</ul>
+<pre><code class="language-text">3 packets transmitted, 3 packets received, 0% packet loss
+</code></pre>
+<p>com latência média aproximada de <code>28.957 ms</code>.</p>
+<p>Isso demonstra que o processo executado dentro do chroot conseguiu utilizar a conectividade de rede do sistema hospedeiro.</p>
+<blockquote>
+<p><strong>Conclusão:</strong> O chroot não possui uma pilha de rede independente. Ele utiliza a infraestrutura de rede fornecida pelo kernel e pelo ambiente hospedeiro.</p>
+</blockquote>
+<h3 id="59-disponibilizar-proc">5.9 Disponibilizar /proc<a class="headerlink" href="#59-disponibilizar-proc" title="Permanent link">&para;</a></h3>
+<p>Ferramentas como <code>ps</code>, <code>ifconfig</code>, <code>free</code> e <code>top</code> podem depender de informações fornecidas por <code>/proc</code>. O erro <code>/proc/net/dev: No such file or directory</code> é uma evidência de que o pseudo filesystem <code>/proc</code> não estava disponível na visão do processo.</p>
+<p>Uma forma de preparar o rootfs a partir do ambiente hospedeiro é:</p>
+<pre><code class="language-bash">mount -t proc proc /data/local/linux/proc
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">chroot /data/local/linux /bin/sh
+ls /proc
+</code></pre>
+<blockquote>
+<p><strong>Importante:</strong> A montagem deve ser feita respeitando o namespace e as permissões do sistema hospedeiro. Não se deve assumir que <code>mount -t proc proc /proc</code> dentro do chroot produzirá automaticamente o comportamento desejado.</p>
+</blockquote>
+<h3 id="510-disponibilizar-sys">5.10 Disponibilizar /sys<a class="headerlink" href="#510-disponibilizar-sys" title="Permanent link">&para;</a></h3>
+<p>Da mesma maneira:</p>
+<pre><code class="language-bash">mount -t sysfs sysfs /data/local/linux/sys
+</code></pre>
+<p>permite disponibilizar informações do kernel relacionadas ao sysfs, desde que o sistema e suas políticas de segurança permitam a operação.</p>
+<h3 id="511-disponibilizar-dev">5.11 Disponibilizar /dev<a class="headerlink" href="#511-disponibilizar-dev" title="Permanent link">&para;</a></h3>
+<p>O diretório <code>/dev</code> é especialmente importante porque contém interfaces de dispositivos. Uma preparação típica pode utilizar:</p>
+<pre><code class="language-bash">mount --bind /dev /data/local/linux/dev
+</code></pre>
+<p>A operação deve ser feita a partir do ambiente hospedeiro, apontando o <code>/dev</code> real para o <code>/dev</code> correspondente dentro do rootfs. Não se deve confundir isso com <code>mount --bind /dev /dev</code> executado dentro do chroot. O segundo caso não representa corretamente a preparação do <code>/dev</code> do rootfs.</p>
+<h3 id="512-disponibilizar-tmp">5.12 Disponibilizar /tmp<a class="headerlink" href="#512-disponibilizar-tmp" title="Permanent link">&para;</a></h3>
+<p>O <code>/tmp</code> pode utilizar um tmpfs quando o sistema permitir:</p>
+<pre><code class="language-bash">mount -t tmpfs tmpfs /data/local/linux/tmp
+</code></pre>
+<p>Isso cria uma área temporária baseada em memória. A disponibilidade e as opções permitidas dependem das políticas do kernel e do sistema hospedeiro.</p>
+<hr />
+<h2 id="6-exemplos">6. Exemplos<a class="headerlink" href="#6-exemplos" title="Permanent link">&para;</a></h2>
+<h3 id="61-ambiente-minimo">6.1 Ambiente mínimo<a class="headerlink" href="#61-ambiente-minimo" title="Permanent link">&para;</a></h3>
+<p>Uma configuração conceitual do ambiente é:</p>
+<pre><code class="language-text">/data/local/linux/
+├── bin/
+│   ├── busybox
+│   ├── sh
+│   ├── ls
+│   ├── cat
+│   ├── mount
+│   └── ...
+├── etc/
+├── root/
+├── tmp/
+├── usr/
+│   ├── bin/
+│   └── sbin/
+├── dev/
+├── proc/
+└── sys/
+</code></pre>
+<ul>
+<li><strong>Entrada:</strong> <code>chroot /data/local/linux /bin/sh</code></li>
+<li><strong>Configuração:</strong> <code>export PATH=/bin:/sbin:/usr/bin:/usr/sbin</code></li>
+</ul>
+<h3 id="62-teste-basico">6.2 Teste básico<a class="headerlink" href="#62-teste-basico" title="Permanent link">&para;</a></h3>
+<p>Dentro do ambiente:</p>
+<pre><code class="language-bash">id
+</code></pre>
+<ul>
+<li><strong>Resultado no teste realizado:</strong> <code>uid=0(root) gid=0(root)</code></li>
+</ul>
+<p>Isso confirma que o processo do shell estava sendo executado com UID 0. É importante observar que isso não significa que o chroot tenha criado um novo mecanismo de privilégio. O processo já havia sido iniciado a partir de um contexto com privilégios suficientes no sistema hospedeiro.</p>
+<h3 id="63-teste-de-rede">6.3 Teste de rede<a class="headerlink" href="#63-teste-de-rede" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">/bin/busybox ifconfig
+/bin/busybox ping -c 3 8.8.8.8
+</code></pre>
+<ul>
+<li><strong>Resultado observado:</strong> <code>0% packet loss</code></li>
+</ul>
+<p>Esse foi um dos testes mais importantes para confirmar que o ambiente Linux experimental já conseguia utilizar recursos externos ao rootfs.</p>
+<hr />
+<h2 id="7-problemas-comuns">7. Problemas comuns<a class="headerlink" href="#7-problemas-comuns" title="Permanent link">&para;</a></h2>
+<h3 id="71-ls-not-found-dentro-do-chroot">7.1 <code>ls: not found</code> dentro do chroot<a class="headerlink" href="#71-ls-not-found-dentro-do-chroot" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Causa provável:</strong> O executável não está presente no rootfs ou o link aponta para um caminho pertencente ao sistema hospedeiro.</li>
+<li>Exemplo problemático: <code>/bin/ls -&gt; /system/xbin/busybox</code></li>
+<li><strong>Diagnóstico (fora do chroot):</strong></li>
+</ul>
+<pre><code class="language-bash">ls -l /data/local/linux/bin/ls
+ls -l /data/local/linux/bin/busybox
+</code></pre>
+<h3 id="72-mount-not-found">7.2 <code>mount: not found</code><a class="headerlink" href="#72-mount-not-found" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Causa provável:</strong> O applet <code>mount</code> existe no BusyBox, mas não existe um executável acessível como <code>/bin/mount</code>.</li>
+<li><strong>Diagnóstico:</strong> Verificar com <code>/bin/busybox mount</code>. Se isso funcionar, o problema é de disponibilização do applet, não necessariamente do BusyBox.</li>
+</ul>
+<h3 id="73-chroot-encontra-binsh-mas-nao-consegue-executa-lo">7.3 chroot encontra <code>/bin/sh</code>, mas não consegue executá-lo<a class="headerlink" href="#73-chroot-encontra-binsh-mas-nao-consegue-executa-lo" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Mensagem:</strong> <code>No such file or directory</code></li>
+<li><strong>Pode indicar:</strong></li>
+<li>shell inexistente;</li>
+<li>link simbólico quebrado;</li>
+<li>ELF incompatível;</li>
+<li>biblioteca dinâmica ausente;</li>
+<li>loader ELF ausente.</li>
+</ul>
+<p>Portanto, não se deve concluir imediatamente que o arquivo não existe.</p>
+<h3 id="74-ifconfig-reclama-de-procnetdev">7.4 ifconfig reclama de <code>/proc/net/dev</code><a class="headerlink" href="#74-ifconfig-reclama-de-procnetdev" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Mensagem observada:</strong> <code>ifconfig: /proc/net/dev: No such file or directory</code></li>
+<li><strong>Causa:</strong> O <code>/proc</code> não está disponível adequadamente no rootfs.</li>
+<li><strong>Solução:</strong> Preparar a montagem de <code>/proc</code> para o rootfs.</li>
+</ul>
+<h3 id="75-busybox-install-cria-arquivos-nos-lugares-errados">7.5 <code>busybox --install</code> cria arquivos nos lugares errados<a class="headerlink" href="#75-busybox-install-cria-arquivos-nos-lugares-errados" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Comando problemático:</strong> <code>busybox --install -s</code></li>
+<li>Esse comando pode utilizar diretórios padrão que não correspondem ao rootfs. Em um ambiente de preparação, especificar explicitamente:</li>
+</ul>
+<pre><code class="language-bash">busybox --install -s /data/local/linux/bin
+</code></pre>
+<p>é muito mais seguro.</p>
+<h3 id="76-chmod-retorna-read-only-file-system">7.6 <code>chmod</code> retorna <code>Read-only file system</code><a class="headerlink" href="#76-chmod-retorna-read-only-file-system" title="Permanent link">&para;</a></h3>
+<p>Durante o projeto ocorreu <code>chmod 6755 /data/local/linux/bin/su</code> com <code>Unable to chmod ...: Read-only file system</code>.</p>
+<p>Foi posteriormente confirmado <code>mount | grep '/data'</code> com:</p>
+<pre><code class="language-text">/emmc@usrdata /data ext4 rw,seclabel,relatime,discard,noauto_da_alloc,data=ordered 0 0
+</code></pre>
+<p>Portanto, não é correto concluir automaticamente que o <code>/data</code> estava montado somente para leitura. Também não é correto concluir automaticamente que o erro foi causado pelo SELinux.</p>
+<p>O SELinux estava <code>Enforcing</code>, mas uma mensagem <code>Read-only file system</code> pode ter outras causas, incluindo:</p>
+<ul>
+<li>restrições específicas da operação;</li>
+<li>filesystem subjacente;</li>
+<li>contexto de segurança;</li>
+<li>política do kernel;</li>
+<li>comportamento do processo;</li>
+<li>limitações impostas pelo ambiente;</li>
+<li>diferenças entre o caminho visto pelo processo e o mount correspondente.</li>
+</ul>
+<p>O diagnóstico correto exige investigar a operação específica antes de atribuir a causa.</p>
+<hr />
+<h2 id="8-diagnostico-e-debugging">8. Diagnóstico e debugging<a class="headerlink" href="#8-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<h3 id="81-verificar-mounts">8.1 Verificar mounts<a class="headerlink" href="#81-verificar-mounts" title="Permanent link">&para;</a></h3>
+<p>No ambiente hospedeiro:</p>
+<pre><code class="language-bash">mount
+# ou:
+cat /proc/mounts
+</code></pre>
+<p>Para <code>/data</code>:</p>
+<pre><code class="language-bash">mount | grep '/data'
+</code></pre>
+<ul>
+<li><strong>Saída observada:</strong></li>
+</ul>
+<pre><code class="language-text">/emmc@usrdata /data ext4 rw,seclabel,relatime,discard,noauto_da_alloc,data=ordered 0 0
+</code></pre>
+<p>Isso confirma <code>rw</code> no mount principal de <code>/data</code>.</p>
+<h3 id="82-verificar-selinux">8.2 Verificar SELinux<a class="headerlink" href="#82-verificar-selinux" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">getenforce
+</code></pre>
+<ul>
+<li><strong>Resultado observado:</strong> <code>Enforcing</code></li>
+</ul>
+<p>Isso significa que as políticas SELinux estão sendo aplicadas. A presença de <code>Enforcing</code> não significa que todas as operações sobre o rootfs serão bloqueadas. Da mesma forma, <code>Enforcing</code> não deve ser usado como explicação automática para qualquer erro de permissão.</p>
+<h3 id="83-verificar-identidade">8.3 Verificar identidade<a class="headerlink" href="#83-verificar-identidade" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">id
+</code></pre>
+<ul>
+<li><strong>Resultado observado:</strong> <code>uid=0(root) gid=0(root)</code></li>
+</ul>
+<p>Esse teste deve ser executado dentro e fora do chroot quando for necessário determinar exatamente qual contexto está sendo utilizado.</p>
+<h3 id="84-verificar-localizacao-do-busybox">8.4 Verificar localização do BusyBox<a class="headerlink" href="#84-verificar-localizacao-do-busybox" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">which busybox
+/system/xbin/busybox --help
+</code></pre>
+<ul>
+<li><strong>Resultado:</strong> <code>/system/xbin/busybox</code> e confirmação da versão.</li>
+</ul>
+<h3 id="85-verificar-links">8.5 Verificar links<a class="headerlink" href="#85-verificar-links" title="Permanent link">&para;</a></h3>
+<p>Para um executável específico:</p>
+<pre><code class="language-bash">ls -l /data/local/linux/bin/ls
+</code></pre>
+<ul>
+<li><strong>Exemplo observado:</strong> <code>ls -&gt; /system/xbin/busybox</code></li>
+</ul>
+<p>Esse tipo de saída deve ser analisado cuidadosamente porque links absolutos podem deixar de apontar para o mesmo arquivo depois que o chroot altera a raiz percebida pelo processo.</p>
+<hr />
+<h2 id="9-seguranca-e-riscos">9. Segurança e riscos<a class="headerlink" href="#9-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>O chroot é relativamente simples de experimentar, mas alterações no sistema hospedeiro podem ser perigosas.</p>
+<h3 id="91-alteracao-de-system">9.1 Alteração de <code>/system</code><a class="headerlink" href="#91-alteracao-de-system" title="Permanent link">&para;</a></h3>
+<p>Foi demonstrado que:</p>
+<pre><code class="language-bash">/system/xbin/busybox mount -o remount,rw /system
+</code></pre>
+<p>pode alterar o estado de montagem de <code>/system</code>. Isso deve ser tratado como operação de alto risco. Alterações incorretas em <code>/system</code> podem causar:</p>
+<ul>
+<li>falha de inicialização;</li>
+<li>aplicações quebradas;</li>
+<li>perda de funcionalidades;</li>
+<li>bootloop;</li>
+<li>necessidade de restaurar firmware.</li>
+</ul>
+<h3 id="92-alteracao-de-data">9.2 Alteração de <code>/data</code><a class="headerlink" href="#92-alteracao-de-data" title="Permanent link">&para;</a></h3>
+<p>O rootfs foi colocado em <code>/data/local/linux</code>. Alterações nessa área podem ser menos críticas para o boot do que alterações diretamente em <code>/system</code>, mas ainda podem afetar aplicações e dados.</p>
+<p>Nunca se deve assumir que um diretório dentro de <code>/data</code> é descartável sem verificar sua função.</p>
+<h3 id="93-su-e-setuid">9.3 <code>su</code> e <code>setuid</code><a class="headerlink" href="#93-su-e-setuid" title="Permanent link">&para;</a></h3>
+<p>O BusyBox utilizado contém o applet <code>su</code>. Porém, <em>"BusyBox possui o applet su"</em> não significa <em>"su está configurado como root persistente"</em> nem <em>"setuid funcionará"</em>.</p>
+<p>O comportamento depende das permissões, do kernel, do filesystem e das políticas de segurança. Além disso, alterar permissões para <code>6755</code> não deve ser utilizado como procedimento padrão sem antes compreender o contexto de segurança do aparelho.</p>
+<h3 id="94-selinux">9.4 SELinux<a class="headerlink" href="#94-selinux" title="Permanent link">&para;</a></h3>
+<p>O aparelho possui SELinux em modo <code>Enforcing</code>. O SELinux deve ser considerado uma camada independente das permissões Unix tradicionais:</p>
+<pre><code class="language-text">UID/GID
+   ↓
+permissões Unix
+   ↓
+filesystem
+   ↓
+mount flags
+   ↓
+SELinux
+   ↓
+kernel
+</code></pre>
+<p>Uma operação pode ser permitida em uma camada e bloqueada em outra.</p>
+<hr />
+<h2 id="10-compatibilidade">10. Compatibilidade<a class="headerlink" href="#10-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>O ambiente descrito nesta seção depende fortemente do dispositivo.</p>
+<h3 id="101-kaios">10.1 KaiOS<a class="headerlink" href="#101-kaios" title="Permanent link">&para;</a></h3>
+<p>O aparelho utilizado possui <strong>KaiOS 2.5.1.2</strong>. Outras versões podem possuir:</p>
+<ul>
+<li>BusyBox diferente;</li>
+<li>kernel diferente;</li>
+<li>políticas SELinux diferentes;</li>
+<li>layout de partições diferente;</li>
+<li>permissões diferentes;</li>
+<li>runtime diferente;</li>
+<li>mecanismos diferentes de inicialização.</li>
+</ul>
+<h3 id="102-arquitetura">10.2 Arquitetura<a class="headerlink" href="#102-arquitetura" title="Permanent link">&para;</a></h3>
+<p>O Zapp II investigado utiliza <strong>ARMv7</strong>. Portando, binários compilados para <code>ARM64</code>, <code>x86</code> ou <code>x86_64</code> não devem ser presumidos como executáveis.</p>
+<h3 id="103-kernel">10.3 Kernel<a class="headerlink" href="#103-kernel" title="Permanent link">&para;</a></h3>
+<p>O kernel observado no aparelho é <strong>Linux 3.4.67</strong>.</p>
+<p>Isso é particularmente importante. Um binário moderno pode depender de funcionalidades de kernel que não existem nessa versão. Da mesma forma, ferramentas compiladas para sistemas Linux modernos podem não ser compatíveis com a ABI disponível no aparelho.</p>
+<h3 id="104-busybox">10.4 BusyBox<a class="headerlink" href="#104-busybox" title="Permanent link">&para;</a></h3>
+<p>O BusyBox utilizado é o <strong>1.21.1</strong>.</p>
+<p>Trata-se de uma versão antiga. Comandos e opções disponíveis nessa versão podem ser diferentes daqueles encontrados em BusyBox contemporâneo. Portanto, documentação baseada em BusyBox 1.36+, por exemplo, não deve ser aplicada automaticamente ao Zapp II.</p>
+<hr />
+<h2 id="11-referencias-cruzadas">11. Referências cruzadas<a class="headerlink" href="#11-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Esta seção está diretamente relacionada aos seguintes capítulos do manual:</p>
+<ul>
+<li>Arquitetura do Zapp II</li>
+<li>Arquitetura Linux e Android do dispositivo</li>
+<li>Root e acesso privilegiado</li>
+<li>BusyBox no KaiOS</li>
+<li>Sistema de arquivos e partições</li>
+<li>ADB e shell remoto</li>
+<li>SELinux e políticas de segurança</li>
+<li>Cross-compilação para ARMv7</li>
+<li>Ferramentas de diagnóstico</li>
+<li>Modificação do <code>/system</code></li>
+<li>Desenvolvimento de software diretamente no dispositivo</li>
+</ul>
+<p>O ambiente chroot também serve como base para capítulos futuros sobre:</p>
+<ul>
+<li>compilação;</li>
+<li>servidores locais;</li>
+<li>ferramentas Unix;</li>
+<li>scripts;</li>
+<li>debugging;</li>
+<li>desenvolvimento de aplicações auxiliares;</li>
+<li>análise do sistema.</li>
+</ul>
+<hr />
+<h2 id="12-resumo">12. Resumo<a class="headerlink" href="#12-resumo" title="Permanent link">&para;</a></h2>
+<p>O Zapp II demonstrou ser capaz de executar um ambiente Linux adicional por meio de chroot, utilizando um rootfs localizado em <code>/data/local/linux</code>.</p>
+<p>O ambiente utiliza o kernel do sistema hospedeiro e não constitui uma máquina virtual independente. O BusyBox disponível no sistema é <code>/system/xbin/busybox</code>, versão <code>1.21.1</code>.</p>
+<p>O shell do mini-Linux foi executado com <code>chroot /data/local/linux /bin/sh</code> e foi confirmado <code>uid=0(root) gid=0(root)</code>.</p>
+<p>A conectividade de rede também foi comprovada:</p>
+<pre><code class="language-bash">/bin/busybox ping -c 3 8.8.8.8
+</code></pre>
+<p>com <code>3 packets transmitted, 3 packets received, 0% packet loss</code>. A interface <code>wlan0</code> foi identificada dentro do ambiente.</p>
+<p>Um dos principais problemas encontrados foi a criação de links simbólicos que apontavam para <code>/system/xbin/busybox</code> a partir do rootfs. Como o chroot altera a raiz percebida pelo processo, esses links podem não apontar para o BusyBox do sistema hospedeiro quando utilizados dentro do ambiente.</p>
+<p>Outro ponto importante é a disponibilidade de pseudo sistemas de arquivos como <code>/proc</code>, <code>/sys</code> e <code>/dev</code>. O erro <code>/proc/net/dev: No such file or directory</code> demonstrou que a disponibilidade desses sistemas é necessária para determinadas ferramentas funcionarem corretamente.</p>
+<p>Por fim, o aparelho possui SELinux <code>Enforcing</code> e <code>/data</code> foi confirmado como <code>ext4 rw</code>. Portanto, operações envolvendo permissões, <code>su</code>, <code>setuid</code> e modificações do sistema devem ser analisadas considerando simultaneamente o filesystem, os mount flags, as permissões Unix, o SELinux e o kernel.</p>
+<p>O resultado mais importante desta etapa é que o Zapp II já possui uma base suficiente para funcionar como um ambiente Linux experimental independente em nível de userland, sem substituir o sistema principal.</p>
+<h3 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h3>
+<p>Esta seção estabelece a base para compreender a execução de software Linux adicional no Zapp II.</p>
+<ul>
+<li><strong>Depende de:</strong> arquitetura de hardware do Zapp II; kernel Linux utilizado pelo firmware; estrutura de partições; acesso root; BusyBox; ADB; permissões e SELinux.</li>
+<li><strong>Provavelmente será utilizada por:</strong> Desenvolvimento C no dispositivo; Cross-compilação ARMv7; Servidores locais; Ferramentas Unix; Debugging; Engenharia reversa; Automação por shell; Construção de um userland Linux mais completo.</li>
+</ul>
+<h3 id="informacoes-que-devem-ser-verificadas-na-compilacao-final">Informações que devem ser verificadas na compilação final<a class="headerlink" href="#informacoes-que-devem-ser-verificadas-na-compilacao-final" title="Permanent link">&para;</a></h3>
+<p>Durante a consolidação do manual, devem ser confirmados especificamente:</p>
+<ol>
+<li>o layout definitivo do rootfs;</li>
+<li>a localização final do BusyBox dentro do rootfs;</li>
+<li>a estratégia correta para criação dos links dos applets;</li>
+<li>quais pseudo sistemas de arquivos podem ser montados no ambiente;</li>
+<li>quais operações são permitidas pelo SELinux;</li>
+<li>o comportamento exato do <code>su</code> no firmware;</li>
+<li>quais modificações sobrevivem a um reboot;</li>
+<li>quais modificações dependem do root temporário;</li>
+<li>quais alterações no <code>/system</code> são realmente necessárias;</li>
+<li>quais procedimentos são específicos do firmware do Zapp II e quais podem ser generalizados para outros aparelhos KaiOS.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

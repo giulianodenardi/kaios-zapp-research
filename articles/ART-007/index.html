@@ -1,0 +1,2054 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Servidor HTTP local no KaiOS - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#servidor-http-local-no-kaios" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Servidor HTTP local no KaiOS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 HTTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-servidor-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Servidor HTTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-diretorio-raiz-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Diretório raiz HTTP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-foreground-e-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Foreground e daemon
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-verificar-se-o-busybox-possui-httpd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar se o BusyBox possui httpd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-criar-um-diretorio-para-o-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Criar um diretório para o site
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-criar-uma-pagina-de-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Criar uma página de teste
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-iniciar-o-servidor-em-uma-porta-nao-privileged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Iniciar o servidor em uma porta não privileged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-acessar-o-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Acessar o servidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#56-testar-sem-navegador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.6 Testar sem navegador
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#57-executar-em-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.7 Executar em background
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#58-encerrar-o-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.8 Encerrar o servidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Exemplos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Exemplos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-site-estatico-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Site estático completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-usar-o-zapp-ii-como-servidor-de-arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Usar o Zapp II como servidor de arquivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-comparacao-com-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Comparação com Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-ausencia-de-autenticacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Ausência de autenticação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-exposicao-de-arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Exposição de arquivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-rede-local-nao-significa-automaticamente-rede-segura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Rede local não significa automaticamente rede segura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-nao-alterar-system-para-instalar-o-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Não alterar /system para instalar o servidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Resumo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Resumo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="servidor-http-local-no-kaios">Servidor HTTP local no KaiOS<a class="headerlink" href="#servidor-http-local-no-kaios" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>Um dispositivo KaiOS possui, além da camada de aplicações e da interface baseada em Gecko, uma camada de baixo nível chamada <strong>Gonk</strong>, responsável pelo kernel Linux, bibliotecas do sistema, firmware e drivers [cite: 5]. A documentação oficial descreve Gonk como a camada subjacente sobre a qual o Gecko é executado [cite: 5]. </p>
+<p>Essa arquitetura permite que, em aparelhos nos quais exista acesso ao shell do sistema, determinadas ferramentas Linux possam ser executadas independentemente da interface gráfica do KaiOS [cite: 5].</p>
+<p>Um exemplo particularmente útil é o <strong>BusyBox httpd</strong>, um servidor HTTP compacto capaz de publicar arquivos de um diretório através da rede local [cite: 5]. O <code>httpd</code> faz parte do conjunto de applets do BusyBox e possui opções para definir porta, endereço de escuta, diretório raiz e modo foreground [cite: 5]. </p>
+<p>No contexto deste projeto, isso permite transformar o aparelho em um servidor web local, de maneira semelhante ao uso de:</p>
+<pre><code class="language-bash">python3 -m http.server
+</code></pre>
+<p>em um computador Linux [cite: 5].</p>
+<p>É importante distinguir duas coisas [cite: 5]:</p>
+<ul>
+<li><strong>Servidor HTTP no sistema do aparelho:</strong> executado pelo Linux/Gonk, por exemplo através do BusyBox [cite: 5]. </li>
+<li><strong>Aplicação web KaiOS:</strong> executada pelo Gecko e sujeita às APIs e ao modelo de segurança do KaiOS [cite: 5]. </li>
+</ul>
+<p>O primeiro não depende necessariamente da existência de uma aplicação KaiOS para funcionar [cite: 5].</p>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-http">2.1 HTTP<a class="headerlink" href="#21-http" title="Permanent link">&para;</a></h3>
+<p>HTTP é o protocolo utilizado para comunicação entre clientes e servidores web [cite: 5].</p>
+<p>Em uma configuração simples [cite: 5]:</p>
+<pre><code class="language-text">PC / navegador
+      │
+      │ HTTP
+      ▼
+┌─────────────────┐
+│     Zapp II     │
+│                 │
+│ BusyBox httpd   │
+│       │         │
+│       ▼         │
+│   /www          │
+└─────────────────┘
+</code></pre>
+<p>O navegador solicita, por exemplo: <code>GET /index.html</code> e o servidor responde com o conteúdo do arquivo [cite: 5].</p>
+<h3 id="22-servidor-http">2.2 Servidor HTTP<a class="headerlink" href="#22-servidor-http" title="Permanent link">&para;</a></h3>
+<p>Um servidor HTTP associa [cite: 5]:</p>
+<ol>
+<li>Um endereço IP [cite: 5]; </li>
+<li>Uma porta TCP [cite: 5]; </li>
+<li>Um diretório usado como raiz do servidor [cite: 5]. </li>
+</ol>
+<p>Por exemplo:</p>
+<ul>
+<li><strong>IP:</strong> <code>192.168.0.16</code> [cite: 5]</li>
+<li><strong>Porta:</strong> <code>8080</code> [cite: 5]</li>
+<li><strong>Diretório:</strong> <code>/storage/sdcard1/www</code> [cite: 5]</li>
+</ul>
+<p>O endereço correspondente seria: <code>http://192.168.0.16:8080/</code> [cite: 5]</p>
+<h3 id="23-diretorio-raiz-http">2.3 Diretório raiz HTTP<a class="headerlink" href="#23-diretorio-raiz-http" title="Permanent link">&para;</a></h3>
+<p>O diretório definido através da opção <code>-h</code> do BusyBox httpd funciona como a raiz dos arquivos publicados [cite: 5].</p>
+<p>Se <code>/storage/sdcard1/www/index.html</code> existir, uma solicitação para <code>/</code> poderá resultar na entrega de <code>index.html</code> [cite: 5].
+O BusyBox documenta <code>-h HOME</code> como a opção que define o diretório inicial do servidor [cite: 5]. </p>
+<h3 id="24-foreground-e-daemon">2.4 Foreground e daemon<a class="headerlink" href="#24-foreground-e-daemon" title="Permanent link">&para;</a></h3>
+<p>O <code>httpd</code> pode ser executado em foreground [cite: 5]:</p>
+<pre><code class="language-bash">busybox httpd -f ...
+</code></pre>
+<p>Nesse modo, o processo permanece associado ao terminal [cite: 5]. Isso é particularmente útil durante testes porque permite observar imediatamente se o servidor iniciou corretamente [cite: 5].</p>
+<p>Sem <code>-f</code>, o comportamento normal é executar o servidor em background. A documentação do BusyBox descreve <code>-f</code> como <em>"Don't daemonize"</em> [cite: 5]. </p>
+<hr />
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>O fluxo básico é [cite: 5]:</p>
+<pre><code class="language-text">1. Criar diretório web
+        ↓
+2. Colocar arquivos no diretório
+        ↓
+3. Iniciar BusyBox httpd
+        ↓
+4. httpd abre uma porta TCP
+        ↓
+5. Outro dispositivo conecta ao IP do KaiOS
+        ↓
+6. Navegador solicita arquivos
+        ↓
+7. httpd entrega os arquivos
+</code></pre>
+<p>Por exemplo:</p>
+<pre><code class="language-text">/storage/sdcard1/www/
+├── index.html
+├── style.css
+├── script.js
+└── imagens/
+    └── logo.png
+</code></pre>
+<p>O navegador poderá acessar <code>http://192.168.0.16:8080/</code> e solicitar [cite: 5]:</p>
+<ul>
+<li><code>/index.html</code> [cite: 5]</li>
+<li><code>/style.css</code> [cite: 5]</li>
+<li><code>/script.js</code> [cite: 5]</li>
+<li><code>/imagens/logo.png</code> [cite: 5]</li>
+</ul>
+<p>O servidor simplesmente mapeia essas solicitações para os arquivos existentes no diretório raiz [cite: 5].</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente</th>
+<th style="text-align: left;">Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Linux/Gonk</strong></td>
+<td style="text-align: left;">Fornece a infraestrutura de execução e rede</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BusyBox</strong></td>
+<td style="text-align: left;">Fornece ferramentas Unix compactas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>httpd</strong></td>
+<td style="text-align: left;">Servidor HTTP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interface de rede</strong></td>
+<td style="text-align: left;">Fornece conectividade IP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TCP</strong></td>
+<td style="text-align: left;">Transporte das conexões HTTP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Navegador</strong></td>
+<td style="text-align: left;">Cliente HTTP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Diretório web</strong></td>
+<td style="text-align: left;">Contém os arquivos publicados</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>/storage/sdcard1</code></td>
+<td style="text-align: left;">Armazenamento externo, quando disponível no aparelho</td>
+</tr>
+</tbody>
+</table>
+<p>No Zapp II investigado neste projeto, já foi identificado um ambiente Linux com BusyBox, acesso root e ferramentas de rede [cite: 5].
+A presença de um determinado applet, entretanto, deve ser verificada no aparelho, pois o BusyBox pode ser compilado com diferentes conjuntos de funcionalidades [cite: 5].</p>
+<hr />
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-verificar-se-o-busybox-possui-httpd">5.1 Verificar se o BusyBox possui httpd<a class="headerlink" href="#51-verificar-se-o-busybox-possui-httpd" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Confirmar que o BusyBox instalado possui o servidor HTTP [cite: 5].</li>
+<li><strong>Pré-requisitos:</strong> Acesso ao shell e BusyBox instalado [cite: 5].</li>
+</ul>
+<p><strong>Comando:</strong></p>
+<pre><code class="language-bash">busybox --list | grep httpd
+</code></pre>
+<p>Outra possibilidade:</p>
+<pre><code class="language-bash">busybox httpd --help
+</code></pre>
+<p><strong>Resultado esperado:</strong>
+Caso o applet esteja disponível, deverá aparecer uma referência a <code>httpd</code> ou uma mensagem de uso semelhante a:</p>
+<pre><code class="language-text">httpd [-ifv[v]] ...
+</code></pre>
+<p>As opções documentadas incluem <code>-f</code>, <code>-p</code> e <code>-h</code> [cite: 5]. </p>
+<p><strong>Possíveis erros:</strong>
+Se aparecer algo semelhante a <code>httpd: applet not found</code>, o BusyBox instalado não possui esse applet [cite: 5]. Nesse caso, não se deve presumir que qualquer comando <code>busybox httpd</code> funcionará [cite: 5].</p>
+<h3 id="52-criar-um-diretorio-para-o-site">5.2 Criar um diretório para o site<a class="headerlink" href="#52-criar-um-diretorio-para-o-site" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Criar uma área isolada para os arquivos que serão publicados [cite: 5].</li>
+</ul>
+<p>No Zapp II, um exemplo é:</p>
+<pre><code class="language-bash">mkdir -p /storage/sdcard1/www
+</code></pre>
+<p>Verifique:</p>
+<pre><code class="language-bash">ls -la /storage/sdcard1/www
+</code></pre>
+<h3 id="53-criar-uma-pagina-de-teste">5.3 Criar uma página de teste<a class="headerlink" href="#53-criar-uma-pagina-de-teste" title="Permanent link">&para;</a></h3>
+<p>Pode-se criar uma página diretamente no dispositivo:</p>
+<pre><code class="language-bash">cat &gt; /storage/sdcard1/www/index.html &lt;&lt;'EOF'
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Zapp II&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Servidor HTTP do Zapp II&lt;/h1&gt;
+    &lt;p&gt;Servidor funcionando.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+EOF
+</code></pre>
+<p>Verifique:</p>
+<pre><code class="language-bash">cat /storage/sdcard1/www/index.html
+</code></pre>
+<h3 id="54-iniciar-o-servidor-em-uma-porta-nao-privileged">5.4 Iniciar o servidor em uma porta não privileged<a class="headerlink" href="#54-iniciar-o-servidor-em-uma-porta-nao-privileged" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Objetivo:</strong> Executar o servidor para testes sem utilizar a porta HTTP tradicional 80 [cite: 5].</li>
+</ul>
+<pre><code class="language-bash">busybox httpd -f -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p>Os parâmetros significam [cite: 5]:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parâmetro</th>
+<th style="text-align: left;">Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>-f</code></td>
+<td style="text-align: left;">Mantém o servidor em foreground</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-p 8080</code></td>
+<td style="text-align: left;">Utiliza a porta TCP 8080</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-h ...</code></td>
+<td style="text-align: left;">Define a raiz dos arquivos</td>
+</tr>
+</tbody>
+</table>
+<p>Essas opções fazem parte da interface documentada do httpd do BusyBox [cite: 5]. </p>
+<h3 id="55-acessar-o-servidor">5.5 Acessar o servidor<a class="headerlink" href="#55-acessar-o-servidor" title="Permanent link">&para;</a></h3>
+<p>Descubra o endereço IP do aparelho [cite: 5]. Dependendo das ferramentas disponíveis:</p>
+<pre><code class="language-bash">ip addr
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-bash">ifconfig
+</code></pre>
+<p>Supondo que o aparelho tenha <code>192.168.0.16</code> e o servidor esteja na porta <code>8080</code>, o computador poderá acessar <code>http://192.168.0.16:8080/</code> [cite: 5].
+A URL deve ser digitada no navegador do computador conectado à mesma rede [cite: 5].</p>
+<h3 id="56-testar-sem-navegador">5.6 Testar sem navegador<a class="headerlink" href="#56-testar-sem-navegador" title="Permanent link">&para;</a></h3>
+<p>Um cliente HTTP de linha de comando pode ser utilizado para verificar se o servidor realmente está respondendo [cite: 5].</p>
+<p>No computador:</p>
+<pre><code class="language-bash">curl http://192.168.0.16:8080/
+</code></pre>
+<p>O conteúdo de <code>index.html</code> deverá aparecer no terminal [cite: 5]. Esse método é particularmente útil para debugging porque separa problemas do servidor de problemas relacionados ao navegador [cite: 5].</p>
+<h3 id="57-executar-em-background">5.7 Executar em background<a class="headerlink" href="#57-executar-em-background" title="Permanent link">&para;</a></h3>
+<p>Depois de confirmar que o servidor funciona, pode-se executá-lo sem <code>-f</code> [cite: 5]:</p>
+<pre><code class="language-bash">busybox httpd -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p>O processo passa a funcionar em background [cite: 5].
+Verifique:</p>
+<pre><code class="language-bash">ps | grep httpd
+</code></pre>
+<p>O comportamento de daemonização é justamente o motivo pelo qual o <code>-f</code> é útil durante a fase de diagnóstico [cite: 5]. </p>
+<h3 id="58-encerrar-o-servidor">5.8 Encerrar o servidor<a class="headerlink" href="#58-encerrar-o-servidor" title="Permanent link">&para;</a></h3>
+<p>Identifique o processo:</p>
+<pre><code class="language-bash">ps | grep httpd
+</code></pre>
+<p>Depois, encerre-o usando o mecanismo disponível no sistema [cite: 5]. Por exemplo:</p>
+<pre><code class="language-bash">kill PID
+</code></pre>
+<p>onde <code>PID</code> corresponde ao identificador do processo [cite: 5].
+Evita-se utilizar um <code>kill</code> genérico contra processos não identificados, especialmente em um sistema embarcado com acesso root [cite: 5].</p>
+<hr />
+<h2 id="6-exemplos">6. Exemplos<a class="headerlink" href="#6-exemplos" title="Permanent link">&para;</a></h2>
+<h3 id="61-site-estatico-completo">6.1 Site estático completo<a class="headerlink" href="#61-site-estatico-completo" title="Permanent link">&para;</a></h3>
+<p><strong>Estrutura:</strong></p>
+<pre><code class="language-text">/storage/sdcard1/www/
+├── index.html
+├── style.css
+├── app.js
+└── imagens/
+    └── logo.png
+</code></pre>
+<p><strong>Servidor:</strong></p>
+<pre><code class="language-bash">busybox httpd -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p><strong>Acesso:</strong>
+<code>http://IP_DO_ZAPP:8080/</code></p>
+<p>Isso é suficiente para hospedar páginas HTML, CSS, JavaScript, imagens e outros arquivos estáticos que o <code>httpd</code> consiga servir [cite: 5].</p>
+<h3 id="62-usar-o-zapp-ii-como-servidor-de-arquivos">6.2 Usar o Zapp II como servidor de arquivos<a class="headerlink" href="#62-usar-o-zapp-ii-como-servidor-de-arquivos" title="Permanent link">&para;</a></h3>
+<p>O mesmo mecanismo pode ser utilizado para disponibilizar arquivos através de HTTP [cite: 5].</p>
+<p>Por exemplo:</p>
+<pre><code class="language-text">/storage/sdcard1/www/
+├── backup.tar.gz
+├── firmware/
+│   └── firmware.bin
+└── documentos/
+    └── manual.pdf
+</code></pre>
+<p>O navegador poderá acessar os arquivos através das respectivas URLs [cite: 5].
+Entretanto, isso deve ser tratado como servidor de arquivos em rede local, e não como mecanismo de transferência autenticada [cite: 5].</p>
+<h3 id="63-comparacao-com-python">6.3 Comparação com Python<a class="headerlink" href="#63-comparacao-com-python" title="Permanent link">&para;</a></h3>
+<p>Em um computador Linux:</p>
+<pre><code class="language-bash">python3 -m http.server 8080
+</code></pre>
+<p>No Zapp II:</p>
+<pre><code class="language-bash">busybox httpd -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p>Conceitualmente, os dois fazem a mesma coisa:</p>
+<pre><code class="language-text">diretório
+    ↓
+servidor HTTP
+    ↓
+porta TCP
+    ↓
+navegador
+</code></pre>
+<p>A implementação, entretanto, é diferente [cite: 5].
+O Python fornece um runtime completo e um servidor implementado em Python [cite: 5]. O BusyBox httpd é um servidor HTTP compacto integrado ao próprio BusyBox [cite: 5].</p>
+<hr />
+<h2 id="7-problemas-comuns">7. Problemas comuns<a class="headerlink" href="#7-problemas-comuns" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><strong><code>httpd: applet not found</code></strong><br />
+  Indica que o BusyBox instalado não contém o applet httpd [cite: 5].<br />
+<em>Verificação:</em> <code>busybox --list | grep httpd</code> [cite: 5]</p>
+</li>
+<li>
+<p><strong><code>Connection refused</code></strong><br />
+  Normalmente significa que não existe um processo escutando naquela porta ou que a conexão está sendo recusada [cite: 5].<br />
+<em>No aparelho:</em> <code>ps | grep httpd</code><br />
+  Também pode ser necessário verificar a interface de rede: <code>ip addr</code> [cite: 5]</p>
+</li>
+<li>
+<p><strong><code>Connection timed out</code></strong><br />
+  É mais compatível com problemas de conectividade ou filtragem de rede [cite: 5].<br />
+<em>Verifique primeiro:</em> <code>ping IP_DO_ZAPP</code> [cite: 5]<br />
+  Se houver conectividade IP, investigue firewall e a porta utilizada [cite: 5].</p>
+</li>
+<li>
+<p><strong>Página não encontrada</strong><br />
+  Confirme o diretório: <code>ls -la /storage/sdcard1/www</code> e confirme que o servidor foi iniciado usando exatamente esse diretório:<br />
+<code>busybox httpd -f -p 8080 -h /storage/sdcard1/www</code> [cite: 5]</p>
+</li>
+<li>
+<p><strong>Porta 80 não funciona</strong><br />
+  A porta 80 é uma porta privilegiada em sistemas Unix tradicionais. Além disso, pode existir outro serviço utilizando-a [cite: 5].<br />
+  Para testes, uma porta alta como <code>8080</code> é preferível [cite: 5].</p>
+</li>
+</ul>
+<hr />
+<h2 id="8-diagnostico-e-debugging">8. Diagnóstico e debugging<a class="headerlink" href="#8-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<p>O primeiro princípio é testar cada camada separadamente [cite: 5].</p>
+<ol>
+<li><strong>Confirmar o applet:</strong>
+   <code>bash
+   busybox httpd --help</code></li>
+<li><strong>Confirmar o diretório:</strong>
+   <code>bash
+   ls -la /storage/sdcard1/www</code></li>
+<li><strong>Confirmar a interface de rede:</strong>
+   <code>bash
+   ip addr</code></li>
+<li><strong>Executar em foreground:</strong>
+   <code>bash
+   busybox httpd -f -p 8080 -h /storage/sdcard1/www</code>
+   Esse é o modo mais apropriado para o primeiro teste porque o processo não é imediatamente colocado em background [cite: 5].</li>
+<li><strong>Verificar o processo (em outro shell):</strong>
+   <code>bash
+   ps | grep httpd</code></li>
+<li><strong>Testar pelo próprio aparelho:</strong>
+   Se houver um cliente HTTP compatível, pode-se testar contra o endereço local [cite: 5]. Caso contrário, o teste pode ser realizado a partir de outro computador [cite: 5].</li>
+<li><strong>Testar com <code>curl</code> no computador:</strong>
+   <code>bash
+   curl -v http://IP_DO_ZAPP:8080/</code>
+   A opção <code>-v</code> permite observar detalhes da conexão HTTP e ajuda a distinguir: <em>problema de rede</em> de <em>problema HTTP</em> de <em>problema no arquivo solicitado</em> [cite: 5].</li>
+</ol>
+<hr />
+<h2 id="9-seguranca-e-riscos">9. Segurança e riscos<a class="headerlink" href="#9-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>O <code>httpd</code> do BusyBox é apropriado para testes e serviços simples, mas não deve ser tratado automaticamente como um servidor web público seguro [cite: 5].</p>
+<h3 id="91-ausencia-de-autenticacao">9.1 Ausência de autenticação<a class="headerlink" href="#91-ausencia-de-autenticacao" title="Permanent link">&para;</a></h3>
+<p>Uma configuração simples como:</p>
+<pre><code class="language-bash">busybox httpd -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p>não deve ser presumida como protegida por autenticação [cite: 5]. Qualquer dispositivo capaz de alcançar a porta poderá tentar acessar o servidor [cite: 5].</p>
+<h3 id="92-exposicao-de-arquivos">9.2 Exposição de arquivos<a class="headerlink" href="#92-exposicao-de-arquivos" title="Permanent link">&para;</a></h3>
+<p>O diretório definido por <code>-h</code> é a área publicada pelo servidor [cite: 5]. Portanto, não é recomendável utilizar diretamente como raiz um diretório que contenha informações privadas [cite: 5].</p>
+<ul>
+<li><strong>Preferível:</strong> <code>/storage/sdcard1/www</code> [cite: 5]</li>
+<li><strong>Evitar:</strong> <code>/data</code> ou outros diretórios contendo dados internos do sistema [cite: 5].</li>
+</ul>
+<h3 id="93-rede-local-nao-significa-automaticamente-rede-segura">9.3 Rede local não significa automaticamente rede segura<a class="headerlink" href="#93-rede-local-nao-significa-automaticamente-rede-segura" title="Permanent link">&para;</a></h3>
+<p>Um servidor destinado apenas à rede local ainda pode ser acessível por outros dispositivos conectados à mesma rede [cite: 5]. Isso é especialmente importante em redes públicas ou compartilhadas [cite: 5].</p>
+<h3 id="94-nao-alterar-system-para-instalar-o-servidor">9.4 Não alterar <code>/system</code> para instalar o servidor<a class="headerlink" href="#94-nao-alterar-system-para-instalar-o-servidor" title="Permanent link">&para;</a></h3>
+<p>Se o BusyBox já estiver disponível, não há necessidade de substituir arquivos do sistema apenas para executar <code>httpd</code> [cite: 5].
+A abordagem preferível durante investigação é utilizar os arquivos já existentes e manter as alterações fora das partições críticas [cite: 5].</p>
+<p>No Zapp II investigado neste projeto, o acesso root permite realizar experimentos desse tipo sem modificar imediatamente a imagem do sistema [cite: 5].</p>
+<hr />
+<h2 id="10-compatibilidade">10. Compatibilidade<a class="headerlink" href="#10-compatibilidade" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>KaiOS 2.5:</strong> KaiOS 2.5 utiliza uma arquitetura baseada em Gecko 48, enquanto versões posteriores da plataforma possuem componentes significativamente diferentes [cite: 5]. Portanto, não se deve assumir que um procedimento realizado em KaiOS 2.5 será idêntico em KaiOS 3.x ou versões posteriores [cite: 5].</li>
+<li><strong>BusyBox:</strong> A disponibilidade do <code>httpd</code> depende da configuração usada para compilar o BusyBox [cite: 5]. No aparelho investigado neste projeto foi identificada a versão <code>BusyBox v1.21.1</code> [cite: 5]. Entretanto, a versão sozinha não garante que todos os applets estejam habilitados [cite: 5]. A verificação correta é:<br />
+<code>busybox --list | grep httpd</code> ou <code>busybox httpd --help</code> [cite: 5]</li>
+<li><strong>Hardware e fabricante:</strong> A existência de <code>/storage/sdcard1</code> não é uma característica universal do KaiOS [cite: 5]. Ela depende da implementação do fabricante e do sistema de armazenamento utilizado pelo aparelho [cite: 5]. Da mesma maneira, o nome da interface de rede pode variar (não assumir que será sempre <code>wlan0</code>) [cite: 5].</li>
+</ul>
+<hr />
+<h2 id="11-referencias-cruzadas">11. Referências cruzadas<a class="headerlink" href="#11-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Este assunto está relacionado principalmente aos seguintes capítulos [cite: 5]:</p>
+<ul>
+<li><strong>Arquitetura do KaiOS:</strong> para compreender a relação entre Gonk, Linux e Gecko [cite: 5].</li>
+<li><strong>Shell e acesso root:</strong> necessário para executar ferramentas diretamente no sistema [cite: 5].</li>
+<li><strong>BusyBox e ferramentas Unix:</strong> necessário para compreender os applets disponíveis [cite: 5].</li>
+<li><strong>Sistema de arquivos do KaiOS:</strong> necessário para compreender <code>/data</code>, armazenamento externo e diretórios do sistema [cite: 5].</li>
+<li><strong>Rede no KaiOS:</strong> necessário para diagnosticar interfaces, endereçamento IP, TCP e firewall [cite: 5].</li>
+<li><strong>ADB e debugging:</strong> útil para transferir arquivos e administrar o aparelho [cite: 5].</li>
+<li><strong>Desenvolvimento de aplicações KaiOS:</strong> relacionado ao conteúdo web servido pelo dispositivo, mas conceitualmente separado do servidor HTTP do sistema [cite: 5].</li>
+</ul>
+<hr />
+<h2 id="12-resumo">12. Resumo<a class="headerlink" href="#12-resumo" title="Permanent link">&para;</a></h2>
+<p>Um aparelho KaiOS que disponibiliza acesso ao ambiente Linux subjacente pode ser utilizado como um servidor HTTP local, desde que possua uma implementação de servidor adequada [cite: 5].</p>
+<p>O BusyBox <code>httpd</code> é particularmente apropriado para esse tipo de experimento por ser compacto e oferecer uma configuração simples [cite: 5]:</p>
+<pre><code class="language-bash">busybox httpd -f -p 8080 -h /storage/sdcard1/www
+</code></pre>
+<p>O procedimento fundamental consiste em [cite: 5]:</p>
+<ol>
+<li>Verificar a existência do applet <code>httpd</code> [cite: 5]; </li>
+<li>Criar um diretório específico para o conteúdo web [cite: 5]; </li>
+<li>Colocar os arquivos nesse diretório [cite: 5]; </li>
+<li>Iniciar o servidor em uma porta TCP [cite: 5]; </li>
+<li>Descobrir o endereço IP do aparelho [cite: 5]; </li>
+<li>Acessar o servidor a partir de outro dispositivo [cite: 5]; </li>
+<li>Utilizar <code>curl</code>, <code>ps</code> e ferramentas de rede para diagnóstico [cite: 5]. </li>
+</ol>
+<p>A principal vantagem para engenharia e desenvolvimento é que esse mecanismo pode transformar o próprio aparelho em uma pequena plataforma de servidor web, distribuição de arquivos, testes HTTP e experimentação de aplicações web, sem necessariamente modificar a ROM ou a camada Gecko [cite: 5].</p>
+<hr />
+<h3 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h3>
+<p><strong>Dependências desta seção:</strong>
+Esta seção depende principalmente de: Arquitetura do KaiOS, Gonk e Linux, Shell e acesso root, BusyBox, Sistema de arquivos, Rede e interfaces de comunicação, ADB [cite: 5].</p>
+<p><strong>Capítulos que podem depender desta seção:</strong>
+Posteriormente, o conceito de servidor HTTP local poderá ser utilizado em: Desenvolvimento e testes de aplicações web, Transferência de arquivos, Debugging remoto, Ferramentas auxiliares para engenharia reversa, Automação do dispositivo, Interfaces web locais para ferramentas de diagnóstico [cite: 5].</p>
+<p><strong>Informações a verificar durante a compilação final:</strong>
+Devem ser confirmados especificamente para cada aparelho: versão exata do KaiOS, versão e configuração do BusyBox, existência do applet <code>httpd</code>, caminho efetivo do armazenamento externo, interfaces de rede disponíveis, endereço IP atribuído, regras de firewall, permissões do diretório utilizado, comportamento específico do firmware do fabricante [cite: 5].</p>
+<p>No caso do Zapp II analisado neste projeto, os dados já observados (KaiOS 2.5.1.2, kernel Linux 3.4.67, acesso root e BusyBox 1.21.1) devem ser tratados como evidências específicas desse firmware, e não como características universais do KaiOS [cite: 5].</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

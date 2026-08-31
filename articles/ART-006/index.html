@@ -1,0 +1,2238 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Dropbear/Beardrop no Zapp II: compilação e uso de SSH - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dropbearbeardrop-no-zapp-ii-compilacao-e-uso-de-ssh" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dropbear/Beardrop no Zapp II: compilação e uso de SSH
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-cross-compilacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Cross-compilação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-por-que-o-make-falhou" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Por que o make falhou
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona-a-dependencia-do-zlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona a dependência do zlib
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-procedimento-pratico-recompilar-o-dropbear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Procedimento prático: recompilar o Dropbear
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Procedimento prático: recompilar o Dropbear">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Pré-requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-limpar-uma-configuracao-parcialmente-criada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Limpar uma configuração parcialmente criada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-configurar-sem-zlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Configurar sem zlib
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-compilar-somente-os-componentes-necessarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Compilar somente os componentes necessários
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-verificar-o-binario-antes-de-transferi-lo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Verificar o binário antes de transferi-lo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-confirmar-a-arquitetura-do-zapp-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Confirmar a arquitetura do Zapp II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-transferir-o-dropbear-para-o-zapp-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Transferir o Dropbear para o Zapp II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-primeiro-teste-do-executavel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Primeiro teste do executável
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-geracao-da-chave-do-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Geração da chave do servidor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-iniciar-o-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Iniciar o servidor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-descobrir-o-endereco-ip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Descobrir o endereço IP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-conectar-a-partir-do-computador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Conectar a partir do computador
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Conectar a partir do computador">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atencao-ao-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atenção ao usuário
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Diagnóstico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Diagnóstico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-o-configure-continua-reclamando-de-zlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 O configure continua reclamando de zlib
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-make-diz-que-nao-existe-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 make diz que não existe Makefile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-o-binario-nao-executa-no-zapp-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 O binário não executa no Zapp II
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#134-permission-denied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.4 Permission denied
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#135-o-servidor-inicia-mas-nao-aceita-conexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.5 O servidor inicia mas não aceita conexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-execucao-em-foreground-durante-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Execução em foreground durante debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-persistencia-das-chaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Persistência das chaves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-seguranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Segurança
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. Segurança">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#riscos-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Riscos principais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-por-que-nao-comecar-modificando-o-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Por que não começar modificando o boot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-configuracao-recomendada-para-a-investigacao-do-zapp-ii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Configuração recomendada para a investigação do Zapp II
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21. Resumo
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="dropbearbeardrop-no-zapp-ii-compilacao-e-uso-de-ssh">Dropbear/Beardrop no Zapp II: compilação e uso de SSH<a class="headerlink" href="#dropbearbeardrop-no-zapp-ii-compilacao-e-uso-de-ssh" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>O Dropbear é uma implementação leve dos protocolos SSH, adequada para sistemas embarcados. No contexto do Zapp II, ele pode ser utilizado para disponibilizar acesso remoto ao shell do aparelho quando já existe uma forma de obter root, por exemplo, através de ADB e de um <code>su</code> funcional [cite: 3].</p>
+<p>Neste contexto, é importante distinguir três elementos:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Componente</th>
+<th style="text-align: left;">Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>dropbear</code></td>
+<td style="text-align: left;">Servidor SSH</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dbclient</code></td>
+<td style="text-align: left;">Cliente SSH do Dropbear</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dropbearkey</code></td>
+<td style="text-align: left;">Geração de chaves privadas do servidor</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>scp</code></td>
+<td style="text-align: left;">Transferência de arquivos via SSH</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dropbearconvert</code></td>
+<td style="text-align: left;">Conversão entre formatos de chaves</td>
+</tr>
+</tbody>
+</table>
+<p>O termo <em>Beardrop</em> não deve ser tratado automaticamente como um componente diferente do Dropbear. É necessário identificar exatamente qual projeto ou binário está sendo chamado de Beardrop antes de assumir compatibilidade [cite: 3].</p>
+<p>Para o Zapp II, o objetivo mais simples é produzir um <code>dropbear</code> ARMv7 estático, transferi-lo para o aparelho e executá-lo manualmente [cite: 3].</p>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-cross-compilacao">2.1 Cross-compilação<a class="headerlink" href="#21-cross-compilacao" title="Permanent link">&para;</a></h3>
+<p>O computador utilizado para compilação provavelmente é <code>x86_64</code>, enquanto o Zapp II utiliza uma arquitetura ARM [cite: 3].</p>
+<p>Assim:</p>
+<pre><code class="language-text">PC x86_64
+   │
+   │ cross-compiler
+   ▼
+binário ARM
+   │
+   ▼
+Zapp II
+</code></pre>
+<p>O comando utilizado anteriormente:</p>
+<pre><code class="language-bash">./configure --host=arm-linux-gnueabihf --enable-static
+</code></pre>
+<p>informa ao sistema de compilação que o programa será executado em uma plataforma ARM com ABI <code>gnueabihf</code> [cite: 3].</p>
+<p>Isso não significa automaticamente que o binário será compatível com o Zapp II. A arquitetura, ABI, CPU, libc e demais características precisam ser compatíveis [cite: 3].</p>
+<h3 id="22-por-que-o-make-falhou">2.2 Por que o make falhou<a class="headerlink" href="#22-por-que-o-make-falhou" title="Permanent link">&para;</a></h3>
+<p>O erro apresentado foi:</p>
+<pre><code class="language-text">configure: error: *** zlib missing - install first or check config.log ***
+</code></pre>
+<p>O ponto mais importante é que o problema ocorreu durante o <code>configure</code> [cite: 3].</p>
+<p>Consequentemente:</p>
+<pre><code class="language-bash">make PROGRAMS=&quot;dropbear dbclient dropbearkey scp&quot;
+</code></pre>
+<p>produziu:</p>
+<pre><code class="language-text">make: *** No targets specified and no makefile found. Stop.
+</code></pre>
+<p>Isso é uma consequência, não um segundo problema independente [cite: 3].</p>
+<p>O fluxo foi:</p>
+<pre><code class="language-text">./configure
+      │
+      ├── procura zlib
+      │
+      ├── zlib não encontrada
+      │
+      └── configure aborta
+              │
+              ▼
+        Makefile não criado
+              │
+              ▼
+             make
+              │
+              └── falha
+</code></pre>
+<p>Portanto, não adianta executar <code>make</code> novamente enquanto o <code>configure</code> continuar falhando [cite: 3].</p>
+<hr />
+<h2 id="3-como-funciona-a-dependencia-do-zlib">3. Como funciona a dependência do zlib<a class="headerlink" href="#3-como-funciona-a-dependencia-do-zlib" title="Permanent link">&para;</a></h2>
+<p>O Dropbear pode ser compilado sem suporte a zlib. Para um servidor SSH minimalista em um aparelho embarcado, essa é uma opção particularmente interessante [cite: 3].</p>
+<p>Há exemplos de builds ARMv7 estáticos do Dropbear utilizando explicitamente:</p>
+<ul>
+<li><code>--disable-zlib</code> [cite: 3]</li>
+<li><code>--enable-static</code> [cite: 3]</li>
+</ul>
+<p>inclusive combinados com outras opções destinadas a reduzir dependências do sistema [cite: 3].</p>
+<p>Portanto, no seu caso, não é necessário instalar zlib apenas para obter um servidor SSH funcional [cite: 3].</p>
+<hr />
+<h2 id="4-procedimento-pratico-recompilar-o-dropbear">4. Procedimento prático: recompilar o Dropbear<a class="headerlink" href="#4-procedimento-pratico-recompilar-o-dropbear" title="Permanent link">&para;</a></h2>
+<h3 id="41-objetivo">4.1 Objetivo<a class="headerlink" href="#41-objetivo" title="Permanent link">&para;</a></h3>
+<p>Produzir um Dropbear estático para ARM e evitar a dependência do zlib [cite: 3].</p>
+<h3 id="42-pre-requisitos">4.2 Pré-requisitos<a class="headerlink" href="#42-pre-requisitos" title="Permanent link">&para;</a></h3>
+<p>No computador de compilação:</p>
+<ul>
+<li>Código-fonte do Dropbear [cite: 3]</li>
+<li>Compilador <code>arm-linux-gnueabihf-gcc</code> [cite: 3]</li>
+<li><code>binutils</code> correspondentes [cite: 3]</li>
+<li>Ambiente de compilação GNU [cite: 3]</li>
+<li>Ferramentas necessárias pelo próprio projeto [cite: 3]</li>
+</ul>
+<p>No seu ambiente, o compilador já foi encontrado:</p>
+<pre><code class="language-text">checking for arm-linux-gnueabihf-gcc... arm-linux-gnueabihf-gcc
+</code></pre>
+<p>Portanto, essa parte está funcionando [cite: 3].</p>
+<h3 id="43-limpar-uma-configuracao-parcialmente-criada">4.3 Limpar uma configuração parcialmente criada<a class="headerlink" href="#43-limpar-uma-configuracao-parcialmente-criada" title="Permanent link">&para;</a></h3>
+<p>Entre no diretório do Dropbear:</p>
+<pre><code class="language-bash">cd ~/dropbear
+</code></pre>
+<p>Se você estiver reutilizando a árvore de compilação após uma tentativa malsucedida:</p>
+<pre><code class="language-bash">make distclean 2&gt;/dev/null || true
+</code></pre>
+<p>Se o projeto ainda não tiver produzido um Makefile, o erro de <code>distclean</code> pode ser ignorado [cite: 3].
+Também é possível simplesmente trabalhar em uma cópia limpa do código-fonte [cite: 3].</p>
+<h3 id="44-configurar-sem-zlib">4.4 Configurar sem zlib<a class="headerlink" href="#44-configurar-sem-zlib" title="Permanent link">&para;</a></h3>
+<p>Execute:</p>
+<pre><code class="language-bash">./configure     --host=arm-linux-gnueabihf     --enable-static     --disable-zlib
+</code></pre>
+<p>O ponto essencial é: <code>--disable-zlib</code> [cite: 3].
+A configuração deve prosseguir além do ponto em que anteriormente apareceu: <code>*** zlib missing</code> [cite: 3].</p>
+<h3 id="45-compilar-somente-os-componentes-necessarios">4.5 Compilar somente os componentes necessários<a class="headerlink" href="#45-compilar-somente-os-componentes-necessarios" title="Permanent link">&para;</a></h3>
+<p>Depois que o <code>configure</code> terminar sem erro, execute:</p>
+<pre><code class="language-bash">make PROGRAMS=&quot;dropbear dbclient dropbearkey scp&quot;
+</code></pre>
+<p>Uma configuração semelhante é utilizada em builds ARMv7 estáticos documentados publicamente [cite: 3].
+Se o objetivo for apenas disponibilizar um servidor SSH no Zapp II, o componente fundamental é: <code>dropbear</code> e, para criar as chaves: <code>dropbearkey</code> [cite: 3].</p>
+<p>Portanto, uma compilação ainda mais minimalista pode ser considerada:</p>
+<pre><code class="language-bash">make PROGRAMS=&quot;dropbear dropbearkey&quot;
+</code></pre>
+<p>A disponibilidade exata dos alvos depende da versão do Dropbear utilizada [cite: 3].</p>
+<hr />
+<h2 id="5-verificar-o-binario-antes-de-transferi-lo">5. Verificar o binário antes de transferi-lo<a class="headerlink" href="#5-verificar-o-binario-antes-de-transferi-lo" title="Permanent link">&para;</a></h2>
+<p>Não copie imediatamente o arquivo para o telefone [cite: 3].
+Primeiro descubra o que foi produzido:</p>
+<pre><code class="language-bash">file dropbear
+</code></pre>
+<p>Um resultado desejável seria algo indicando ARM e executável estático, por exemplo:</p>
+<pre><code class="language-text">ELF 32-bit LSB executable, ARM, ...
+statically linked
+</code></pre>
+<p>O texto exato varia conforme a versão das ferramentas [cite: 3].</p>
+<p>Também é útil:</p>
+<pre><code class="language-bash">arm-linux-gnueabihf-readelf -h dropbear
+</code></pre>
+<p>Verifique principalmente:</p>
+<pre><code class="language-text">Class:       ELF32
+Machine:     ARM
+</code></pre>
+<p>E:</p>
+<pre><code class="language-bash">arm-linux-gnueabihf-readelf -d dropbear
+</code></pre>
+<p>Se o executável for realmente estático, não deverá haver uma lista normal de bibliotecas dinâmicas em <code>NEEDED</code> [cite: 3].</p>
+<p>Outra verificação útil:</p>
+<pre><code class="language-bash">arm-linux-gnueabihf-strip dropbear
+</code></pre>
+<p>Isso reduz o tamanho do executável removendo informações que não são necessárias para sua execução [cite: 3].
+Antes de fazer isso, entretanto, é recomendável manter uma cópia do binário não reduzido para debugging [cite: 3].</p>
+<hr />
+<h2 id="6-confirmar-a-arquitetura-do-zapp-ii">6. Confirmar a arquitetura do Zapp II<a class="headerlink" href="#6-confirmar-a-arquitetura-do-zapp-ii" title="Permanent link">&para;</a></h2>
+<p>A arquitetura do compilador não deve ser escolhida apenas porque o aparelho possui ARM [cite: 3].
+No caso do Zapp II, é importante confirmar a arquitetura efetivamente utilizada pelo firmware [cite: 3].</p>
+<p>No aparelho, com shell disponível:</p>
+<pre><code class="language-bash">uname -a
+uname -m
+</code></pre>
+<p>Também pode ser útil:</p>
+<pre><code class="language-bash">cat /proc/cpuinfo
+</code></pre>
+<p>Procure informações como:</p>
+<ul>
+<li>Processor</li>
+<li>CPU architecture</li>
+<li>Hardware</li>
+<li>Features</li>
+</ul>
+<p>O objetivo é determinar se o binário ARMv7 produzido é compatível com o processador e com a ABI utilizada pelo sistema [cite: 3].</p>
+<blockquote>
+<p><strong>Importante:</strong>
+ARMv7 e <code>arm-linux-gnueabihf</code> não são sinônimos. A arquitetura da CPU e a ABI utilizada pelo executável são questões relacionadas, mas distintas. Por isso, o teste real no aparelho é indispensável [cite: 3].</p>
+</blockquote>
+<hr />
+<h2 id="7-transferir-o-dropbear-para-o-zapp-ii">7. Transferir o Dropbear para o Zapp II<a class="headerlink" href="#7-transferir-o-dropbear-para-o-zapp-ii" title="Permanent link">&para;</a></h2>
+<p>Com ADB funcionando:</p>
+<pre><code class="language-bash">adb push dropbear /data/local/tmp/dropbear
+adb push dropbearkey /data/local/tmp/dropbearkey
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">adb shell
+</code></pre>
+<p>No aparelho:</p>
+<pre><code class="language-bash">su
+chmod 755 /data/local/tmp/dropbear
+chmod 755 /data/local/tmp/dropbearkey
+</code></pre>
+<p>Verifique:</p>
+<pre><code class="language-bash">ls -l /data/local/tmp/dropbear*
+</code></pre>
+<hr />
+<h2 id="8-primeiro-teste-do-executavel">8. Primeiro teste do executável<a class="headerlink" href="#8-primeiro-teste-do-executavel" title="Permanent link">&para;</a></h2>
+<p>Antes de tentar iniciar o servidor, execute:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbear -h
+</code></pre>
+<p>O objetivo é confirmar que o kernel conseguiu carregar o ELF [cite: 3].</p>
+<p>Se aparecer a ajuda do Dropbear, isso já confirma várias coisas:</p>
+<pre><code class="language-text">ELF compatível
+        ↓
+loader capaz de executá-lo
+        ↓
+Dropbear iniciou
+        ↓
+opções de linha de comando disponíveis
+</code></pre>
+<p>Se aparecer <code>not found</code>, isso não significa necessariamente que o arquivo não existe [cite: 3]. Pode significar que o kernel não conseguiu encontrar o interpretador/loader necessário para um executável dinâmico [cite: 3]. Esse é um dos motivos pelos quais um binário realmente estático é interessante nesse cenário [cite: 3].</p>
+<hr />
+<h2 id="9-geracao-da-chave-do-servidor">9. Geração da chave do servidor<a class="headerlink" href="#9-geracao-da-chave-do-servidor" title="Permanent link">&para;</a></h2>
+<p>O servidor SSH precisa de uma chave de host [cite: 3].
+Crie um diretório persistente:</p>
+<pre><code class="language-bash">mkdir -p /data/ssh
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbearkey     -t ed25519     -f /data/ssh/dropbear_ed25519_host_key
+</code></pre>
+<p>Se a versão do Dropbear utilizada não aceitar Ed25519, será necessário utilizar um tipo de chave suportado por aquela versão, por exemplo RSA [cite: 3].</p>
+<p>Nesse caso:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbearkey     -t rsa     -f /data/ssh/dropbear_rsa_host_key
+</code></pre>
+<p>Não se deve assumir que todos os tipos de chave são suportados por todas as versões do Dropbear [cite: 3].</p>
+<hr />
+<h2 id="10-iniciar-o-servidor">10. Iniciar o servidor<a class="headerlink" href="#10-iniciar-o-servidor" title="Permanent link">&para;</a></h2>
+<p>Para um primeiro teste, é melhor utilizar uma porta diferente de 22, por exemplo:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbear     -r /data/ssh/dropbear_ed25519_host_key     -p 2222
+</code></pre>
+<ul>
+<li>A opção <code>-r</code> especifica a chave privada do host [cite: 3].</li>
+<li>A opção <code>-p 2222</code> faz o servidor escutar na porta 2222 [cite: 3].</li>
+</ul>
+<p>Uma porta não privilegiada também evita algumas questões relacionadas à tentativa de utilizar a porta 22 durante os testes [cite: 3].</p>
+<hr />
+<h2 id="11-descobrir-o-endereco-ip">11. Descobrir o endereço IP<a class="headerlink" href="#11-descobrir-o-endereco-ip" title="Permanent link">&para;</a></h2>
+<p>No Zapp II:</p>
+<pre><code class="language-bash">ip addr
+</code></pre>
+<p>Se houver suporte:</p>
+<pre><code class="language-bash">ip addr show wlan0
+</code></pre>
+<p>Também pode ser possível utilizar:</p>
+<pre><code class="language-bash">ifconfig
+</code></pre>
+<p>dependendo das ferramentas disponíveis no firmware [cite: 3].
+O resultado deverá permitir identificar algo semelhante a:</p>
+<pre><code class="language-text">inet 192.168.1.123/24
+</code></pre>
+<p>Nesse exemplo, o endereço seria <code>192.168.1.123</code> [cite: 3].</p>
+<hr />
+<h2 id="12-conectar-a-partir-do-computador">12. Conectar a partir do computador<a class="headerlink" href="#12-conectar-a-partir-do-computador" title="Permanent link">&para;</a></h2>
+<p>No Linux:</p>
+<pre><code class="language-bash">ssh -p 2222 root@192.168.1.123
+</code></pre>
+<p>Substitua o endereço pelo IP real do Zapp II [cite: 3].
+O primeiro acesso deverá envolver a verificação da chave de host [cite: 3].</p>
+<h3 id="atencao-ao-usuario">Atenção ao usuário<a class="headerlink" href="#atencao-ao-usuario" title="Permanent link">&para;</a></h3>
+<p>Não é correto assumir universalmente que o usuário SSH será root [cite: 3].
+O Dropbear pode iniciar o processo com determinado usuário dependendo da forma como o servidor foi executado e das opções da versão utilizada [cite: 3].</p>
+<p>Como você está investigando um aparelho com acesso root, primeiro confirme no próprio aparelho:</p>
+<pre><code class="language-bash">id
+whoami
+</code></pre>
+<p>Isso informa qual identidade está sendo utilizada pelo shell atual, mas ainda não prova sozinho qual usuário será aceito pelo servidor SSH [cite: 3].
+Esse comportamento deve ser testado no firmware específico do Zapp II [cite: 3].</p>
+<hr />
+<h2 id="13-diagnostico">13. Diagnóstico<a class="headerlink" href="#13-diagnostico" title="Permanent link">&para;</a></h2>
+<h3 id="131-o-configure-continua-reclamando-de-zlib">13.1 O configure continua reclamando de zlib<a class="headerlink" href="#131-o-configure-continua-reclamando-de-zlib" title="Permanent link">&para;</a></h3>
+<p>Verifique se a opção foi realmente passada:</p>
+<pre><code class="language-bash">./configure --help | grep -i zlib
+</code></pre>
+<p>Se a versão do Dropbear oferecer a opção, deverá existir alguma referência ao suporte a zlib [cite: 3].</p>
+<p>Então execute novamente:</p>
+<pre><code class="language-bash">./configure     --host=arm-linux-gnueabihf     --enable-static     --disable-zlib
+</code></pre>
+<p>Se ainda houver erro, examine:</p>
+<pre><code class="language-bash">grep -i zlib config.log
+</code></pre>
+<p>O <code>config.log</code> é especialmente importante porque mostra os testes realizados pelo <code>configure</code> [cite: 3].</p>
+<h3 id="132-make-diz-que-nao-existe-makefile">13.2 make diz que não existe Makefile<a class="headerlink" href="#132-make-diz-que-nao-existe-makefile" title="Permanent link">&para;</a></h3>
+<p>Isso normalmente significa que o <code>configure</code> não terminou com sucesso [cite: 3].</p>
+<p>Verifique primeiro:</p>
+<pre><code class="language-bash">ls -l Makefile
+</code></pre>
+<p>Se não existir, não continue tentando diferentes comandos <code>make</code> [cite: 3].
+Primeiro corrija:</p>
+<pre><code class="language-bash">./configure ...
+</code></pre>
+<p>Depois confirme:</p>
+<pre><code class="language-bash">ls -l Makefile
+</code></pre>
+<p>Somente então:</p>
+<pre><code class="language-bash">make
+</code></pre>
+<h3 id="133-o-binario-nao-executa-no-zapp-ii">13.3 O binário não executa no Zapp II<a class="headerlink" href="#133-o-binario-nao-executa-no-zapp-ii" title="Permanent link">&para;</a></h3>
+<p>Execute:</p>
+<pre><code class="language-bash">file /data/local/tmp/dropbear
+</code></pre>
+<p>No PC, também:</p>
+<pre><code class="language-bash">file dropbear
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">uname -m
+</code></pre>
+<p>no Zapp II, e:</p>
+<pre><code class="language-bash">cat /proc/cpuinfo
+</code></pre>
+<p>Essas informações devem ser comparadas [cite: 3].</p>
+<h3 id="134-permission-denied">13.4 Permission denied<a class="headerlink" href="#134-permission-denied" title="Permanent link">&para;</a></h3>
+<p>Verifique:</p>
+<pre><code class="language-bash">ls -l /data/local/tmp/dropbear
+chmod 755 /data/local/tmp/dropbear
+</code></pre>
+<p>Se ainda ocorrer <code>Permission denied</code>, pode haver uma restrição do filesystem ou do SELinux [cite: 3].
+Verifique:</p>
+<pre><code class="language-bash">getenforce
+</code></pre>
+<p>se esse comando estiver disponível [cite: 3].</p>
+<p>Também:</p>
+<pre><code class="language-bash">mount
+</code></pre>
+<p>pode revelar se o local onde o arquivo foi colocado possui alguma opção que impeça execução [cite: 3].</p>
+<h3 id="135-o-servidor-inicia-mas-nao-aceita-conexao">13.5 O servidor inicia mas não aceita conexão<a class="headerlink" href="#135-o-servidor-inicia-mas-nao-aceita-conexao" title="Permanent link">&para;</a></h3>
+<p>Primeiro confirme que o processo está rodando:</p>
+<pre><code class="language-bash">ps | grep dropbear
+</code></pre>
+<p>Depois verifique sockets:</p>
+<pre><code class="language-bash">netstat -ln
+</code></pre>
+<p>ou, se disponível:</p>
+<pre><code class="language-bash">ss -ln
+</code></pre>
+<p>Procure a porta <code>2222</code> [cite: 3].</p>
+<p>Também é possível testar localmente no próprio aparelho, caso exista cliente TCP adequado [cite: 3].
+A partir do PC:</p>
+<pre><code class="language-bash">nc -vz 192.168.1.123 2222
+</code></pre>
+<p>Se a porta não estiver acessível, o problema ainda não é autenticação SSH. Primeiro deve ser investigada a conectividade de rede [cite: 3].</p>
+<hr />
+<h2 id="14-execucao-em-foreground-durante-debugging">14. Execução em foreground durante debugging<a class="headerlink" href="#14-execucao-em-foreground-durante-debugging" title="Permanent link">&para;</a></h2>
+<p>Durante a investigação inicial, não é recomendável iniciar o Dropbear em background imediatamente [cite: 3].
+É preferível executar o servidor diretamente no shell:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbear     -r /data/ssh/dropbear_ed25519_host_key     -p 2222
+</code></pre>
+<p>Assim, mensagens de erro podem permanecer visíveis no terminal [cite: 3].
+Somente depois que a execução estiver comprovada faz sentido automatizar a inicialização [cite: 3].</p>
+<hr />
+<h2 id="15-persistencia-das-chaves">15. Persistência das chaves<a class="headerlink" href="#15-persistencia-das-chaves" title="Permanent link">&para;</a></h2>
+<p>Um detalhe importante para o Zapp II é o local da chave [cite: 3].
+Se a chave for criada em <code>/data/ssh/</code> e esse armazenamento for persistente no firmware, ela poderá sobreviver a reinicializações [cite: 3].
+Se for criada em um diretório temporário, a chave poderá desaparecer [cite: 3].</p>
+<p>Isso é importante porque a chave de host identifica criptograficamente o servidor [cite: 3].
+Se ela mudar a cada boot, o computador cliente poderá apresentar avisos de alteração da chave conhecida [cite: 3].
+Portanto, para uma instalação permanente, deve-se investigar quais partições e diretórios do Zapp II são persistentes [cite: 3].</p>
+<hr />
+<h2 id="16-seguranca">16. Segurança<a class="headerlink" href="#16-seguranca" title="Permanent link">&para;</a></h2>
+<p>Executar um servidor SSH em um telefone KaiOS com root transforma o aparelho em um serviço de administração remota [cite: 3].
+Isso possui consequências importantes [cite: 3].</p>
+<h3 id="riscos-principais">Riscos principais<a class="headerlink" href="#riscos-principais" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Risco</th>
+<th style="text-align: left;">Consequência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Exposição à rede</strong></td>
+<td style="text-align: left;">Terceiros podem tentar conectar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Shell como root</strong></td>
+<td style="text-align: left;">Comprometimento pode significar controle completo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Chave privada exposta</strong></td>
+<td style="text-align: left;">Identidade do servidor pode ser comprometida</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Binário incompatível</strong></td>
+<td style="text-align: left;">Crash ou comportamento imprevisível</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Alteração de boot</strong></td>
+<td style="text-align: left;">Possível bootloop</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Modificação de <code>/system</code></strong></td>
+<td style="text-align: left;">Pode impedir inicialização</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SELinux inadequado</strong></td>
+<td style="text-align: left;">Servidor pode não funcionar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Firmware específico</strong></td>
+<td style="text-align: left;">Comandos podem não ser reproduzíveis em outro aparelho</td>
+</tr>
+</tbody>
+</table>
+<p>Durante a fase experimental, recomenda-se:</p>
+<ol>
+<li>Utilizar uma porta de teste [cite: 3];</li>
+<li>Manter o servidor desativado quando não estiver sendo utilizado [cite: 3];</li>
+<li>Não expor a porta diretamente à Internet [cite: 3];</li>
+<li>Preservar uma cópia do firmware original [cite: 3];</li>
+<li>Trabalhar inicialmente em <code>/data/local/tmp</code> [cite: 3];</li>
+<li>Evitar modificar <code>/system</code> até que o funcionamento esteja comprovado [cite: 3].</li>
+</ol>
+<hr />
+<h2 id="17-por-que-nao-comecar-modificando-o-boot">17. Por que não começar modificando o boot<a class="headerlink" href="#17-por-que-nao-comecar-modificando-o-boot" title="Permanent link">&para;</a></h2>
+<p>É tentador criar imediatamente um mecanismo para iniciar o Dropbear automaticamente [cite: 3].
+Isso deve ser evitado na primeira fase [cite: 3].</p>
+<p>A sequência mais segura é:</p>
+<pre><code class="language-text">1. Compilar
+       ↓
+2. Verificar ELF
+       ↓
+3. Transferir
+       ↓
+4. Executar manualmente
+       ↓
+5. Gerar chave
+       ↓
+6. Iniciar servidor
+       ↓
+7. Conectar via SSH
+       ↓
+8. Testar estabilidade
+       ↓
+9. Investigar persistência
+       ↓
+10. Só então automatizar
+</code></pre>
+<p>Essa abordagem preserva a capacidade de recuperação caso alguma etapa apresente problemas [cite: 3].</p>
+<hr />
+<h2 id="18-configuracao-recomendada-para-a-investigacao-do-zapp-ii">18. Configuração recomendada para a investigação do Zapp II<a class="headerlink" href="#18-configuracao-recomendada-para-a-investigacao-do-zapp-ii" title="Permanent link">&para;</a></h2>
+<p>Para o estágio atual da investigação, uma configuração razoável é:</p>
+<pre><code class="language-bash">./configure     --host=arm-linux-gnueabihf     --enable-static     --disable-zlib
+</code></pre>
+<p>seguida por:</p>
+<pre><code class="language-bash">make PROGRAMS=&quot;dropbear dropbearkey&quot;
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">file dropbear
+arm-linux-gnueabihf-readelf -h dropbear
+</code></pre>
+<p>Somente depois de confirmar o binário:</p>
+<pre><code class="language-bash">adb push dropbear /data/local/tmp/dropbear
+adb push dropbearkey /data/local/tmp/dropbearkey
+</code></pre>
+<p>No Zapp II:</p>
+<pre><code class="language-bash">su
+chmod 755 /data/local/tmp/dropbear*
+</code></pre>
+<p>Teste:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbear -h
+</code></pre>
+<p>E somente então:</p>
+<pre><code class="language-bash">mkdir -p /data/ssh
+
+/data/local/tmp/dropbearkey     -t ed25519     -f /data/ssh/dropbear_ed25519_host_key
+</code></pre>
+<p>Finalmente:</p>
+<pre><code class="language-bash">/data/local/tmp/dropbear     -r /data/ssh/dropbear_ed25519_host_key     -p 2222
+</code></pre>
+<p>Essa sequência é adequada como procedimento experimental, mas os parâmetros de arquitetura, ABI, tipo de chave e comportamento de autenticação precisam ser confirmados contra o firmware específico do Zapp II [cite: 3].</p>
+<hr />
+<h2 id="19-compatibilidade">19. Compatibilidade<a class="headerlink" href="#19-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>A compatibilidade deve ser analisada em várias camadas [cite: 3]:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Camada</th>
+<th style="text-align: left;">O que verificar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Hardware</strong></td>
+<td style="text-align: left;">SoC e arquitetura ARM</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CPU</strong></td>
+<td style="text-align: left;">Instruções suportadas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ABI</strong></td>
+<td style="text-align: left;"><code>gnueabihf</code>, <code>musleabihf</code> etc.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>libc</strong></td>
+<td style="text-align: left;"><code>glibc</code>, <code>musl</code>, <code>Bionic</code> ou outra</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kernel</strong></td>
+<td style="text-align: left;">Recursos de rede e execução ELF</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SELinux</strong></td>
+<td style="text-align: left;">Políticas aplicadas ao processo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>KaiOS</strong></td>
+<td style="text-align: left;">Versão e personalizações do fabricante</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Firmware</strong></td>
+<td style="text-align: left;">Alterações específicas do Zapp II</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dropbear</strong></td>
+<td style="text-align: left;">Versão utilizada</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SSH</strong></td>
+<td style="text-align: left;">Algoritmos habilitados</td>
+</tr>
+</tbody>
+</table>
+<p>Especialmente importante é não concluir que um binário Alpine ARMv7 será automaticamente executável no Zapp II [cite: 3]. Alpine normalmente utiliza <code>musl</code>, enquanto dispositivos baseados em Android/B2G podem possuir outro ambiente de runtime [cite: 3].
+Para um binário realmente estático, parte dessa diferença é eliminada, mas não necessariamente todas as incompatibilidades [cite: 3].</p>
+<hr />
+<h2 id="20-integracao-com-o-restante-do-manual">20. Integração com o restante do manual<a class="headerlink" href="#20-integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h2>
+<p>Esta seção se relaciona diretamente com:</p>
+<ul>
+<li><strong>Arquitetura do Zapp II</strong>, para determinar SoC, CPU e ABI [cite: 3].</li>
+<li><strong>Root e privilégios</strong>, para compreender como executar o servidor com permissões elevadas [cite: 3].</li>
+<li><strong>ADB</strong>, utilizado para transferir e testar os binários [cite: 3].</li>
+<li><strong>Sistema de arquivos do KaiOS</strong>, para determinar onde armazenar binários e chaves [cite: 3].</li>
+<li><strong>Kernel e SELinux</strong>, para investigar problemas de execução e acesso à rede [cite: 3].</li>
+<li><strong>Firmware</strong>, caso seja necessário tornar o servidor persistente [cite: 3].</li>
+<li><strong>Debugging</strong>, para análise de processos, sockets e logs [cite: 3].</li>
+</ul>
+<p>Posteriormente, esta seção poderá servir de base para um capítulo específico sobre acesso remoto e administração do Zapp II [cite: 3].</p>
+<p>Durante a compilação final do manual, devem ser verificadas especificamente:</p>
+<ol>
+<li>Arquitetura e ABI exatas do Zapp II [cite: 3];</li>
+<li>Versão do kernel [cite: 3];</li>
+<li><code>libc</code>/runtime efetivamente utilizado [cite: 3];</li>
+<li>Versão do KaiOS [cite: 3];</li>
+<li>Versão do Dropbear utilizada nos testes [cite: 3];</li>
+<li>Suporte efetivo aos algoritmos de chave disponíveis [cite: 3];</li>
+<li>Comportamento de autenticação do Dropbear nesse firmware [cite: 3];</li>
+<li>Políticas SELinux [cite: 3];</li>
+<li>Persistência de <code>/data</code> [cite: 3];</li>
+<li>Possibilidade de inicialização automática sem modificar componentes críticos do firmware [cite: 3].</li>
+</ol>
+<hr />
+<h2 id="21-resumo">21. Resumo<a class="headerlink" href="#21-resumo" title="Permanent link">&para;</a></h2>
+<p>O erro apresentado durante a compilação não indica um problema com o <code>make</code> [cite: 3]. O problema ocorreu anteriormente, quando o <code>configure</code> detectou a ausência de zlib e abortou [cite: 3].</p>
+<p>Para o objetivo específico de disponibilizar SSH no Zapp II, a abordagem mais simples é recompilar o Dropbear com:</p>
+<pre><code class="language-bash">./configure     --host=arm-linux-gnueabihf     --enable-static     --disable-zlib
+</code></pre>
+<p>e então:</p>
+<pre><code class="language-bash">make PROGRAMS=&quot;dropbear dropbearkey&quot;
+</code></pre>
+<p>O binário deve ser verificado no computador antes de ser transferido ao aparelho [cite: 3]. Depois, deve ser executado inicialmente de forma manual em <code>/data/local/tmp</code>, com uma chave armazenada em <code>/data/ssh</code> e uma porta de teste como <code>2222</code> [cite: 3].</p>
+<p>A principal conclusão técnica é que não é necessário resolver a dependência de zlib para obter um Dropbear funcional, desde que a versão utilizada ofereça a opção <code>--disable-zlib</code> [cite: 3]. Builds ARMv7 estáticos utilizando exatamente essa estratégia são tecnicamente viáveis [cite: 3].</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3135 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../../fases/01-identidade/02-objetivos/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>WebIDE, depuração remota e investigação de APIs no KaiOS 2.5 - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#webide-depuracao-remota-e-investigacao-de-apis-no-kaios-25" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WebIDE, depuração remota e investigação de APIs no KaiOS 2.5
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-gecko-e-b2g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Gecko e B2G
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-adb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 ADB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Console
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Como funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-fluxo-de-conexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Fluxo de conexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-socket-de-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Socket de debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-verificar-se-o-adb-reconhece-o-aparelho" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar se o ADB reconhece o aparelho
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-verificar-o-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Verificar o shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-criar-o-encaminhamento-do-debugger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Criar o encaminhamento do debugger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-abrir-o-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Abrir o WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-abrir-as-developer-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Abrir as Developer Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-investigacao-das-apis-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Investigação das APIs JavaScript
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Investigação das APIs JavaScript">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-nao-presumir-que-uma-api-existe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Não presumir que uma API existe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-inspecionar-navigator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Inspecionar navigator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pesquisar-apis-relacionadas-ao-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pesquisar APIs relacionadas ao sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-o-projeto-strukturartshell-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. O projeto strukturart/shell-command
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-procedimento-recomendado-para-testar-shell-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Procedimento recomendado para testar shell-command
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Procedimento recomendado para testar shell-command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Pré-requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-primeira-etapa-preservar-o-codigo-original" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Primeira etapa: preservar o código original
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-segunda-etapa-identificar-o-mecanismo-utilizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Segunda etapa: identificar o mecanismo utilizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-terceira-etapa-testar-a-api-isoladamente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Terceira etapa: testar a API isoladamente
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-investigacao-de-permissoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Investigação de permissões
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-exemplos-de-investigacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Exemplos de investigação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Exemplos de investigação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-1-determinar-o-contexto-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 1: determinar o contexto JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-2-procurar-apis-mozilla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 2: procurar APIs Mozilla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-3-testar-uma-api-especifica-sem-executa-la" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 3: testar uma API específica sem executá-la
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Problemas comuns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Problemas comuns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-o-aparelho-aparece-no-adb-devices-mas-nao-no-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 O aparelho aparece no adb devices, mas não no WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-o-webide-mostra-um-aviso-sobre-versao-do-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 O WebIDE mostra um aviso sobre versão do runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-o-console-funciona-mas-a-api-nao-existe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 O Console funciona, mas a API não existe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-a-api-existe-mas-a-operacao-falha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 A API existe, mas a operação falha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-root-nao-deve-ser-tratado-como-requisito-suficiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Root não deve ser tratado como requisito suficiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-evitar-testes-destrutivos-inicialmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Evitar testes destrutivos inicialmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-preservar-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Preservar evidências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Resumo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. Resumo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-gecko-e-b2g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Gecko e B2G
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-adb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 ADB
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Console
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Como funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-fluxo-de-conexao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Fluxo de conexão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-socket-de-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Socket de debugging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Procedimentos práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-verificar-se-o-adb-reconhece-o-aparelho" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar se o ADB reconhece o aparelho
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-verificar-o-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Verificar o shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-criar-o-encaminhamento-do-debugger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Criar o encaminhamento do debugger
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-abrir-o-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Abrir o WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-abrir-as-developer-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Abrir as Developer Tools
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-investigacao-das-apis-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Investigação das APIs JavaScript
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Investigação das APIs JavaScript">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-nao-presumir-que-uma-api-existe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Não presumir que uma API existe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-inspecionar-navigator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Inspecionar navigator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-pesquisar-apis-relacionadas-ao-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Pesquisar APIs relacionadas ao sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-o-projeto-strukturartshell-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. O projeto strukturart/shell-command
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-procedimento-recomendado-para-testar-shell-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Procedimento recomendado para testar shell-command
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Procedimento recomendado para testar shell-command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Pré-requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-primeira-etapa-preservar-o-codigo-original" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Primeira etapa: preservar o código original
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-segunda-etapa-identificar-o-mecanismo-utilizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Segunda etapa: identificar o mecanismo utilizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-terceira-etapa-testar-a-api-isoladamente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Terceira etapa: testar a API isoladamente
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-investigacao-de-permissoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Investigação de permissões
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-exemplos-de-investigacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Exemplos de investigação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Exemplos de investigação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-1-determinar-o-contexto-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 1: determinar o contexto JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-2-procurar-apis-mozilla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 2: procurar APIs Mozilla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-3-testar-uma-api-especifica-sem-executa-la" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 3: testar uma API específica sem executá-la
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Problemas comuns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Problemas comuns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-o-aparelho-aparece-no-adb-devices-mas-nao-no-webide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 O aparelho aparece no adb devices, mas não no WebIDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-o-webide-mostra-um-aviso-sobre-versao-do-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 O WebIDE mostra um aviso sobre versão do runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-o-console-funciona-mas-a-api-nao-existe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 O Console funciona, mas a API não existe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-a-api-existe-mas-a-operacao-falha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 A API existe, mas a operação falha
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-root-nao-deve-ser-tratado-como-requisito-suficiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Root não deve ser tratado como requisito suficiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-evitar-testes-destrutivos-inicialmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Evitar testes destrutivos inicialmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#133-preservar-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.3 Preservar evidências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Resumo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. Resumo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="webide-depuracao-remota-e-investigacao-de-apis-no-kaios-25">WebIDE, depuração remota e investigação de APIs no KaiOS 2.5<a class="headerlink" href="#webide-depuracao-remota-e-investigacao-de-apis-no-kaios-25" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>O WebIDE é uma ferramenta de desenvolvimento baseada nas ferramentas de desenvolvedor do Firefox usada para conectar um computador a dispositivos baseados em Gecko/B2G, incluindo aparelhos com KaiOS 2.5.</p>
+<p>No contexto do KaiOS 2.5, ele pode ser utilizado para:</p>
+<ol>
+<li>conectar-se ao runtime do aparelho;</li>
+<li>instalar e executar aplicações;</li>
+<li>abrir as ferramentas de desenvolvimento;</li>
+<li>visualizar logs;</li>
+<li>executar JavaScript no contexto da aplicação;</li>
+<li>inspecionar HTML e CSS;</li>
+<li>depurar código JavaScript;</li>
+<li>investigar APIs WebAPI expostas pelo runtime;</li>
+<li>estudar diferenças entre o ambiente normal de uma aplicação e ambientes privilegiados.</li>
+</ol>
+<p>A documentação oficial do KaiOS para o ambiente 2.x recomenda especificamente o Firefox 59 para o fluxo tradicional de desenvolvimento com WebIDE e descreve a conexão através de ADB e do debugger-socket.</p>
+<p>Este capítulo é particularmente relevante para engenharia reversa e experimentação em aparelhos KaiOS 2.5 com acesso ADB/root, inclusive para investigar projetos antigos como o strukturart/shell-command.</p>
+<p>Há, entretanto, uma distinção importante:</p>
+<blockquote>
+<p>ADB, root e WebIDE são mecanismos diferentes. Ter acesso root ao shell não significa automaticamente que uma aplicação KaiOS possa executar comandos de shell.</p>
+</blockquote>
+<p>O objetivo do WebIDE, neste contexto, é justamente permitir investigar o que o runtime JavaScript do aparelho ainda expõe.</p>
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-gecko-e-b2g">2.1 Gecko e B2G<a class="headerlink" href="#21-gecko-e-b2g" title="Permanent link">&para;</a></h3>
+<p>O KaiOS 2.5 pertence à família de sistemas derivados do Firefox OS/B2G. Sua plataforma utiliza uma arquitetura baseada em:</p>
+<pre><code>Aplicação HTML/CSS/JavaScript
+             │
+             ▼
+        Gecko / B2G
+             │
+       WebAPIs / IPC
+             │
+             ▼
+        Serviços do sistema
+             │
+             ▼
+        Linux / Gonk
+             │
+             ▼
+          Hardware
+</code></pre>
+<p>Isso é importante porque JavaScript executado por uma aplicação não possui automaticamente os mesmos privilégios do shell Linux.</p>
+<p>Uma aplicação pode ter acesso a determinadas APIs dependendo de:</p>
+<ol>
+<li>tipo da aplicação;</li>
+<li>permissões declaradas no manifesto;</li>
+<li>assinatura;</li>
+<li>origem;</li>
+<li>versão do Gecko;</li>
+<li>configuração do firmware;</li>
+<li>modificações realizadas pelo fabricante.</li>
+</ol>
+<p>A documentação do KaiOS diferencia aplicações hospedadas, privilegiadas e certificadas. APIs sensíveis podem exigir níveis específicos de privilégio.</p>
+<h3 id="22-adb">2.2 ADB<a class="headerlink" href="#22-adb" title="Permanent link">&para;</a></h3>
+<p>O Android Debug Bridge (ADB) é uma ferramenta de comunicação com o dispositivo.</p>
+<p>No KaiOS 2.5, ele é utilizado para tarefas como:</p>
+<pre><code class="language-bash">adb devices
+</code></pre>
+<p>identificar o aparelho conectado e, quando permitido pelo firmware:</p>
+<pre><code class="language-bash">adb shell
+</code></pre>
+<p>obter um shell no dispositivo.</p>
+<p>Em aparelhos com root, esse shell pode proporcionar acesso muito mais amplo ao sistema operacional.</p>
+<p>Porém:</p>
+<pre><code>ADB shell
+   ≠
+JavaScript da aplicação
+</code></pre>
+<p>São ambientes diferentes.</p>
+<h3 id="23-webide">2.3 WebIDE<a class="headerlink" href="#23-webide" title="Permanent link">&para;</a></h3>
+<p>O WebIDE funciona como uma interface de desenvolvimento para o runtime Gecko/B2G.</p>
+<p>O fluxo tradicional é:</p>
+<pre><code>Computador
+    │
+    │ USB
+    ▼
+   ADB
+    │
+    │ debugger socket
+    ▼
+KaiOS / Gecko
+    │
+    ▼
+Aplicação
+    │
+    ▼
+Developer Tools
+</code></pre>
+<p>A documentação oficial mostra a utilização do socket:</p>
+<pre><code class="language-bash">adb root
+adb forward tcp:6000 localfilesystem:/data/local/debugger-socket
+</code></pre>
+<p>Esse comando cria um encaminhamento entre a porta TCP 6000 do computador e o socket local de debugging do aparelho.</p>
+<h3 id="24-console">2.4 Console<a class="headerlink" href="#24-console" title="Permanent link">&para;</a></h3>
+<p>O Console das Developer Tools permite executar JavaScript no contexto do alvo selecionado.</p>
+<p>A documentação do KaiOS descreve explicitamente o Console como uma ferramenta que permite visualizar informações de uma página e executar expressões JavaScript no contexto dela.</p>
+<p>Isso é especialmente útil para responder perguntas como:</p>
+<pre><code class="language-js">typeof navigator
+</code></pre>
+<p>ou:</p>
+<pre><code class="language-js">Object.keys(navigator)
+</code></pre>
+<p>e investigar quais APIs estão realmente presentes naquele aparelho.</p>
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<h3 id="31-fluxo-de-conexao">3.1 Fluxo de conexão<a class="headerlink" href="#31-fluxo-de-conexao" title="Permanent link">&para;</a></h3>
+<p>O procedimento tradicional pode ser representado assim:</p>
+<pre><code>KaiOS
+  │
+  ├── modo debugging
+  │
+  ▼
+ADB
+  │
+  ├── adb devices
+  │
+  ├── adb root
+  │
+  └── adb forward
+          │
+          ▼
+   debugger-socket
+          │
+          ▼
+       WebIDE
+          │
+          ▼
+  Developer Tools
+          │
+          ├── Inspector
+          ├── Console
+          ├── Debugger
+          └── Scratchpad
+</code></pre>
+<p>O KaiOS documenta esse fluxo para dispositivos 2.x.</p>
+<h3 id="32-socket-de-debugging">3.2 Socket de debugging<a class="headerlink" href="#32-socket-de-debugging" title="Permanent link">&para;</a></h3>
+<p>O caminho documentado para KaiOS 2.5 é:</p>
+<pre><code>/data/local/debugger-socket
+</code></pre>
+<p>O encaminhamento pode ser feito com:</p>
+<pre><code class="language-bash">adb forward tcp:6000 localfilesystem:/data/local/debugger-socket
+</code></pre>
+<p>A partir desse momento, o computador pode acessar o endpoint através de:</p>
+<pre><code>localhost:6000
+</code></pre>
+<p>No WebIDE, seleciona-se Remote Runtime e informa-se:</p>
+<pre><code>localhost:6000
+</code></pre>
+<p>A documentação do KaiOS também confirma que a porta TCP pode ser alterada.</p>
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADB</td>
+<td>Comunicação entre computador e aparelho</td>
+</tr>
+<tr>
+<td>adb shell</td>
+<td>Acesso ao shell Linux</td>
+</tr>
+<tr>
+<td>adb root</td>
+<td>Solicita daemon ADB com privilégios de root, quando suportado</td>
+</tr>
+<tr>
+<td>adb forward</td>
+<td>Encaminha uma porta/socket do dispositivo</td>
+</tr>
+<tr>
+<td>debugger-socket</td>
+<td>Endpoint utilizado pelas ferramentas de debugging</td>
+</tr>
+<tr>
+<td>WebIDE</td>
+<td>Interface de desenvolvimento</td>
+</tr>
+<tr>
+<td>Developer Tools</td>
+<td>Inspector, Console, Debugger etc.</td>
+</tr>
+<tr>
+<td>Gecko/B2G</td>
+<td>Runtime das aplicações</td>
+</tr>
+<tr>
+<td>manifest.webapp</td>
+<td>Define informações e permissões da aplicação</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>Código executado pela aplicação</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h3 id="51-verificar-se-o-adb-reconhece-o-aparelho">5.1 Verificar se o ADB reconhece o aparelho<a class="headerlink" href="#51-verificar-se-o-adb-reconhece-o-aparelho" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> confirmar que a comunicação básica funciona antes de investigar o WebIDE.</p>
+<p><strong>Pré-requisitos:</strong></p>
+<ol>
+<li>KaiOS 2.5;</li>
+<li>modo de debugging habilitado;</li>
+<li>cabo USB com transmissão de dados;</li>
+<li>ADB instalado.</li>
+</ol>
+<p>Execute:</p>
+<pre><code class="language-bash">adb devices
+</code></pre>
+<p>Resultado esperado:</p>
+<pre><code>List of devices attached
+XXXXXXXX    device
+</code></pre>
+<p>Se aparecer:</p>
+<pre><code>unauthorized
+</code></pre>
+<p>o aparelho ainda não autorizou a conexão.</p>
+<p>Se a lista estiver vazia:</p>
+<pre><code>List of devices attached
+</code></pre>
+<p>o problema ainda está no nível de ADB/USB/debugging, não no WebIDE.</p>
+<h3 id="52-verificar-o-shell">5.2 Verificar o shell<a class="headerlink" href="#52-verificar-o-shell" title="Permanent link">&para;</a></h3>
+<p>Execute:</p>
+<pre><code class="language-bash">adb shell
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">id
+</code></pre>
+<p>O resultado pode ser algo semelhante a:</p>
+<pre><code>uid=0(root) gid=0(root)
+</code></pre>
+<p>ou:</p>
+<pre><code>uid=2000(shell) gid=2000(shell)
+</code></pre>
+<p>Isso permite determinar imediatamente se o shell ADB está sendo executado como root.</p>
+<p><strong>Importante:</strong> possuir <code>uid=0</code> aqui não significa que o JavaScript de uma aplicação também possuirá privilégios equivalentes.</p>
+<h3 id="53-criar-o-encaminhamento-do-debugger">5.3 Criar o encaminhamento do debugger<a class="headerlink" href="#53-criar-o-encaminhamento-do-debugger" title="Permanent link">&para;</a></h3>
+<p>Em aparelhos nos quais o mecanismo tradicional permanece disponível:</p>
+<pre><code class="language-bash">adb root
+adb forward tcp:6000 localfilesystem:/data/local/debugger-socket
+</code></pre>
+<p>Depois verifique os encaminhamentos:</p>
+<pre><code class="language-bash">adb forward --list
+</code></pre>
+<p>O resultado deverá indicar um encaminhamento envolvendo a porta 6000.</p>
+<p>Se <code>adb root</code> retornar uma mensagem indicando que o dispositivo não permite root ADB, isso não significa necessariamente que o aparelho não tenha root por outros meios.</p>
+<h3 id="54-abrir-o-webide">5.4 Abrir o WebIDE<a class="headerlink" href="#54-abrir-o-webide" title="Permanent link">&para;</a></h3>
+<p>Em ambientes compatíveis, abra uma versão do Firefox que ainda possua WebIDE.</p>
+<p>A documentação histórica do KaiOS recomenda Firefox 59 para o ambiente KaiOS 2.x.</p>
+<p>No Firefox, procure:</p>
+<pre><code>Tools
+  → Web Developer
+      → WebIDE
+</code></pre>
+<p>Em algumas versões, o atalho utilizado é:</p>
+<pre><code>Shift + F8
+</code></pre>
+<p>A interface deverá apresentar opções relacionadas a runtimes.</p>
+<p>Selecione:</p>
+<pre><code>Remote Runtime
+</code></pre>
+<p>e informe:</p>
+<pre><code>localhost:6000
+</code></pre>
+<p>A documentação oficial descreve exatamente esse mecanismo de conexão.</p>
+<h3 id="55-abrir-as-developer-tools">5.5 Abrir as Developer Tools<a class="headerlink" href="#55-abrir-as-developer-tools" title="Permanent link">&para;</a></h3>
+<p>Depois de conectar o runtime, selecione uma aplicação.</p>
+<p>O WebIDE permite executar a aplicação e abrir as ferramentas através do botão representado por uma chave inglesa.</p>
+<p>Entre as ferramentas disponíveis estão:</p>
+<ol>
+<li>Inspector;</li>
+<li>Console;</li>
+<li>JavaScript Debugger;</li>
+<li>Style Editor;</li>
+<li>Scratchpad.</li>
+</ol>
+<p>O ponto mais importante para a investigação deste capítulo é o Console.</p>
+<h2 id="6-investigacao-das-apis-javascript">6. Investigação das APIs JavaScript<a class="headerlink" href="#6-investigacao-das-apis-javascript" title="Permanent link">&para;</a></h2>
+<h3 id="61-nao-presumir-que-uma-api-existe">6.1 Não presumir que uma API existe<a class="headerlink" href="#61-nao-presumir-que-uma-api-existe" title="Permanent link">&para;</a></h3>
+<p>Uma abordagem inadequada seria simplesmente executar:</p>
+<pre><code class="language-js">navigator.mozSystem
+</code></pre>
+<p>e concluir que o resultado determina se o KaiOS pode executar comandos.</p>
+<p>Isso é insuficiente.</p>
+<p>A existência de uma propriedade não demonstra que:</p>
+<ol>
+<li>ela pode executar comandos;</li>
+<li>ela está disponível para aquele tipo de aplicação;</li>
+<li>ela possui os privilégios necessários;</li>
+<li>o firmware implementa o comportamento esperado;</li>
+<li>o código antigo do shell-command é compatível com aquele runtime.</li>
+</ol>
+<p>O teste correto começa pela descoberta.</p>
+<h3 id="62-inspecionar-navigator">6.2 Inspecionar navigator<a class="headerlink" href="#62-inspecionar-navigator" title="Permanent link">&para;</a></h3>
+<p>No Console:</p>
+<pre><code class="language-js">typeof navigator
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-js">Object.keys(navigator)
+</code></pre>
+<p>Dependendo da implementação do Gecko, APIs nativas podem não aparecer exatamente da mesma maneira que propriedades JavaScript comuns. Portanto, também é útil testar propriedades individualmente.</p>
+<p>Por exemplo:</p>
+<pre><code class="language-js">typeof navigator.mozTCPSocket
+</code></pre>
+<p>A documentação do KaiOS confirma a existência histórica de <code>navigator.mozTCPSocket</code> e sua relação com a API de sockets TCP.</p>
+<h3 id="63-pesquisar-apis-relacionadas-ao-sistema">6.3 Pesquisar APIs relacionadas ao sistema<a class="headerlink" href="#63-pesquisar-apis-relacionadas-ao-sistema" title="Permanent link">&para;</a></h3>
+<p>Pode-se procurar propriedades relacionadas a APIs Mozilla/B2G:</p>
+<pre><code class="language-js">Object.getOwnPropertyNames(navigator).sort()
+</code></pre>
+<p>E pesquisar visualmente por nomes contendo:</p>
+<pre><code>moz
+system
+process
+shell
+exec
+socket
+device
+</code></pre>
+<p>Também é possível verificar diretamente:</p>
+<pre><code class="language-js">typeof navigator.mozProcess
+</code></pre>
+<p>e:</p>
+<pre><code class="language-js">typeof navigator.mozSystem
+</code></pre>
+<p>Porém, esses testes devem ser tratados como investigação, não como prova de compatibilidade com shell-command.</p>
+<h2 id="7-o-projeto-strukturartshell-command">7. O projeto strukturart/shell-command<a class="headerlink" href="#7-o-projeto-strukturartshell-command" title="Permanent link">&para;</a></h2>
+<p>O projeto investigado nesta seção é descrito como:</p>
+<blockquote>
+<p>"Execute shell commands from javascript level"</p>
+</blockquote>
+<p>O repositório aparece catalogado como um projeto relacionado a KaiOS, com aproximadamente 157 KB de código e histórico de desenvolvimento iniciado na época do KaiOS 2.x.</p>
+<p>Existe uma evidência particularmente importante sobre sua compatibilidade histórica.</p>
+<p>Em uma discussão sobre KaiOS, o próprio autor do projeto afirmou que até o KaiOS 2.4 era possível executar scripts shell a partir do JavaScript, apresentando o repositório strukturart/shell-command como demonstração dessa abordagem.</p>
+<p>Isso fornece uma hipótese de investigação muito mais sólida:</p>
+<pre><code>KaiOS 2.4
+   │
+   └── mecanismo usado pelo shell-command
+             │
+             ▼
+KaiOS 2.5
+   │
+   ├── mecanismo removido?
+   ├── mecanismo restringido?
+   ├── API ainda existente?
+   ├── privilégio diferente?
+   └── alteração no Gecko?
+</code></pre>
+<p>Portanto, não se deve assumir que o projeto funcionará simplesmente porque o aparelho possui root.</p>
+<h2 id="8-procedimento-recomendado-para-testar-shell-command">8. Procedimento recomendado para testar shell-command<a class="headerlink" href="#8-procedimento-recomendado-para-testar-shell-command" title="Permanent link">&para;</a></h2>
+<h3 id="81-objetivo">8.1 Objetivo<a class="headerlink" href="#81-objetivo" title="Permanent link">&para;</a></h3>
+<p>Determinar se o mecanismo utilizado pelo projeto histórico continua funcional em um aparelho KaiOS 2.5.</p>
+<h3 id="82-pre-requisitos">8.2 Pré-requisitos<a class="headerlink" href="#82-pre-requisitos" title="Permanent link">&para;</a></h3>
+<ol>
+<li>aparelho KaiOS 2.5;</li>
+<li>ADB funcional;</li>
+<li>acesso root, preferencialmente;</li>
+<li>WebIDE funcional;</li>
+<li>cópia local do repositório;</li>
+<li>possibilidade de instalar uma aplicação experimental.</li>
+</ol>
+<h3 id="83-primeira-etapa-preservar-o-codigo-original">8.3 Primeira etapa: preservar o código original<a class="headerlink" href="#83-primeira-etapa-preservar-o-codigo-original" title="Permanent link">&para;</a></h3>
+<p>Clone o projeto no computador:</p>
+<pre><code class="language-bash">git clone https://github.com/strukturart/shell-command.git
+</code></pre>
+<p>Entre no diretório:</p>
+<pre><code class="language-bash">cd shell-command
+</code></pre>
+<p>Antes de modificar qualquer coisa, registre:</p>
+<pre><code class="language-bash">git status
+</code></pre>
+<p>e:</p>
+<pre><code class="language-bash">git log --oneline --all
+</code></pre>
+<p>O objetivo é preservar o estado original para que os testes possam ser reproduzidos.</p>
+<h3 id="84-segunda-etapa-identificar-o-mecanismo-utilizado">8.4 Segunda etapa: identificar o mecanismo utilizado<a class="headerlink" href="#84-segunda-etapa-identificar-o-mecanismo-utilizado" title="Permanent link">&para;</a></h3>
+<p>Antes de instalar o projeto, procure referências a APIs de execução de processos:</p>
+<pre><code class="language-bash">grep -RniE 'mozProcess|mozSystem|process|exec|shell|command' .
+</code></pre>
+<p>Também é útil:</p>
+<pre><code class="language-bash">find . -maxdepth 2 -type f -print
+</code></pre>
+<p>e:</p>
+<pre><code class="language-bash">cat manifest.webapp
+</code></pre>
+<p>O objetivo é descobrir qual API o projeto realmente utiliza, em vez de assumir que utiliza <code>navigator.mozSystem</code>.</p>
+<h3 id="85-terceira-etapa-testar-a-api-isoladamente">8.5 Terceira etapa: testar a API isoladamente<a class="headerlink" href="#85-terceira-etapa-testar-a-api-isoladamente" title="Permanent link">&para;</a></h3>
+<p>Antes de executar o projeto inteiro, crie uma aplicação mínima que apenas investigue a API.</p>
+<p>Por exemplo, o JavaScript pode registrar:</p>
+<pre><code class="language-js">console.log(&quot;navigator.mozProcess =&quot;, typeof navigator.mozProcess);
+console.log(&quot;navigator.mozSystem =&quot;, typeof navigator.mozSystem);
+console.log(&quot;navigator.mozTCPSocket =&quot;, typeof navigator.mozTCPSocket);
+</code></pre>
+<p>Depois abra o Console do WebIDE.</p>
+<p>Isso produz uma matriz inicial:</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Resultado</th>
+<th>Interpretação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mozProcess</td>
+<td>undefined</td>
+<td>API não exposta nesse contexto</td>
+</tr>
+<tr>
+<td>mozProcess</td>
+<td>object</td>
+<td>API aparentemente presente</td>
+</tr>
+<tr>
+<td>mozProcess</td>
+<td>function</td>
+<td>API presente como função</td>
+</tr>
+<tr>
+<td>mozSystem</td>
+<td>undefined</td>
+<td>não disponível nesse contexto</td>
+</tr>
+<tr>
+<td>mozTCPSocket</td>
+<td>object</td>
+<td>API TCP disponível, sujeito a permissões</td>
+</tr>
+</tbody>
+</table>
+<p>A interpretação definitiva depende do contexto da aplicação e do firmware.</p>
+<h2 id="9-investigacao-de-permissoes">9. Investigação de permissões<a class="headerlink" href="#9-investigacao-de-permissoes" title="Permanent link">&para;</a></h2>
+<p>A presença de uma API não é suficiente.</p>
+<p>O manifesto da aplicação pode conter permissões:</p>
+<pre><code class="language-json">&quot;permissions&quot;: {
+    &quot;tcp-socket&quot;: {}
+}
+</code></pre>
+<p>Por exemplo, a documentação do KaiOS identifica <code>tcp-socket</code> como uma permissão associada à API TCP e indica que ela requer aplicação privilegiada.</p>
+<p>O mesmo princípio deve ser aplicado ao mecanismo utilizado pelo shell-command.</p>
+<p>Portanto, ao analisar o projeto, deve-se registrar:</p>
+<pre><code>manifest.webapp
+        │
+        ├── type
+        ├── permissions
+        ├── origin
+        └── outras propriedades
+</code></pre>
+<p>Uma aplicação comum, privilegiada e certificada pode possuir capacidades diferentes.</p>
+<h2 id="10-exemplos-de-investigacao">10. Exemplos de investigação<a class="headerlink" href="#10-exemplos-de-investigacao" title="Permanent link">&para;</a></h2>
+<h3 id="exemplo-1-determinar-o-contexto-javascript">Exemplo 1: determinar o contexto JavaScript<a class="headerlink" href="#exemplo-1-determinar-o-contexto-javascript" title="Permanent link">&para;</a></h3>
+<pre><code class="language-js">console.log(location.href);
+console.log(document.location.origin);
+console.log(typeof navigator);
+</code></pre>
+<p>Isso ajuda a identificar onde o código está sendo executado.</p>
+<h3 id="exemplo-2-procurar-apis-mozilla">Exemplo 2: procurar APIs Mozilla<a class="headerlink" href="#exemplo-2-procurar-apis-mozilla" title="Permanent link">&para;</a></h3>
+<pre><code class="language-js">Object.getOwnPropertyNames(navigator)
+    .filter(function (name) {
+        return name.toLowerCase().indexOf(&quot;moz&quot;) !== -1;
+    })
+    .sort();
+</code></pre>
+<p>O resultado fornece uma lista de propriedades relacionadas ao namespace Mozilla que o objeto expõe naquele contexto.</p>
+<h3 id="exemplo-3-testar-uma-api-especifica-sem-executa-la">Exemplo 3: testar uma API específica sem executá-la<a class="headerlink" href="#exemplo-3-testar-uma-api-especifica-sem-executa-la" title="Permanent link">&para;</a></h3>
+<pre><code class="language-js">typeof navigator.mozProcess
+</code></pre>
+<p>Isso é deliberadamente um teste de existência, não uma tentativa de executar comandos.</p>
+<p>Essa abordagem é preferível durante a fase inicial de investigação porque reduz o risco de efeitos colaterais.</p>
+<h2 id="11-problemas-comuns">11. Problemas comuns<a class="headerlink" href="#11-problemas-comuns" title="Permanent link">&para;</a></h2>
+<h3 id="111-o-aparelho-aparece-no-adb-devices-mas-nao-no-webide">11.1 O aparelho aparece no adb devices, mas não no WebIDE<a class="headerlink" href="#111-o-aparelho-aparece-no-adb-devices-mas-nao-no-webide" title="Permanent link">&para;</a></h3>
+<p>Possíveis causas:</p>
+<ol>
+<li>socket de debugging não encaminhado;</li>
+<li>caminho do socket diferente;</li>
+<li>runtime incompatível;</li>
+<li>versão inadequada do Firefox;</li>
+<li>configuração de debugging desabilitada;</li>
+<li>restrição específica do firmware.</li>
+</ol>
+<p>O primeiro teste deve ser:</p>
+<pre><code class="language-bash">adb forward --list
+</code></pre>
+<p>Depois:</p>
+<pre><code class="language-bash">adb forward tcp:6000 localfilesystem:/data/local/debugger-socket
+</code></pre>
+<h3 id="112-o-webide-mostra-um-aviso-sobre-versao-do-runtime">11.2 O WebIDE mostra um aviso sobre versão do runtime<a class="headerlink" href="#112-o-webide-mostra-um-aviso-sobre-versao-do-runtime" title="Permanent link">&para;</a></h3>
+<p>Esse comportamento pode ocorrer porque o Gecko do dispositivo possui uma data/build diferente da versão do Firefox usada pelo WebIDE.</p>
+<p>A documentação do KaiOS orienta que determinado aviso de runtime antigo pode ser ignorado no fluxo documentado para KaiOS 2.x.</p>
+<p>Isso não significa, entretanto, que qualquer incompatibilidade possa ser ignorada. Se as Developer Tools não funcionarem, a versão do runtime passa a ser uma variável relevante.</p>
+<h3 id="113-o-console-funciona-mas-a-api-nao-existe">11.3 O Console funciona, mas a API não existe<a class="headerlink" href="#113-o-console-funciona-mas-a-api-nao-existe" title="Permanent link">&para;</a></h3>
+<p>Isso é perfeitamente possível.</p>
+<p>O Console apenas demonstra que o mecanismo de debugging funciona. Ele não garante que uma determinada WebAPI esteja disponível.</p>
+<p>Por exemplo:</p>
+<pre><code class="language-js">typeof navigator.mozProcess
+</code></pre>
+<p>pode retornar:</p>
+<pre><code>&quot;undefined&quot;
+</code></pre>
+<p>mesmo quando:</p>
+<pre><code>ADB
+root
+WebIDE
+</code></pre>
+<p>estão funcionando normalmente.</p>
+<h3 id="114-a-api-existe-mas-a-operacao-falha">11.4 A API existe, mas a operação falha<a class="headerlink" href="#114-a-api-existe-mas-a-operacao-falha" title="Permanent link">&para;</a></h3>
+<p>Nesse caso é necessário separar:</p>
+<pre><code>API inexistente
+      ↓
+API existente
+      ↓
+permissão insuficiente
+      ↓
+API permitida
+      ↓
+implementação diferente
+      ↓
+operação executada
+</code></pre>
+<p>O erro do Console deve ser preservado integralmente para investigação posterior.</p>
+<h2 id="12-diagnostico-e-debugging">12. Diagnóstico e debugging<a class="headerlink" href="#12-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<p>Uma investigação adequada deve registrar pelo menos:</p>
+<pre><code class="language-bash">adb shell getprop
+</code></pre>
+<p>versão do sistema:</p>
+<pre><code class="language-bash">adb shell getprop | grep -i kai
+</code></pre>
+<p>informações do dispositivo:</p>
+<pre><code class="language-bash">adb shell getprop | grep -Ei 'ro.product|ro.build'
+</code></pre>
+<p>e:</p>
+<pre><code class="language-bash">adb shell id
+</code></pre>
+<p>Também é útil registrar:</p>
+<pre><code class="language-bash">adb forward --list
+</code></pre>
+<p>Além disso, a aplicação experimental deve registrar no Console:</p>
+<pre><code class="language-js">console.log(&quot;User agent:&quot;, navigator.userAgent);
+console.log(&quot;Location:&quot;, location.href);
+</code></pre>
+<p>Essas informações ajudam a diferenciar:</p>
+<ol>
+<li>aparelho;</li>
+<li>firmware;</li>
+<li>runtime;</li>
+<li>contexto da aplicação;</li>
+<li>permissões;</li>
+<li>disponibilidade da API.</li>
+</ol>
+<h2 id="13-seguranca-e-riscos">13. Segurança e riscos<a class="headerlink" href="#13-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<h3 id="131-root-nao-deve-ser-tratado-como-requisito-suficiente">13.1 Root não deve ser tratado como requisito suficiente<a class="headerlink" href="#131-root-nao-deve-ser-tratado-como-requisito-suficiente" title="Permanent link">&para;</a></h3>
+<p>Um aparelho com root permite alterar componentes que uma aplicação normal não poderia modificar.</p>
+<p>Isso aumenta consideravelmente o risco de:</p>
+<ol>
+<li>apagar arquivos importantes;</li>
+<li>alterar permissões;</li>
+<li>modificar aplicações do sistema;</li>
+<li>causar bootloop;</li>
+<li>inutilizar componentes do sistema;</li>
+<li>perder a possibilidade de atualização;</li>
+<li>necessitar de reflashing do firmware.</li>
+</ol>
+<h3 id="132-evitar-testes-destrutivos-inicialmente">13.2 Evitar testes destrutivos inicialmente<a class="headerlink" href="#132-evitar-testes-destrutivos-inicialmente" title="Permanent link">&para;</a></h3>
+<p>Na primeira fase, não utilizar comandos como:</p>
+<pre><code class="language-bash">rm -rf
+</code></pre>
+<p>nem modificar diretamente partições ou diretórios críticos.</p>
+<p>O primeiro objetivo deve ser somente:</p>
+<pre><code>descobrir
+    ↓
+observar
+    ↓
+registrar
+    ↓
+testar API
+    ↓
+testar operação inofensiva
+</code></pre>
+<p>Somente depois disso deve-se considerar modificações persistentes.</p>
+<h3 id="133-preservar-evidencias">13.3 Preservar evidências<a class="headerlink" href="#133-preservar-evidencias" title="Permanent link">&para;</a></h3>
+<p>Antes de alterar o aparelho, registre:</p>
+<pre><code class="language-bash">adb shell getprop &gt; getprop.txt
+adb shell id &gt; id.txt
+adb forward --list &gt; adb-forward.txt
+</code></pre>
+<p>Também é recomendável manter uma cópia do firmware original e dos arquivos modificados antes de qualquer alteração.</p>
+<h2 id="14-compatibilidade">14. Compatibilidade<a class="headerlink" href="#14-compatibilidade" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Dependência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WebIDE</td>
+<td>Versão do Firefox e compatibilidade com Gecko</td>
+</tr>
+<tr>
+<td>ADB</td>
+<td>Firmware, modo debugging e implementação do fabricante</td>
+</tr>
+<tr>
+<td>debugger-socket</td>
+<td>Configuração do runtime</td>
+</tr>
+<tr>
+<td>WebAPIs</td>
+<td>Versão do Gecko/KaiOS</td>
+</tr>
+<tr>
+<td>permissões</td>
+<td>Tipo da aplicação e manifesto</td>
+</tr>
+<tr>
+<td>shell-command</td>
+<td>API utilizada pelo projeto e compatibilidade do runtime</td>
+</tr>
+<tr>
+<td>root</td>
+<td>Método de root e firmware</td>
+</tr>
+<tr>
+<td>caminho de sockets</td>
+<td>Pode variar entre builds</td>
+</tr>
+<tr>
+<td>aparelhos KaiOS 2.5</td>
+<td>Fabricantes podem modificar o sistema</td>
+</tr>
+</tbody>
+</table>
+<p>A própria documentação do KaiOS recomenda Firefox 59 para o ambiente de desenvolvimento 2.x, enquanto versões posteriores da plataforma possuem ferramentas e runtimes diferentes.</p>
+<p>Também há evidência de que o ecossistema evoluiu significativamente depois do KaiOS 2.5. O KaiOS 3.0, por exemplo, passou para Gecko 84 e alterou diversas APIs e mecanismos de gerenciamento de aplicações.</p>
+<p>Portanto, resultados obtidos no KaiOS 3.x ou 4.x não devem ser automaticamente aplicados ao KaiOS 2.5.</p>
+<h2 id="15-referencias-cruzadas">15. Referências cruzadas<a class="headerlink" href="#15-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Este capítulo possui relação direta com:</p>
+<ol>
+<li>Arquitetura do KaiOS</li>
+<li>Gecko, B2G e Gonk</li>
+<li>ADB e comunicação com o dispositivo</li>
+<li>Root e privilégios</li>
+<li>Estrutura de aplicações KaiOS</li>
+<li>Manifestos e permissões</li>
+<li>WebAPIs do KaiOS</li>
+<li>Engenharia reversa de aplicações</li>
+<li>Debugging e análise de logs</li>
+<li>Modificação do sistema e firmware</li>
+</ol>
+<p>Em particular, a investigação do shell-command depende de uma compreensão anterior de tipos de aplicações e permissões.</p>
+<h2 id="16-resumo">16. Resumo<a class="headerlink" href="#16-resumo" title="Permanent link">&para;</a></h2>
+<p>O WebIDE constitui uma ponte entre o computador e o runtime Gecko do KaiOS, permitindo executar e depurar aplicações e investigar as APIs efetivamente disponibilizadas pelo aparelho.</p>
+<p>O fluxo básico é:</p>
+<pre><code>ADB
+ ↓
+debugger-socket
+ ↓
+WebIDE
+ ↓
+Developer Tools
+ ↓
+Console
+ ↓
+investigação do runtime
+</code></pre>
+<p>Para a investigação do strukturart/shell-command, a metodologia recomendada é não começar tentando executar comandos shell.</p>
+<p>O procedimento mais seguro e tecnicamente informativo é:</p>
+<ol>
+<li>Confirmar ADB</li>
+<li>Confirmar shell/root</li>
+<li>Confirmar debugger-socket</li>
+<li>Conectar WebIDE</li>
+<li>Abrir Console</li>
+<li>Identificar o contexto da aplicação</li>
+<li>Descobrir as WebAPIs disponíveis</li>
+<li>Examinar o manifest.webapp</li>
+<li>Identificar exatamente a API usada pelo shell-command</li>
+<li>Testar essa API isoladamente</li>
+<li>Somente depois tentar executar uma operação não destrutiva</li>
+</ol>
+<p>Um dado histórico particularmente relevante é que o próprio autor do shell-command associou sua técnica ao KaiOS até a versão 2.4. Isso torna o KaiOS 2.5 um excelente objeto de investigação de compatibilidade, mas não permite concluir antecipadamente que a técnica continuará funcionando.</p>
+<h3 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h3>
+<p>Esta seção deverá ser conectada posteriormente aos capítulos de ADB, root, arquitetura Gecko/B2G, aplicações e manifestos, WebAPIs, engenharia reversa e debugging.</p>
+<p>Durante a compilação final do manual, devem ser verificadas especificamente:</p>
+<ol>
+<li>o caminho exato do debugger-socket no firmware analisado;</li>
+<li>a versão exata do Gecko do aparelho;</li>
+<li>quais APIs utilizadas pelo shell-command ainda existem no KaiOS 2.5;</li>
+<li>quais permissões são necessárias;</li>
+<li>se o comportamento muda entre fabricantes e chipsets;</li>
+<li>se a técnica histórica do projeto funciona no firmware específico testado;</li>
+<li>se aparelhos mais recentes da linha KaiOS 2.5 possuem restrições adicionais de debugging.</li>
+</ol>
+<p><strong>Referências:</strong></p>
+<ul>
+<li><a href="https://developer.kaiostech.com/docs/getting-started/env-setup/os-env-setup/">Documentação oficial de ambiente KaiOS 2.x</a></li>
+<li><a href="https://developer.kaiostech.com/docs/sfp-2.6/development/build-your-first-package-app/test-your-apps/">Documentação oficial sobre teste e debugging de aplicações</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

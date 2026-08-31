@@ -1,0 +1,2499 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Ferramentas Unix estáticas no KaiOS - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ferramentas-unix-estaticas-no-kaios" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ferramentas Unix estáticas no KaiOS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/01-identidade/05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fases/08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Conceitos fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Conceitos fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-arquitetura-arm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Arquitetura ARM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-abi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 ABI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-armhf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 armhf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-binario-estatico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Binário estático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Como funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Como funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diretorio-de-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diretório de teste
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-componentes-envolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Componentes envolvidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-procedimentos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Procedimentos práticos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#51-verificar-a-arquitetura-informada-pelo-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Verificar a arquitetura informada pelo sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1 Verificar a arquitetura informada pelo sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comando
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado-esperado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado esperado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-inspecionar-o-binario-antes-de-executa-lo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Inspecionar o binário antes de executá-lo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 Inspecionar o binário antes de executá-lo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#por-que-isso-e-importante" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por que isso é importante?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#53-transferir-neatvi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Transferir neatvi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#54-testar-sem-alterar-o-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Testar sem alterar o sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#55-criar-um-arquivo-de-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Criar um arquivo de teste
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-exemplos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Exemplos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#61-conjunto-minimo-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Conjunto mínimo recomendado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#62-por-que-neatvi-e-particularmente-interessante" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Por que neatvi é particularmente interessante
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Problemas comuns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#71-permission-denied" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Permission denied
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#72-no-such-file-or-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 No such file or directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#73-exec-format-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Exec format error
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#74-illegal-instruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Illegal instruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#75-erro-429-no-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Erro 429 no GitHub
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-diagnostico-e-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Diagnóstico e debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#81-confirmar-o-arquivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Confirmar o arquivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#82-confirmar-permissoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Confirmar permissões
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#83-confirmar-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Confirmar arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#84-confirmar-arquitetura-do-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Confirmar arquitetura do dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#85-observar-mensagens-do-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Observar mensagens do kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#86-preservacao-de-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 Preservação de evidências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-seguranca-e-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Segurança e riscos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Segurança e riscos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#evitar-inicialmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evitar inicialmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estrategia-segura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estratégia segura
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Referências cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Resumo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-o-restante-do-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com o restante do manual
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ferramentas-unix-estaticas-no-kaios">Ferramentas Unix estáticas no KaiOS<a class="headerlink" href="#ferramentas-unix-estaticas-no-kaios" title="Permanent link">&para;</a></h1>
+<h2 id="1-visao-geral">1. Visão geral<a class="headerlink" href="#1-visao-geral" title="Permanent link">&para;</a></h2>
+<p>Um dispositivo KaiOS com acesso root e ADB pode ser utilizado como ambiente de investigação e administração de baixo nível, permitindo executar ferramentas adicionais diretamente no aparelho.</p>
+<p>Uma fonte interessante para esse propósito é o repositório <strong>static-binaries</strong>, de Ryan Woodsmall. O projeto disponibiliza diversos programas Linux compilados estaticamente com toolchains baseadas em <strong>musl</strong>, incluindo versões para <code>armhf</code>. O próprio projeto, porém, alerta que os binários podem não estar atualizados, que nem todas as arquiteturas possuem exatamente o mesmo conjunto de programas e que eles não devem ser utilizados para substituir integralmente o userspace do sistema.</p>
+<p>No contexto desta seção, o objetivo não é transformar o KaiOS em uma distribuição Linux, mas disponibilizar <strong>ferramentas portáteis para investigação, edição, diagnóstico, rede e manipulação de arquivos</strong>.</p>
+<p>Um ponto importante precisa ser corrigido em relação a uma suposição comum: <code>armeabi-v7a</code> <strong>não significa automaticamente que qualquer binário chamado</strong> <code>armhf</code><strong> será compatível</strong>.</p>
+<p>O Android define <code>armeabi-v7a</code> utilizando a convenção de chamadas <code>softfp</code>, enquanto o antigo <code>armeabi-v7a-hard</code> utilizava convenções de chamada hard-float. O Android atualmente documenta que <code>armeabi-v7a</code> usa <code>-mfloat-abi=softfp</code>; a própria documentação do NDK afirma que a variante <code>armeabi-v7a-hard</code> deixou de ser suportada.</p>
+<p>Portanto:</p>
+<blockquote>
+<p><strong>ARMv7 é uma característica do processador.</strong> <code>armhf</code> <strong>é uma característica da ABI. As duas coisas não são sinônimas.</strong></p>
+</blockquote>
+<p>A compatibilidade do binário precisa ser <strong>testada no próprio dispositivo</strong>.</p>
+<hr />
+<h2 id="2-conceitos-fundamentais">2. Conceitos fundamentais<a class="headerlink" href="#2-conceitos-fundamentais" title="Permanent link">&para;</a></h2>
+<h3 id="21-arquitetura-arm">2.1 Arquitetura ARM<a class="headerlink" href="#21-arquitetura-arm" title="Permanent link">&para;</a></h3>
+<p>O Zapp II utilizado neste projeto reporta:</p>
+<pre><code>armeabi-v7a
+</code></pre>
+<p>Isso indica um ambiente ARM de 32 bits compatível com ARMv7. A documentação do Android descreve <code>armeabi-v7a</code> como ABI para CPUs ARM de 32 bits, incluindo Thumb-2 e Neon.</p>
+<p>Isso responde à pergunta:</p>
+<blockquote>
+<p>"O processador consegue executar instruções ARMv7?"</p>
+</blockquote>
+<p>Mas não responde sozinho:</p>
+<blockquote>
+<p>"Este binário específico pode ser executado pelo userspace deste sistema?"</p>
+</blockquote>
+<p>Essa segunda pergunta envolve a ABI, o formato ELF, a biblioteca C, o carregador e as interfaces do kernel.</p>
+<hr />
+<h3 id="22-abi">2.2 ABI<a class="headerlink" href="#22-abi" title="Permanent link">&para;</a></h3>
+<p>ABI, ou Application Binary Interface, define aspectos como:</p>
+<ul>
+<li>
+<p>convenções de chamada;</p>
+</li>
+<li>
+<p>passagem de argumentos;</p>
+</li>
+<li>
+<p>retorno de valores;</p>
+</li>
+<li>
+<p>alinhamento;</p>
+</li>
+<li>
+<p>tamanho e representação de determinados tipos;</p>
+</li>
+<li>
+<p>interação entre código compilado e bibliotecas.</p>
+</li>
+</ul>
+<p>No caso do Android <code>armeabi-v7a</code>, a convenção de chamada utiliza <code>softfp</code>. Isso <strong>não significa que o processador não tenha hardware de ponto flutuante</strong>. O processador pode utilizar instruções de ponto flutuante por hardware, enquanto os argumentos das funções seguem a convenção <code>softfp</code>.</p>
+<hr />
+<h3 id="23-armhf">2.3 <code>armhf</code><a class="headerlink" href="#23-armhf" title="Permanent link">&para;</a></h3>
+<p>O termo <code>armhf</code> normalmente é utilizado para designar uma variante ARM com ABI hard-float.</p>
+<p>Consequentemente, não é correto utilizar:</p>
+<pre><code>armeabi-v7a = armhf
+</code></pre>
+<p>como regra geral.</p>
+<p>No caso dos binários do <code>static-binaries</code>, existe uma informação adicional importante: o projeto afirma que seus binários são construídos utilizando <strong>musl-cross-make</strong> e são estáticos.</p>
+<p>Isso reduz algumas dependências de userspace, mas <strong>não elimina incompatibilidades de ABI ou diferenças entre ambientes Linux</strong>.</p>
+<hr />
+<h3 id="24-binario-estatico">2.4 Binário estático<a class="headerlink" href="#24-binario-estatico" title="Permanent link">&para;</a></h3>
+<p>Um programa Linux convencional pode depender de bibliotecas externas:</p>
+<pre><code>programa
+ |
+ +-- libc
+ +-- libm
+ +-- libssl
+ +-- outras bibliotecas
+</code></pre>
+<p>Um binário estático incorpora as bibliotecas necessárias ao próprio executável, dentro dos limites das bibliotecas utilizadas durante sua compilação.</p>
+<p>A arquitetura fica mais próxima de:</p>
+<pre><code>programa
+ |
+ +-- código do programa
+ +-- libc incorporada
+ +-- outras bibliotecas incorporadas
+ |
+ v
+kernel
+</code></pre>
+<p>Isso é particularmente interessante em sistemas embarcados porque reduz a dependência das bibliotecas existentes no aparelho.</p>
+<p>Entretanto, <strong>estático não significa universalmente compatível</strong>.</p>
+<p>O programa ainda depende do kernel e de recursos disponíveis no ambiente.</p>
+<hr />
+<h2 id="3-como-funciona">3. Como funciona<a class="headerlink" href="#3-como-funciona" title="Permanent link">&para;</a></h2>
+<p>O fluxo recomendado para introduzir uma ferramenta no Zapp II é:</p>
+<pre><code>PC
+ |
+ | adb push
+ v
+/data/local/tmp/
+ |
+ | chmod
+ v
+executável
+ |
+ | execução
+ v
+kernel + filesystem + permissões
+</code></pre>
+<p>A primeira etapa deve ser sempre experimental.</p>
+<p>Não é necessário instalar imediatamente o programa em um diretório permanente do sistema.</p>
+<h3 id="diretorio-de-teste">Diretório de teste<a class="headerlink" href="#diretorio-de-teste" title="Permanent link">&para;</a></h3>
+<p>O diretório:</p>
+<pre><code>/data/local/tmp/
+</code></pre>
+<p>é adequado para experimentação porque permite testar ferramentas sem modificar imediatamente os arquivos permanentes do sistema.</p>
+<p>Exemplo:</p>
+<pre><code>adb push neatvi /data/local/tmp/neatvi
+adb shell chmod 755 /data/local/tmp/neatvi
+adb shell /data/local/tmp/neatvi
+</code></pre>
+<p>O resultado esperado é a inicialização do <code>neatvi</code>, caso o binário seja compatível com o ambiente.</p>
+<hr />
+<h2 id="4-componentes-envolvidos">4. Componentes envolvidos<a class="headerlink" href="#4-componentes-envolvidos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zapp II</td>
+<td>Dispositivo de destino</td>
+</tr>
+<tr>
+<td>KaiOS</td>
+<td>Sistema operacional</td>
+</tr>
+<tr>
+<td>Kernel Linux</td>
+<td>Camada que efetivamente executa o ELF e fornece syscalls</td>
+</tr>
+<tr>
+<td>ADB</td>
+<td>Transporte e shell remoto</td>
+</tr>
+<tr>
+<td><code>/data/local/tmp/</code></td>
+<td>Área recomendada para testes</td>
+</tr>
+<tr>
+<td>ELF</td>
+<td>Formato dos executáveis</td>
+</tr>
+<tr>
+<td>ABI ARM</td>
+<td>Convenções binárias utilizadas pelo executável</td>
+</tr>
+<tr>
+<td>musl</td>
+<td>libc utilizada na construção dos binários do projeto</td>
+</tr>
+<tr>
+<td><code>static-binaries</code></td>
+<td>Fonte de ferramentas Linux estáticas</td>
+</tr>
+<tr>
+<td><code>neatvi</code></td>
+<td>Editor vi pequeno</td>
+</tr>
+<tr>
+<td><code>busybox</code></td>
+<td>Conjunto de utilitários Unix em um único executável</td>
+</tr>
+<tr>
+<td><code>curl</code></td>
+<td>Cliente HTTP/HTTPS/FTP</td>
+</tr>
+<tr>
+<td><code>jq</code></td>
+<td>Processamento de JSON</td>
+</tr>
+<tr>
+<td><code>nc</code></td>
+<td>Netcat</td>
+</tr>
+<tr>
+<td><code>dropbearmulti</code></td>
+<td>Cliente/servidor SSH e SCP</td>
+</tr>
+</tbody>
+</table>
+<p>repositório atualmente lista, entre outros, <code>bash</code>, <code>busybox</code>, <code>coreutils</code>, <code>curl</code>, <code>dropbearmulti</code>, <code>jq</code>, <code>nc</code>, <code>neatvi</code>, <code>rsync</code>, <code>socat</code>, <code>tmux</code>, <code>toybox</code>, <code>xz</code> e diversas outras ferramentas.</p>
+<hr />
+<h2 id="5-procedimentos-praticos">5. Procedimentos práticos<a class="headerlink" href="#5-procedimentos-praticos" title="Permanent link">&para;</a></h2>
+<h2 id="51-verificar-a-arquitetura-informada-pelo-sistema">5.1 Verificar a arquitetura informada pelo sistema<a class="headerlink" href="#51-verificar-a-arquitetura-informada-pelo-sistema" title="Permanent link">&para;</a></h2>
+<h3 id="objetivo">Objetivo<a class="headerlink" href="#objetivo" title="Permanent link">&para;</a></h3>
+<p>Confirmar a ABI reportada pelo aparelho antes de testar binários.</p>
+<h3 id="comando">Comando<a class="headerlink" href="#comando" title="Permanent link">&para;</a></h3>
+<p>No computador:</p>
+<pre><code>adb shell getprop ro.product.cpu.abi
+</code></pre>
+<p>No Zapp II utilizado neste projeto, o resultado conhecido é:</p>
+<pre><code>armeabi-v7a
+</code></pre>
+<h3 id="resultado-esperado">Resultado esperado<a class="headerlink" href="#resultado-esperado" title="Permanent link">&para;</a></h3>
+<pre><code>armeabi-v7a
+</code></pre>
+<h3 id="limitacao">Limitação<a class="headerlink" href="#limitacao" title="Permanent link">&para;</a></h3>
+<p>Esse resultado confirma a ABI declarada pelo sistema Android/KaiOS, mas <strong>não comprova que um determinado binário</strong> <code>armhf</code><strong> será executado</strong>.</p>
+<hr />
+<h2 id="52-inspecionar-o-binario-antes-de-executa-lo">5.2 Inspecionar o binário antes de executá-lo<a class="headerlink" href="#52-inspecionar-o-binario-antes-de-executa-lo" title="Permanent link">&para;</a></h2>
+<p>No computador Linux, uma ferramenta útil é:</p>
+<pre><code>file neatvi
+</code></pre>
+<p>Pode-se também examinar o ELF:</p>
+<pre><code>readelf -h neatvi
+</code></pre>
+<p>E procurar informações relacionadas à arquitetura:</p>
+<pre><code>readelf -A neatvi
+</code></pre>
+<p>Essas verificações permitem identificar características do executável antes de colocá-lo no telefone.</p>
+<h3 id="por-que-isso-e-importante">Por que isso é importante?<a class="headerlink" href="#por-que-isso-e-importante" title="Permanent link">&para;</a></h3>
+<p>Evita a situação:</p>
+<pre><code>baixar
+ ↓
+copiar para o telefone
+ ↓
+executar
+ ↓
+&quot;não funciona&quot;
+</code></pre>
+<p>e substitui por:</p>
+<pre><code>baixar
+ ↓
+inspecionar ELF
+ ↓
+identificar arquitetura/ABI
+ ↓
+copiar
+ ↓
+testar
+</code></pre>
+<hr />
+<h2 id="53-transferir-neatvi">5.3 Transferir <code>neatvi</code><a class="headerlink" href="#53-transferir-neatvi" title="Permanent link">&para;</a></h2>
+<p>O projeto disponibiliza <code>neatvi</code> e descreve-o como um pequeno editor semelhante ao <code>vi</code>.</p>
+<p>Depois de obter uma versão apropriada:</p>
+<pre><code>adb push neatvi /data/local/tmp/neatvi
+</code></pre>
+<p>Em seguida:</p>
+<pre><code>adb shell chmod 755 /data/local/tmp/neatvi
+</code></pre>
+<p>Teste:</p>
+<pre><code>adb shell /data/local/tmp/neatvi
+</code></pre>
+<p>Para abrir um arquivo:</p>
+<pre><code>adb shell /data/local/tmp/neatvi /caminho/para/arquivo
+</code></pre>
+<p>O caminho efetivamente utilizável depende do filesystem exposto pelo firmware.</p>
+<hr />
+<h2 id="54-testar-sem-alterar-o-sistema">5.4 Testar sem alterar o sistema<a class="headerlink" href="#54-testar-sem-alterar-o-sistema" title="Permanent link">&para;</a></h2>
+<p>A recomendação é manter inicialmente as ferramentas em:</p>
+<pre><code>/data/local/tmp/
+</code></pre>
+<p>Por exemplo:</p>
+<pre><code>adb push neatvi /data/local/tmp/
+adb shell chmod 755 /data/local/tmp/neatvi
+adb shell /data/local/tmp/neatvi --help
+</code></pre>
+<p>Caso o programa não possua <code>--help</code>, isso não significa necessariamente que esteja quebrado. Alguns programas Unix simplesmente não implementam essa opção.</p>
+<p>No caso do <code>neatvi</code>, o teste mais apropriado é simplesmente executá-lo em um arquivo de teste.</p>
+<hr />
+<h2 id="55-criar-um-arquivo-de-teste">5.5 Criar um arquivo de teste<a class="headerlink" href="#55-criar-um-arquivo-de-teste" title="Permanent link">&para;</a></h2>
+<pre><code>adb shell 'echo &quot;Teste do neatvi no KaiOS&quot; &gt; /data/local/tmp/teste.txt'
+</code></pre>
+<p>Depois:</p>
+<pre><code>adb shell /data/local/tmp/neatvi /data/local/tmp/teste.txt
+</code></pre>
+<p>Após sair do editor:</p>
+<pre><code>adb shell cat /data/local/tmp/teste.txt
+</code></pre>
+<p>Isso fornece um teste simples do ciclo:</p>
+<pre><code>ADB
+ ↓
+filesystem
+ ↓
+neatvi
+ ↓
+edição
+ ↓
+gravação
+ ↓
+leitura
+</code></pre>
+<hr />
+<h2 id="6-exemplos">6. Exemplos<a class="headerlink" href="#6-exemplos" title="Permanent link">&para;</a></h2>
+<h2 id="61-conjunto-minimo-recomendado">6.1 Conjunto mínimo recomendado<a class="headerlink" href="#61-conjunto-minimo-recomendado" title="Permanent link">&para;</a></h2>
+<p>Para o objetivo de investigação do Zapp II, não é necessário instalar dezenas de ferramentas.</p>
+<p>Um conjunto inicial mais racional seria:</p>
+<table>
+<thead>
+<tr>
+<th>Prioridade</th>
+<th>Ferramenta</th>
+<th>Utilidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Muito alta</td>
+<td><code>busybox</code></td>
+<td>Utilitários Unix básicos</td>
+</tr>
+<tr>
+<td>Muito alta</td>
+<td><code>neatvi</code></td>
+<td>Edição de arquivos</td>
+</tr>
+<tr>
+<td>Alta</td>
+<td><code>curl</code></td>
+<td>HTTP/HTTPS</td>
+</tr>
+<tr>
+<td>Alta</td>
+<td><code>jq</code></td>
+<td>Análise de JSON</td>
+</tr>
+<tr>
+<td>Alta</td>
+<td><code>nc</code></td>
+<td>Testes de rede</td>
+</tr>
+<tr>
+<td>Alta</td>
+<td><code>xz</code></td>
+<td>Manipulação de arquivos comprimidos</td>
+</tr>
+<tr>
+<td>Média</td>
+<td><code>bash</code></td>
+<td>Shell adicional</td>
+</tr>
+<tr>
+<td>Média</td>
+<td><code>tmux</code></td>
+<td>Sessões persistentes</td>
+</tr>
+<tr>
+<td>Média</td>
+<td><code>socat</code></td>
+<td>Comunicação entre sockets</td>
+</tr>
+<tr>
+<td>Média</td>
+<td><code>dropbearmulti</code></td>
+<td>SSH/SCP</td>
+</tr>
+<tr>
+<td>Média</td>
+<td><code>rsync</code></td>
+<td>Transferência incremental</td>
+</tr>
+<tr>
+<td>Baixa</td>
+<td><code>links</code></td>
+<td>Navegação textual</td>
+</tr>
+<tr>
+<td>Baixa</td>
+<td><code>make</code></td>
+<td>Compilação</td>
+</tr>
+<tr>
+<td>Baixa</td>
+<td><code>ccache</code></td>
+<td>Cache de compilação</td>
+</tr>
+</tbody>
+</table>
+<p>repositório confirma a existência desses programas em sua coleção geral, embora a disponibilidade específica de cada programa dentro de uma determinada arquitetura deva ser verificada antes do download.</p>
+<hr />
+<h2 id="62-por-que-neatvi-e-particularmente-interessante">6.2 Por que <code>neatvi</code> é particularmente interessante<a class="headerlink" href="#62-por-que-neatvi-e-particularmente-interessante" title="Permanent link">&para;</a></h2>
+<p>O <code>neatvi</code> possui uma função diferente de ferramentas como <code>busybox</code>.</p>
+<p>O BusyBox fornece vários utilitários:</p>
+<pre><code>ls
+cp
+mv
+cat
+grep
+sed
+sh
+...
+</code></pre>
+<p>Já o <code>neatvi</code> fornece um editor de texto.</p>
+<p>Isso é útil porque, depois de obter shell root, torna-se possível investigar e editar arquivos diretamente no aparelho:</p>
+<pre><code>adb shell
+</code></pre>
+<p>e posteriormente:</p>
+<pre><code>/data/local/tmp/neatvi /algum/arquivo
+</code></pre>
+<p>Sem depender necessariamente de:</p>
+<pre><code>PC → editar → adb push → aparelho
+</code></pre>
+<p>para cada pequena alteração.</p>
+<hr />
+<h2 id="7-problemas-comuns">7. Problemas comuns<a class="headerlink" href="#7-problemas-comuns" title="Permanent link">&para;</a></h2>
+<h2 id="71-permission-denied">7.1 <code>Permission denied</code><a class="headerlink" href="#71-permission-denied" title="Permanent link">&para;</a></h2>
+<p>Exemplo:</p>
+<pre><code>Permission denied
+</code></pre>
+<p>Causa provável:</p>
+<p>O arquivo não possui permissão de execução.</p>
+<p>Verifique:</p>
+<pre><code>adb shell ls -l /data/local/tmp/neatvi
+</code></pre>
+<p>Corrija:</p>
+<pre><code>adb shell chmod 755 /data/local/tmp/neatvi
+</code></pre>
+<hr />
+<h2 id="72-no-such-file-or-directory">7.2 <code>No such file or directory</code><a class="headerlink" href="#72-no-such-file-or-directory" title="Permanent link">&para;</a></h2>
+<p>Esse erro é particularmente enganoso.</p>
+<p>Ele pode significar que o arquivo realmente não existe, mas também pode ocorrer quando o executável depende de um carregador ELF que não está disponível.</p>
+<p>Verifique primeiro:</p>
+<pre><code>adb shell ls -l /data/local/tmp/neatvi
+</code></pre>
+<p>Depois:</p>
+<pre><code>adb shell /data/local/tmp/neatvi
+</code></pre>
+<p>Se o arquivo existir e ainda assim o sistema informar <code>No such file or directory</code>, deve-se investigar o ELF e suas dependências.</p>
+<hr />
+<h2 id="73-exec-format-error">7.3 <code>Exec format error</code><a class="headerlink" href="#73-exec-format-error" title="Permanent link">&para;</a></h2>
+<p>Exemplo:</p>
+<pre><code>Exec format error
+</code></pre>
+<p>Isso normalmente indica incompatibilidade do formato executável com a arquitetura ou ABI disponível.</p>
+<p>Verifique no computador:</p>
+<pre><code>file neatvi
+</code></pre>
+<p>E:</p>
+<pre><code>readelf -h neatvi
+</code></pre>
+<p>Não se deve concluir simplesmente que:</p>
+<pre><code>armhf
+</code></pre>
+<p>é suficiente porque o telefone reporta:</p>
+<pre><code>armeabi-v7a
+</code></pre>
+<p>A distinção entre arquitetura e ABI é essencial nesse caso.</p>
+<hr />
+<h2 id="74-illegal-instruction">7.4 <code>Illegal instruction</code><a class="headerlink" href="#74-illegal-instruction" title="Permanent link">&para;</a></h2>
+<p>Exemplo:</p>
+<pre><code>Illegal instruction
+</code></pre>
+<p>O binário pode ter sido compilado utilizando instruções que o processador não suporta.</p>
+<p>Isso é diferente de uma incompatibilidade simples de arquitetura.</p>
+<p>Nesse caso, investigar:</p>
+<pre><code>cat /proc/cpuinfo
+</code></pre>
+<p>pode ajudar a identificar características do processador.</p>
+<p>A disponibilidade efetiva de extensões ARM como NEON também pode variar. A documentação do Android observa que algumas extensões ARMv7 são opcionais e devem ser verificadas no dispositivo.</p>
+<hr />
+<h2 id="75-erro-429-no-github">7.5 Erro 429 no GitHub<a class="headerlink" href="#75-erro-429-no-github" title="Permanent link">&para;</a></h2>
+<p>O erro:</p>
+<pre><code>429 Too Many Requests
+</code></pre>
+<p>é uma resposta de limitação de requisições do serviço.</p>
+<p>Não é um erro de compatibilidade do binário.</p>
+<p>Portanto:</p>
+<pre><code>HTTP 429
+</code></pre>
+<p>não significa:</p>
+<pre><code>neatvi incompatível
+</code></pre>
+<p>Significa que o download não foi obtido naquele momento.</p>
+<p>Para a documentação do manual, deve-se manter essa distinção.</p>
+<hr />
+<h2 id="8-diagnostico-e-debugging">8. Diagnóstico e debugging<a class="headerlink" href="#8-diagnostico-e-debugging" title="Permanent link">&para;</a></h2>
+<h2 id="81-confirmar-o-arquivo">8.1 Confirmar o arquivo<a class="headerlink" href="#81-confirmar-o-arquivo" title="Permanent link">&para;</a></h2>
+<pre><code>adb shell ls -lh /data/local/tmp/neatvi
+</code></pre>
+<h2 id="82-confirmar-permissoes">8.2 Confirmar permissões<a class="headerlink" href="#82-confirmar-permissoes" title="Permanent link">&para;</a></h2>
+<pre><code>adb shell ls -l /data/local/tmp/neatvi
+</code></pre>
+<p>O arquivo deve possuir bit de execução.</p>
+<h2 id="83-confirmar-arquitetura">8.3 Confirmar arquitetura<a class="headerlink" href="#83-confirmar-arquitetura" title="Permanent link">&para;</a></h2>
+<p>No PC:</p>
+<pre><code>file neatvi
+</code></pre>
+<pre><code>readelf -h neatvi
+</code></pre>
+<h2 id="84-confirmar-arquitetura-do-dispositivo">8.4 Confirmar arquitetura do dispositivo<a class="headerlink" href="#84-confirmar-arquitetura-do-dispositivo" title="Permanent link">&para;</a></h2>
+<pre><code>adb shell getprop ro.product.cpu.abi
+</code></pre>
+<p>E, quando disponível:</p>
+<pre><code>adb shell cat /proc/cpuinfo
+</code></pre>
+<h2 id="85-observar-mensagens-do-kernel">8.5 Observar mensagens do kernel<a class="headerlink" href="#85-observar-mensagens-do-kernel" title="Permanent link">&para;</a></h2>
+<p>Com acesso adequado ao log:</p>
+<pre><code>adb shell dmesg
+</code></pre>
+<p>ou:</p>
+<pre><code>adb shell dmesg | tail
+</code></pre>
+<p>A disponibilidade e o nível de informação de <code>dmesg</code> dependem das permissões e da configuração do firmware.</p>
+<hr />
+<h2 id="86-preservacao-de-evidencias">8.6 Preservação de evidências<a class="headerlink" href="#86-preservacao-de-evidencias" title="Permanent link">&para;</a></h2>
+<p>Durante investigação de KaiOS, é preferível inicialmente executar ferramentas a partir de:</p>
+<pre><code>/data/local/tmp/
+</code></pre>
+<p>em vez de modificar:</p>
+<pre><code>/system/
+</code></pre>
+<p>ou outras partições do firmware.</p>
+<p>Isso mantém o experimento reversível:</p>
+<pre><code>copiar ferramenta
+→ testar
+→ apagar ferramenta
+</code></pre>
+<p>em vez de:</p>
+<pre><code>alterar userspace
+→ modificar PATH
+→ substituir binários
+→ alterar permissões
+→ descobrir incompatibilidade
+</code></pre>
+<p>Essa abordagem é especialmente importante em dispositivos com métodos de recuperação limitados.</p>
+<hr />
+<h2 id="9-seguranca-e-riscos">9. Segurança e riscos<a class="headerlink" href="#9-seguranca-e-riscos" title="Permanent link">&para;</a></h2>
+<p>Ferramentas estáticas fornecem capacidades adicionais, mas não tornam o ambiente automaticamente seguro.</p>
+<p>Com root, um comando incorreto pode modificar arquivos críticos.</p>
+<h3 id="evitar-inicialmente">Evitar inicialmente<a class="headerlink" href="#evitar-inicialmente" title="Permanent link">&para;</a></h3>
+<pre><code>rm -rf
+</code></pre>
+<p>em diretórios do sistema.</p>
+<p>Também deve-se evitar substituir binários existentes em:</p>
+<pre><code>/system/bin/
+</code></pre>
+<p>ou diretórios equivalentes sem backup e sem compreender o mecanismo de boot do firmware.</p>
+<p>O próprio projeto <code>static-binaries</code> recomenda explicitamente não substituir o userspace existente por seus binários.</p>
+<h3 id="estrategia-segura">Estratégia segura<a class="headerlink" href="#estrategia-segura" title="Permanent link">&para;</a></h3>
+<p>Utilizar:</p>
+<pre><code>/data/local/tmp/
+</code></pre>
+<p>como área de laboratório.</p>
+<p>Somente depois de comprovar:</p>
+<ol>
+<li>
+<p>arquitetura;</p>
+</li>
+<li>
+<p>ABI;</p>
+</li>
+<li>
+<p>funcionamento;</p>
+</li>
+<li>
+<p>permissões;</p>
+</li>
+<li>
+<p>dependências;</p>
+</li>
+<li>
+<p>estabilidade;</p>
+</li>
+</ol>
+<p>deve-se considerar uma instalação permanente.</p>
+<hr />
+<h2 id="10-compatibilidade">10. Compatibilidade<a class="headerlink" href="#10-compatibilidade" title="Permanent link">&para;</a></h2>
+<p>A compatibilidade precisa ser considerada em várias camadas.</p>
+<table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Pergunta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>O processador executa ARMv7?</td>
+</tr>
+<tr>
+<td>ABI</td>
+<td>O binário utiliza uma ABI compatível?</td>
+</tr>
+<tr>
+<td>ELF</td>
+<td>O executável possui formato reconhecido?</td>
+</tr>
+<tr>
+<td>libc</td>
+<td>As funções necessárias estão incorporadas ou disponíveis?</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>As syscalls necessárias existem?</td>
+</tr>
+<tr>
+<td>Filesystem</td>
+<td>Os caminhos e operações esperados existem?</td>
+</tr>
+<tr>
+<td>Permissões</td>
+<td>O processo possui os privilégios necessários?</td>
+</tr>
+<tr>
+<td>Terminal</td>
+<td>O programa consegue operar no terminal disponível?</td>
+</tr>
+<tr>
+<td>KaiOS</td>
+<td>O firmware impõe restrições adicionais?</td>
+</tr>
+</tbody>
+</table>
+<p>No caso do Zapp II:</p>
+<p>No caso do Zapp II:</p>
+<pre><code>CPU/ABI reportada:
+armeabi-v7a
+</code></pre>
+<p>Isso é uma evidência favorável para execução de software ARM de 32 bits, mas <strong>não deve ser interpretado como confirmação automática de compatibilidade com</strong> <code>armhf</code>.</p>
+<p>A confirmação definitiva deve ser experimental.</p>
+<hr />
+<h2 id="11-referencias-cruzadas">11. Referências cruzadas<a class="headerlink" href="#11-referencias-cruzadas" title="Permanent link">&para;</a></h2>
+<p>Esta seção possui relação direta com:</p>
+<ul>
+<li>
+<p><strong>Arquitetura do KaiOS</strong></p>
+</li>
+<li>
+<p><strong>Arquitetura ARM e ABI</strong></p>
+</li>
+<li>
+<p><strong>ADB e Debugging</strong></p>
+</li>
+<li>
+<p><strong>Root e permissões</strong></p>
+</li>
+<li>
+<p><strong>Filesystem do KaiOS</strong></p>
+</li>
+<li>
+<p><strong>Kernel Linux utilizado pelo dispositivo</strong></p>
+</li>
+<li>
+<p><strong>Engenharia reversa do firmware</strong></p>
+</li>
+<li>
+<p><strong>Ferramentas de linha de comando</strong></p>
+</li>
+<li>
+<p><strong>Rede e comunicação</strong></p>
+</li>
+<li>
+<p><strong>Modificação do sistema</strong></p>
+</li>
+</ul>
+<p>Posteriormente, os conceitos apresentados aqui serão particularmente úteis para capítulos que tratem de investigação do sistema de arquivos, análise de processos, edição de configurações e execução de ferramentas diretamente no aparelho.</p>
+<hr />
+<h2 id="12-resumo">12. Resumo<a class="headerlink" href="#12-resumo" title="Permanent link">&para;</a></h2>
+<p>O acesso root e ADB permite utilizar o Zapp II como um pequeno ambiente de investigação de baixo nível.</p>
+<p>O projeto <code>static-binaries</code> é uma fonte interessante porque disponibiliza diversos executáveis Linux construídos estaticamente com toolchains baseadas em musl, incluindo uma árvore <code>armhf</code>.</p>
+<p>Entretanto, deve-se evitar a simplificação:</p>
+<pre><code>armeabi-v7a = armhf
+</code></pre>
+<p>O Zapp II reporta <code>armeabi-v7a</code>, enquanto <code>armhf</code> normalmente implica uma convenção ABI hard-float. O Android <code>armeabi-v7a</code> utiliza <code>softfp</code>, embora possa utilizar hardware de ponto flutuante internamente.</p>
+<p>Assim, o procedimento correto é:</p>
+<pre><code>1. identificar a ABI do dispositivo
+2. identificar a arquitetura do ELF
+3. examinar o binário
+4. copiar para /data/local/tmp/
+5. atribuir permissão de execução
+6. executar
+7. analisar erros
+8. somente então considerar instalação permanente
+</code></pre>
+<p>Para o ambiente de investigação do Zapp II, <code>neatvi</code>, <code>busybox</code>, <code>curl</code>, <code>jq</code>, <code>nc</code> e <code>xz</code> constituem um conjunto inicial particularmente útil. O <code>neatvi</code> é especialmente interessante por fornecer um editor de texto pequeno para uso diretamente no aparelho.</p>
+<h2 id="integracao-com-o-restante-do-manual">Integração com o restante do manual<a class="headerlink" href="#integracao-com-o-restante-do-manual" title="Permanent link">&para;</a></h2>
+<p><strong>Depende de:</strong></p>
+<ul>
+<li>
+<p>arquitetura e hardware do Zapp II;</p>
+</li>
+<li>
+<p>ABI ARM;</p>
+</li>
+<li>
+<p>funcionamento do ADB;</p>
+</li>
+<li>
+<p>acesso root;</p>
+</li>
+<li>
+<p>organização do filesystem;</p>
+</li>
+<li>
+<p>arquitetura do kernel.</p>
+</li>
+</ul>
+<p><strong>Provavelmente será utilizado por:</strong></p>
+<ul>
+<li>
+<p>capítulo de debugging;</p>
+</li>
+<li>
+<p>capítulo de engenharia reversa;</p>
+</li>
+<li>
+<p>capítulo de filesystem;</p>
+</li>
+<li>
+<p>capítulo de rede;</p>
+</li>
+<li>
+<p>capítulo de modificação do sistema;</p>
+</li>
+<li>
+<p>capítulo de ferramentas para desenvolvimento.</p>
+</li>
+</ul>
+<p><strong>Verificações para a compilação final:</strong></p>
+<ul>
+<li>
+<p>confirmar exatamente qual build do KaiOS está instalada no Zapp II;</p>
+</li>
+<li>
+<p>registrar o resultado de <code>getprop ro.product.cpu.abi</code>;</p>
+</li>
+<li>
+<p>registrar o resultado de <code>/proc/cpuinfo</code>;</p>
+</li>
+<li>
+<p>identificar se os binários <code>armhf</code> específicos utilizados são realmente executáveis no firmware;</p>
+</li>
+<li>
+<p>registrar versões e hashes SHA-256 dos binários escolhidos;</p>
+</li>
+<li>
+<p>documentar quais ferramentas funcionaram efetivamente no aparelho, em vez de assumir compatibilidade apenas pela arquitetura;</p>
+</li>
+<li>
+<p>separar claramente binários Linux genéricos de ferramentas compiladas especificamente para o ambiente KaiOS.</p>
+</li>
+</ul>
+<p><strong>Referência principal:</strong> <a href="https://github.com/ryanwoodsmall/static-binaries?utm_source=chatgpt.com">ryanwoodsmall/static-binaries no GitHub</a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

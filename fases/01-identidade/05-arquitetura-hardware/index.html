@@ -1,0 +1,1636 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Investigação técnica do Multilaser Zapp II e KaiOS 2.5">
+      
+      
+        <meta name="author" content="Giuliano Denardi Botteon">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>5. Arquitetura de Hardware - KaiOS Zapp Research</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-arquitetura-de-hardware" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../../.." title="KaiOS Zapp Research" class="md-header__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KaiOS Zapp Research
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5. Arquitetura de Hardware
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="KaiOS Zapp Research" class="md-nav__button md-logo" aria-label="KaiOS Zapp Research" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    KaiOS Zapp Research
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acervo de Artigos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Acervo de Artigos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../articles/ART-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ART-001 (WebIDE e APIs)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--completed"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 1 · Identidade do projeto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 1 · Identidade do projeto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-manifesto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manifesto do Projeto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-escopo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Escopo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-contexto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contexto e motivação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-estado-da-pesquisa.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estado atual da pesquisa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 2 · O Objeto de Estudo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-objeto/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 3 · Ambiente Técnico
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 3 · Ambiente Técnico
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-ambiente-tecnico/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 4 · Investigação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 4 · Investigação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-investigacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 5 · Desenvolvimento
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 5 · Desenvolvimento
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-desenvolvimento/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 6 · KaiOS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 6 · KaiOS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-kaios/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 7 · Documentação
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 7 · Documentação
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-documentacao/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fase 8 · IA Aplicada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fase 8 · IA Aplicada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-ia-aplicada/index.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão Geral
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-on-chip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System-on-Chip
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#processador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memória
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#armazenamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Armazenamento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interfaces-e-perifericos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interfaces e periféricos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacao-entre-hardware-e-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relação entre hardware e sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nivel-de-confianca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nível de confiança
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nível de confiança">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confirmado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confirmado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identificado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inferido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inferido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desconhecido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desconhecido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-desta-etapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos desta etapa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proxima-etapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próxima etapa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principio-da-investigacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípio da investigação
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="5-arquitetura-de-hardware">5. Arquitetura de Hardware<a class="headerlink" href="#5-arquitetura-de-hardware" title="Permanent link">&para;</a></h1>
+<h2 id="visao-geral">Visão geral<a class="headerlink" href="#visao-geral" title="Permanent link">&para;</a></h2>
+<p>O hardware constitui a camada fundamental do Projeto KaiOS / Zapp II.</p>
+<p>Antes de investigar o sistema operacional, os processos ou as aplicações, é necessário compreender a plataforma física sobre a qual esses componentes são executados.</p>
+<p>A investigação do hardware busca estabelecer uma relação entre os componentes identificados no dispositivo e os recursos que posteriormente aparecem nas camadas de firmware, kernel e sistema operacional.</p>
+<p>O objetivo não é produzir inicialmente um inventário completo de cada componente eletrônico, mas construir progressivamente um <strong>mapa técnico da plataforma</strong>.</p>
+<h2 id="arquitetura-geral">Arquitetura geral<a class="headerlink" href="#arquitetura-geral" title="Permanent link">&para;</a></h2>
+<p>O Zapp II pode ser analisado inicialmente como uma plataforma composta por diferentes grupos funcionais:</p>
+<pre><code class="language-text">┌───────────────────────────────┐
+│          Aplicações           │
+├───────────────────────────────┤
+│            KaiOS              │
+├───────────────────────────────┤
+│      Sistema / Frameworks     │
+├───────────────────────────────┤
+│         Linux Kernel          │
+├───────────────────────────────┤
+│       Firmware / Boot         │
+├───────────────────────────────┤
+│       SoC / Hardware          │
+└───────────────────────────────┘
+</code></pre>
+<p>O hardware fornece os recursos necessários para que as camadas superiores possam funcionar.</p>
+<p>Entre esses recursos estão processamento, memória, armazenamento, comunicação e interfaces com dispositivos periféricos.</p>
+<h2 id="system-on-chip">System-on-Chip<a class="headerlink" href="#system-on-chip" title="Permanent link">&para;</a></h2>
+<p>O componente central identificado na plataforma é o <strong>MediaTek MT6572</strong>.</p>
+<p>Um SoC, ou <em>System-on-Chip</em>, reúne em um único componente diversas funções que, em arquiteturas computacionais tradicionais, poderiam estar distribuídas entre vários circuitos.</p>
+<p>Para esta investigação, o SoC é particularmente importante porque estabelece uma ligação entre diferentes áreas:</p>
+<pre><code class="language-text">CPU
+│
+├── Arquitetura ARM
+│
+├── Memória
+│
+├── Periféricos
+│
+├── Interfaces
+│
+└── Controladores
+       │
+       ↓
+     Kernel
+       │
+       ↓
+    Sistema
+</code></pre>
+<p>A documentação específica de cada componente do MT6572 será desenvolvida posteriormente, conforme forem obtidas evidências suficientes.</p>
+<h2 id="processador">Processador<a class="headerlink" href="#processador" title="Permanent link">&para;</a></h2>
+<p>A CPU representa a unidade responsável pela execução das instruções dos programas.</p>
+<p>A identificação da arquitetura do processador possui consequências práticas para todo o projeto.</p>
+<p>Ela determina, entre outras coisas:</p>
+<ul>
+<li>formato dos executáveis;</li>
+<li>conjunto de instruções;</li>
+<li>arquitetura dos compiladores;</li>
+<li>compatibilidade de bibliotecas;</li>
+<li>ABI;</li>
+<li>possibilidades de cross-compilation;</li>
+<li>compatibilidade de ferramentas.</li>
+</ul>
+<p>Por isso, a arquitetura ARM não será tratada apenas como uma característica do hardware, mas também como um requisito para os experimentos de software realizados posteriormente.</p>
+<h2 id="memoria">Memória<a class="headerlink" href="#memoria" title="Permanent link">&para;</a></h2>
+<p>A memória é uma das principais limitações a serem consideradas em uma plataforma móvel de baixo custo.</p>
+<p>A investigação deverá distinguir diferentes tipos de armazenamento e memória sempre que houver informações suficientes para fazê-lo.</p>
+<p>Entre os elementos relevantes estão:</p>
+<ul>
+<li>memória RAM;</li>
+<li>armazenamento permanente;</li>
+<li>partições;</li>
+<li>áreas reservadas ao sistema;</li>
+<li>áreas destinadas aos usuários;</li>
+<li>memória utilizada por firmware.</li>
+</ul>
+<p>A quantidade e a organização desses recursos podem afetar diretamente:</p>
+<ul>
+<li>desempenho;</li>
+<li>execução de aplicações;</li>
+<li>disponibilidade de ferramentas;</li>
+<li>compilação local;</li>
+<li>armazenamento de arquivos;</li>
+<li>possibilidade de execução de determinados programas.</li>
+</ul>
+<h2 id="armazenamento">Armazenamento<a class="headerlink" href="#armazenamento" title="Permanent link">&para;</a></h2>
+<p>O armazenamento permanente possui importância especial para a investigação porque pode conter diferentes componentes da plataforma.</p>
+<p>Dependendo da estrutura encontrada, poderão existir áreas destinadas a:</p>
+<ul>
+<li>boot;</li>
+<li>sistema;</li>
+<li>recuperação;</li>
+<li>dados;</li>
+<li>configurações;</li>
+<li>aplicativos;</li>
+<li>firmware.</li>
+</ul>
+<p>A identificação dessas áreas deverá ser realizada por meio de evidências obtidas no próprio dispositivo sempre que possível.</p>
+<p>Não será assumida uma estrutura de partições apenas com base em modelos semelhantes.</p>
+<h2 id="interfaces-e-perifericos">Interfaces e periféricos<a class="headerlink" href="#interfaces-e-perifericos" title="Permanent link">&para;</a></h2>
+<p>Um dispositivo móvel não é composto apenas por CPU, memória e armazenamento.</p>
+<p>O SoC e os demais componentes precisam interagir com diversos dispositivos físicos.</p>
+<p>Entre as categorias de interesse estão:</p>
+<ul>
+<li>tela;</li>
+<li>touchscreen;</li>
+<li>teclado;</li>
+<li>áudio;</li>
+<li>câmera;</li>
+<li>comunicação USB;</li>
+<li>rede móvel;</li>
+<li>Wi-Fi;</li>
+<li>Bluetooth;</li>
+<li>rádio;</li>
+<li>sensores;</li>
+<li>gerenciamento de energia.</li>
+</ul>
+<p>A investigação dessas interfaces poderá ser realizada posteriormente por meio da análise de:</p>
+<p><strong>hardware → driver → kernel → dispositivo → serviço → aplicação.</strong></p>
+<p>Essa cadeia permite relacionar um componente físico ao modo como ele é apresentado ao sistema operacional.</p>
+<h2 id="usb">USB<a class="headerlink" href="#usb" title="Permanent link">&para;</a></h2>
+<p>A interface USB possui importância especial neste projeto por constituir uma das principais formas de comunicação entre o Zapp II e um computador externo.</p>
+<p>Por meio dela, foi possível utilizar ferramentas como <strong>ADB</strong> e realizar atividades de investigação e desenvolvimento.</p>
+<p>A análise da interface USB poderá incluir:</p>
+<ul>
+<li>modos de conexão;</li>
+<li>identificação do dispositivo;</li>
+<li>ADB;</li>
+<li>MTP;</li>
+<li>armazenamento;</li>
+<li>configuração USB;</li>
+<li>comportamento durante boot;</li>
+<li>comunicação entre dispositivo e computador.</li>
+</ul>
+<p>Essa investigação será tratada em maior profundidade na seção dedicada ao ambiente de desenvolvimento.</p>
+<h2 id="relacao-entre-hardware-e-sistema">Relação entre hardware e sistema<a class="headerlink" href="#relacao-entre-hardware-e-sistema" title="Permanent link">&para;</a></h2>
+<p>Uma das metas da investigação é evitar estudar o hardware como uma lista isolada de componentes.</p>
+<p>Cada componente deverá, sempre que possível, ser relacionado à sua representação nas camadas superiores.</p>
+<p>Por exemplo:</p>
+<pre><code class="language-text">Componente físico
+       ↓
+Controlador
+       ↓
+Driver
+       ↓
+Kernel
+       ↓
+Dispositivo do sistema
+       ↓
+Serviço
+       ↓
+Aplicação
+</code></pre>
+<p>Essa abordagem permite responder perguntas como:</p>
+<blockquote>
+<p>Qual componente físico fornece determinado recurso?</p>
+<p>Qual driver controla esse componente?</p>
+<p>Como o kernel o apresenta ao sistema?</p>
+<p>Qual serviço utiliza esse recurso?</p>
+<p>Como uma aplicação acessa essa funcionalidade?</p>
+</blockquote>
+<h2 id="nivel-de-confianca">Nível de confiança<a class="headerlink" href="#nivel-de-confianca" title="Permanent link">&para;</a></h2>
+<p>As informações de hardware serão classificadas conforme sua origem.</p>
+<h3 id="confirmado">Confirmado<a class="headerlink" href="#confirmado" title="Permanent link">&para;</a></h3>
+<p>Informação sustentada por evidência direta ou por múltiplas fontes confiáveis.</p>
+<h3 id="identificado">Identificado<a class="headerlink" href="#identificado" title="Permanent link">&para;</a></h3>
+<p>Componente ou característica encontrada durante a investigação, mas que ainda pode exigir confirmação adicional.</p>
+<h3 id="inferido">Inferido<a class="headerlink" href="#inferido" title="Permanent link">&para;</a></h3>
+<p>Informação deduzida a partir do comportamento do sistema ou de documentação relacionada.</p>
+<h3 id="desconhecido">Desconhecido<a class="headerlink" href="#desconhecido" title="Permanent link">&para;</a></h3>
+<p>Informação para a qual ainda não existem evidências suficientes.</p>
+<p>Essa classificação será mantida ao longo do projeto para evitar que especificações presumidas sejam apresentadas como fatos.</p>
+<h2 id="objetivos-desta-etapa">Objetivos desta etapa<a class="headerlink" href="#objetivos-desta-etapa" title="Permanent link">&para;</a></h2>
+<p>A investigação de hardware deverá produzir progressivamente:</p>
+<ul>
+<li>[ ] Mapa geral da plataforma.</li>
+<li>[ ] Identificação dos principais componentes.</li>
+<li>[ ] Documentação do SoC.</li>
+<li>[ ] Identificação da arquitetura da CPU.</li>
+<li>[ ] Levantamento de memória e armazenamento.</li>
+<li>[ ] Mapeamento das principais interfaces.</li>
+<li>[ ] Relação entre hardware e componentes do sistema.</li>
+<li>[ ] Registro das informações ainda desconhecidas.</li>
+</ul>
+<p>O objetivo não é desmontar imediatamente o dispositivo ou identificar cada componente eletrônico.</p>
+<p>A prioridade é construir uma compreensão funcional da plataforma.</p>
+<h2 id="proxima-etapa">Próxima etapa<a class="headerlink" href="#proxima-etapa" title="Permanent link">&para;</a></h2>
+<p>Com a arquitetura de hardware estabelecida como ponto de partida, a investigação pode avançar para uma camada particularmente importante:</p>
+<p><strong>o ambiente de software que transforma o hardware em uma plataforma utilizável.</strong></p>
+<p>A próxima etapa deverá investigar o <strong>sistema operacional, o kernel Linux e a relação entre Android e KaiOS</strong>, estabelecendo a cadeia de software executada pelo dispositivo.</p>
+<h2 id="principio-da-investigacao">Princípio da investigação<a class="headerlink" href="#principio-da-investigacao" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Hardware não é apenas especificação. É o fundamento sobre o qual todo o comportamento observado no sistema se torna possível.</strong></p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
